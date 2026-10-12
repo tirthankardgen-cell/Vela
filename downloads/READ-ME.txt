@@ -1,0 +1,14 @@
+VELA — Interior design studio
+Version 0.1.0
+
+Extract this ZIP, then open Vela.html in a modern desktop browser.
+For 3D, enable browser hardware acceleration.
+
+Save project downloads a JSON backup and keeps a named snapshot in this browser.
+Keep your JSON files: browser storage is not a cloud backup.
+Import accepts Vela and existing Roomnote layout JSON files.
+Present creates a printable client board; use your browser's Save as PDF option.
+
+This is an offline local application. No login or internet connection is required.
+3D furniture is schematic. Verify dimensions and clearances before construction or purchasing.
+Estimates exclude tax, installation, delivery and unpriced items.

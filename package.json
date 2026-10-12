@@ -1,0 +1,20 @@
+{
+  "name": "vela-studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node planner/build.mjs",
+    "dev": "python3 -m http.server 8766 --bind 127.0.0.1",
+    "test": "python3 tests/planner_smoke.py && python3 tests/whole_flat_smoke.py && python3 tests/studio_smoke.py"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10"
+  },
+  "version": "0.1.0",
+  "engines": {
+    "node": "24.x"
+  }
+}
