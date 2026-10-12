@@ -1,0 +1,6 @@
+# Standalone HTML contains generated Three.js shader strings; keep their contents intact.
+/index.html linguist-generated=true -whitespace
+/planner.html linguist-generated=true -whitespace
+/docs/index.html linguist-generated=true -whitespace
+/downloads/*.zip binary
+/docs/assets/*.png binary
