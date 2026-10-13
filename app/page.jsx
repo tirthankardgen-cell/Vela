@@ -11,8 +11,9 @@ const possibilities=[
  {icon:'present',number:'03',title:'Bring the idea together.',copy:'Move between 2D and 3D, collect your finishes and prepare a considered design presentation.'},
 ];
 export default function Home(){return <main className="marketing landing">
-<LandingMotion/><div className="reading-progress" aria-hidden="true"/><SiteHeader/>
+<LandingMotion/><div className="reading-progress" aria-hidden="true"/>
 <section className="editorial-hero" aria-labelledby="home-title">
+ <SiteHeader/>
  <div className="hero-photograph"><img src="/images/vela-interior.webp" alt="Sunlit living room with an ivory sofa, olive lounge chair, walnut table and soft linen curtains" width="1800" height="1200" fetchPriority="high" data-parallax/></div>
  <div className="hero-shade"/><div className="editorial-hero-copy"><span className="lux-kicker">A MORE CONSIDERED HOME</span><h1 id="home-title">Good spaces.<br/><em>Beautiful living.</em></h1><p>A little imagination. A sense of possibility.<br/>Make room for the way you want to live.</p><Link href="/signup" className="lux-button hero-cta">Begin your space <Icon name="arrow" size={18}/></Link></div>
  <div className="hero-bottom"><span>VELA / SPACE, WITH INTENTION</span><a href="#inspiration">Discover a different perspective <Icon name="down" size={16}/></a><span>01 — THE LIVING ROOM</span></div>
