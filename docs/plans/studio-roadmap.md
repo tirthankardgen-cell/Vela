@@ -37,6 +37,8 @@ Current boundary: Vela can resize a polygon, adjust its corners and add interior
 Current boundary: image/PDF upload fits a first-page image to entered room bounds. Opacity and visibility are supported; distance calibration and automatic wall recognition are not.
 
 ## Phase 4 — Furnish and refine
+
+Category research and the proposed object hierarchy are in the [catalogue research document](studio-catalogue-research.md).
 - Improve categories, object previews, search and placement feedback.
 - Add dimension overlays, alignment and clearance guides, room-specific finishes and better selection actions.
 - Keep one geometry model for 2D and 3D; refine visual assets after drawing fundamentals work.
