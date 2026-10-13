@@ -13,6 +13,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
     page.goto(BASE_URL + '/studio?demo=1');page.wait_for_function('Boolean(window.Vela)')
     layout=lambda: page.evaluate('Roomnote.getLayout()')
     assert len(layout()['room']['zones'])==7
+    if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
     page.locator('#room-preset').select_option('l1')
     original=layout(); assert len(original['items'])==16
     # All further interactions must work without a network connection.
@@ -35,6 +36,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
     saved=Path(tmp)/'layout.json';d.value.save_as(saved); data=json.loads(saved.read_text());assert len(data['items'])==18
     with page.expect_download() as d: page.locator('#export-image').click()
     d.value.save_as(Path(tmp)/'plan.svg');assert '<svg' in (Path(tmp)/'plan.svg').read_text()
+    if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
     page.locator('#room-preset').select_option('b2');assert len(layout()['room']['vertices'])==4
     page.locator('#file-input').set_input_files(str(saved));page.wait_for_timeout(250);assert len(layout()['items'])==18
     invalid=Path(tmp)/'bad.json';invalid.write_text('{"format":"bad"}')

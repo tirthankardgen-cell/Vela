@@ -25,6 +25,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as temp:
     page.locator('[name="budget"]').fill('1000')
     page.locator('#project-form button[type="submit"]').click()
     project_id = state()['project']['id']
+    if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
     page.locator('#room-preset').select_option('blank')
     assert state()['project']['id'] == project_id
     assert state()['project']['name'] == 'Test residence <Studio>'
@@ -66,6 +67,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as temp:
     assert rows[1][1] == "'=Test supplier"
     assert rows[1][-1] == '250.5'
     page.locator('#close-dialog').click()
+    if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
     page.locator('#room-preset').select_option('flat')
     page.locator('#file-input').set_input_files(str(exported))
     page.wait_for_function('Vela.getLayout().items.length === 1')

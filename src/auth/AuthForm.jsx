@@ -6,6 +6,7 @@ import {createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordRe
 import {firebase,firebaseConfigured,friendlyError} from '../lib/firebase';
 import {demoMode,signInDemo} from '../lib/demo-auth';
 import Wordmark from '../marketing/Wordmark';
+import {GoogleIcon} from '../components/Icon';
 
 export default function AuthForm({mode='login'}){
  const router=useRouter();const [busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState('');
@@ -34,6 +35,6 @@ export default function AuthForm({mode='login'}){
  {error&&<p className="form-error" role="alert">{error}</p>}{message&&<p className="form-success" role="status">{message}</p>}
  <button className="lux-button lux-button-dark" disabled={busy||(!demoMode&&!firebaseConfigured)}>{busy?'Please wait…':signup?'Create your account':reset?'Send reset link':'Sign in'} <span>↗</span></button>
  </form>
- {!reset&&<><div className="form-divider"><span>or</span></div><button className="google-button" onClick={google} disabled={busy||(!demoMode&&!firebaseConfigured)}><span>G</span> {demoMode?"Try Google sign-in (preview)":"Continue with Google"}</button></>}
+ {!reset&&<><div className="form-divider"><span>or</span></div><button className="google-button" onClick={google} disabled={busy||(!demoMode&&!firebaseConfigured)}><GoogleIcon/> {demoMode?"Try Google sign-in (preview)":"Continue with Google"}</button></>}
  <p className="auth-switch">{signup?'Already feel at home? ':reset?'Remember your password? ':'New to Vela? '}<Link href={signup||reset?'/login':'/signup'}>{signup||reset?'Sign in':'Create an account'}</Link></p><Link href="/start?demo=1" className="guest-link">Explore without an account →</Link><p className="auth-small">Guest projects stay on this device. {demoMode?"Preview accounts and projects are local simulations.":"Account projects save to your private cloud workspace."}</p></div></section></main>;
 }

@@ -1,0 +1,87 @@
+/* Studio controls are compact; editorial typography stays on the landing pages. */
+#root .app-header{height:64px;padding:0 18px;gap:20px}
+#root .vela-brand{min-width:130px}
+#root .brand-edition,#root .project-avatar{display:none}
+#root .project-title{display:flex;align-items:center;gap:6px;max-width:300px}
+#root .project-title svg{flex-shrink:0}
+#root .header-actions button,#root .studio-nav button,#root .view-switch button,#root .canvas-tools button{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+#root button svg{flex-shrink:0}
+#root .studio-nav{height:42px;padding:0 18px}
+#root .studio-nav>div{gap:24px}
+#root .workspace{grid-template-columns:224px minmax(320px,1fr) 240px;min-height:calc(100dvh - 106px)}
+#root .library,#root .inspector{padding:18px 16px;max-height:calc(100dvh - 106px)}
+#root .library-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+#root .library-heading h2,#root .inspector h2{font-family:Manrope,sans-serif;font-size:14px;font-weight:650;letter-spacing:0;margin:0}
+#root .new-space-link{display:flex;align-items:center;gap:4px;color:#71624b;text-decoration:none;font-size:11px;white-space:nowrap}
+#root a:focus-visible,#root summary:focus-visible{outline:2px solid #978365;outline-offset:3px}
+#root .search-box{margin-top:0}
+#root .search-box svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#71624b;pointer-events:none}
+#root .search-box input{font-size:12px}
+#root .library-tabs{margin:12px 0}
+#root .library-tabs button{font-size:11px;padding:10px 2px}
+#root .catalogue{gap:8px}
+#root .catalogue button{height:76px;font-size:10px;color:#45483e;background:#f7f7f2}
+#root .catalogue svg{width:38px;height:30px;stroke:#626a58}
+#root .room-settings{margin-top:18px;padding-top:14px}
+#root .room-settings summary{margin-bottom:8px}
+#root .room-settings label{margin-top:8px}
+#root .studio{height:calc(100dvh - 106px);padding:16px 18px 0}
+#root .studio-toolbar h2{font-family:Manrope,sans-serif;font-size:16px;font-weight:600;letter-spacing:-.3px;margin:0 0 4px}
+#root .studio-toolbar .muted{font-size:11px}
+#root .view-switch{border-radius:6px}
+#root .canvas-tools{margin:14px 0 10px;flex-wrap:wrap}
+#root .canvas-tools button{min-width:32px;min-height:32px;padding:6px 8px}
+#root .stage{border-radius:6px;min-height:300px}
+#root .stage-tag{font-size:10px;padding:7px 10px;bottom:12px;color:#626558}
+#root .studio-footer{padding:10px 0;font-size:10px}
+#root .empty-icon{margin:26px 0 10px;color:#a5aa97;display:block}
+#root .project-metrics{padding:18px 0;gap:12px}
+#root .project-metrics span{font-family:Manrope,sans-serif;font-size:19px;font-weight:500}
+#root .project-metrics small{font-size:8px;color:#717568;letter-spacing:.5px}
+#root .inspector p{font-size:12px;line-height:1.6}
+#root .inspector h2{margin-bottom:16px;color:#343a30}
+#root #item-form label{font-size:11px;color:#63685c}
+#root #item-form input{font-size:12px}
+#root .inspector-bottom{margin-top:18px;padding-top:16px}
+#root .inspector-bottom summary{font-size:12px;font-weight:600;cursor:pointer;margin-bottom:12px}
+#root .inspector textarea{font-size:12px}
+#root .mobile-panel-nav{display:none}
+.google-button .google-icon{flex:none;display:block}
+@media(max-width:1050px) and (min-width:781px){
+ #root .workspace{grid-template-columns:190px minmax(280px,1fr) 210px}
+ #root .library,#root .inspector{padding:16px 12px}
+ #root .studio{padding:16px 12px 0}
+ #root .header-project{display:flex}
+ #root .project-title{max-width:170px}
+ #root .header-actions button{font-size:10px;padding:8px}
+ #root .header-actions svg{width:15px;height:15px}
+ #root .vela-brand{min-width:100px}
+}
+@media(max-width:780px){
+ #root .app-header{height:auto;min-height:64px;flex-wrap:wrap;padding:12px;gap:10px}
+ #root .vela-brand{min-width:0}
+ #root .header-project{display:flex;flex:1;justify-content:flex-end}
+ #root .project-title{max-width:210px;font-size:11px}
+ #root .header-project small{text-align:right;font-size:9px}
+ #root .header-actions{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+ #root .header-actions button{font-size:10px;padding:9px 5px}
+ #root #open-file{display:inline-flex}
+ #root .header-actions svg{width:15px;height:15px}
+ #root .studio-nav{padding:0 12px}
+ #root .studio-nav>div{width:100%;justify-content:space-between;gap:10px}
+ #root .studio-nav button{font-size:11px}
+ #root .mobile-panel-nav{display:flex;gap:8px;background:#faf9f2;padding:9px 12px;border-bottom:1px solid #e2e1de}
+ #root .mobile-panel-nav a{color:#515949;font-size:11px;text-decoration:none;padding:5px 10px;border:1px solid #dedfd4;border-radius:4px}
+ #root .workspace{display:flex;min-height:0}
+ #root .studio{height:65dvh;min-height:480px;padding:16px 12px 0}
+ #root .library,#root .inspector{max-height:none;width:100%;padding:20px 16px;scroll-margin-top:12px}
+ #root .catalogue{grid-template-columns:repeat(3,1fr)}
+ #root .catalogue button{height:80px;font-size:11px}
+ #root .studio-toolbar{align-items:center}
+ #root .studio-toolbar h2{font-size:15px}
+ #root .view-switch button{font-size:11px;padding:8px}
+ #root .canvas-tools{gap:8px}
+ #root .studio-footer{font-size:9px}
+ #root .empty-icon{margin-top:12px}
+}
+@media(prefers-reduced-motion:reduce){#root *{scroll-behavior:auto;transition:none}}

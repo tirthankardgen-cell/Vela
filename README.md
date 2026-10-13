@@ -8,6 +8,8 @@ Production URL: https://vela-dgen.vercel.app/
 
 ![Vela design studio](docs/assets/vela-studio.png)
 
+Studio roadmap: [phased layout, drawing and tracing plan](docs/plans/studio-roadmap.md). The first phase simplifies the studio controls and icons; connected-room drawing and calibrated tracing are planned separately.
+
 ## Website workflow
 
 1. Explore the landing page, then sign up or sign in using the labelled account simulation. Guest access is also available.

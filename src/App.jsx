@@ -5,6 +5,7 @@ import Library from './components/Library';
 import DesignCanvas from './components/DesignCanvas';
 import Inspector from './components/Inspector';
 import DialogHost from './components/DialogHost';
+import './studio.css';
 
 // React owns the workspace structure. The geometry engine owns its canvas,
 // form bindings and dialog contents; every listener and renderer is disposed on unmount.
@@ -13,7 +14,8 @@ function Studio(props) {
   return (
     <>
       <Header cloud={Boolean(props.store)} preview={props.store?.isDemo} />
-      <main className="workspace"><Library /><DesignCanvas /><Inspector /></main>
+      <nav className="mobile-panel-nav" aria-label="Studio panels"><a href="#studio-canvas">Canvas</a><a href="#studio-objects">Objects</a><a href="#studio-properties">Properties</a></nav>
+      <main className="workspace"><Library guest={!props.store} /><DesignCanvas /><Inspector /></main>
       <DialogHost />
       <section id="presentation" hidden />
       <input type="file" id="file-input" accept=".json,application/json" hidden />
