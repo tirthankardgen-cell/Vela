@@ -150,3 +150,30 @@
  .landing [data-parallax]{transform:none!important;will-change:auto}
  .landing .reveal-pending{opacity:1;transform:none}
 }
+
+/* Equal outside columns keep the main links centred independently of the logo and account actions. */
+.landing .site-header{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:20px}
+.landing .site-header .site-primary-nav{justify-content:center;gap:28px}
+.landing .site-header nav.site-primary-nav>a{display:block;white-space:nowrap}
+.landing .site-header-actions{display:flex;align-items:center;justify-self:end;gap:22px;font-size:14px;white-space:nowrap}
+.landing .site-header-actions>a:not(.lux-button){padding:12px 0}
+.landing .site-header nav>a[aria-current=page]:after{transform:scaleX(1)}
+@media(max-width:1150px){
+ .landing .site-header .wordmark-label{display:none}
+ .landing .site-header .site-primary-nav{gap:20px;font-size:13px}
+ .landing .site-header-actions{gap:16px;font-size:13px}
+ .landing .site-header .lux-button{padding-inline:14px;gap:12px}
+}
+@media(max-width:950px){
+ .landing .site-header{height:auto;grid-template-columns:1fr auto;gap:8px 16px;padding:14px 20px}
+ .landing .site-header .site-primary-nav{grid-row:2;grid-column:1/-1;width:100%;gap:32px;border-top:1px solid #e5dccb26;padding-top:4px}
+ .landing .site-header-actions{grid-row:1;grid-column:2}
+ .landing .editorial-hero-copy{top:57%}
+}
+@media(max-width:700px){
+ .landing .site-header{padding:12px;gap:7px 10px}
+ .landing .site-header-actions{gap:12px;font-size:11px}
+ .landing .site-header .lux-button{padding:10px;font-size:10px;gap:6px}
+ .landing .site-header .lux-button svg{display:none}
+ .landing .site-header .site-primary-nav{gap:28px;font-size:12px}
+}
