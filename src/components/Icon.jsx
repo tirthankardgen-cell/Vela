@@ -1,4 +1,7 @@
 const paths={
+ arrow:'M5 12h14m-6-6 6 6-6 6',down:'M12 4v16m-6-6 6 6 6-6',up:'M12 20V4m-6 6 6-6 6 6',
+ sparkle:'m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2z',
+ quote:'M10 5H4v8h4c0 3-1 4-3 5M20 5h-6v8h4c0 3-1 4-3 5',home:'m3 11 9-8 9 8M5 10v11h14V10M9 21v-7h6v7',
  close:'m6 6 12 12M18 6 6 18',library:'M3 4h7v16H3zM14 4h7v16h-7z',
  search:'m21 21-5-5 M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16',
  chevron:'m8 10 4 4 4-4',plus:'M12 5v14M5 12h14',minus:'M5 12h14',
