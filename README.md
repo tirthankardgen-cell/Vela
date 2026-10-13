@@ -41,7 +41,7 @@ npm run dev
 
 Development uses port 8766. `npm run start` serves the production build on port 8767. In the prepared cloud environment, use `npm ci --cache /workspace/.npm-cache --no-audit --no-fund`.
 
-Vercel should import this repository with its root directory at the repository root. `vercel.json` selects **Next.js**, `npm ci`, and `npm run build`. Remove any old `docs` output-directory override in Vercel project settings; use the framework default. No environment variables are required for the simulation. Connected Git deployments can publish subsequent pushes.
+Vercel should import this repository with its root directory at the repository root. `vercel.json` selects **Next.js**, `npm ci`, `npm run build`, and explicitly sets the output directory to `.next`. This overrides the legacy `docs` project setting. If editing the Vercel dashboard settings, use `.next` or disable the output-directory override; never use `docs` for this Next.js application. No environment variables are required for the simulation. Connected Git deployments can publish subsequent pushes.
 
 The canonical URL and sharing metadata use `https://vela-dgen.vercel.app` in `src/lib/site.js`. Brand assets are generated during preparation. Fonts are self-hosted and licensed under the SIL Open Font License; sources and palette research are in `brand/README.md`.
 
