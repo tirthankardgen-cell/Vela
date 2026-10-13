@@ -14,7 +14,7 @@ with sync_playwright() as p:
  initial=page.evaluate('Vela.getLayout().items.length')
  page.locator('[data-kind="chair"]').click()
  assert page.evaluate('Vela.getLayout().items.length')==initial+1
- page.locator('#stage').click(position={'x':15,'y':15})
+ page.locator('#stage').click(position={'x':700,'y':140})
  # Select the added object through the model's stable ID, then send one key event.
  item_id=page.evaluate('Vela.getLayout().items.at(-1).id')
  page.locator(f'[data-id="{item_id}"]').click(force=True)

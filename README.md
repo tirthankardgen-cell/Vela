@@ -10,6 +10,8 @@ Production URL: https://vela-dgen.vercel.app/
 
 Studio roadmap: [phased layout, drawing and tracing plan](docs/plans/studio-roadmap.md). The first phase simplifies the studio controls and icons; connected-room drawing and calibrated tracing are planned separately.
 
+The studio uses a full-screen canvas with floating library, properties and tool controls. Use **Focus** to hide both panels. Browse Furniture, Electronics, Climate, Decor or Build; room filters and search aliases help find the existing objects. See the [catalogue research and rollout](docs/plans/studio-catalogue-research.md) for planned additions.
+
 ## Website workflow
 
 1. Explore the landing page, then sign up or sign in using the labelled account simulation. Guest access is also available.

@@ -1,7 +1,7 @@
 # Vela catalogue research and category plan
 
-**Prepared:** 13 October 2026  
-**Status:** Research and product proposal. Categories and assets below are not yet implemented.  
+**Prepared:** 13 October 2026
+**Status:** Research and product proposal. First catalogue-navigation release implemented for existing objects; additional categories and assets below remain planned.
 **Scope:** A room/flat design library that can grow into a professional residential and small-commercial workflow.
 
 ## Recommendation
@@ -224,3 +224,10 @@ Add office workstations and meeting rooms, reception counters and waiting seatin
 6. Validate with a furnished-room task, a flat task, keyboard navigation, mobile placement and JSON save/reopen checks.
 
 **Next deliverable:** a small catalogue-navigation update using current objects. The full list is a roadmap, not a request to implement every category in one release.
+
+
+## First catalogue-navigation release
+
+Implemented Furniture, Electronics, Climate, Decor and Build using the 17 existing object types. Added room filters, cross-category alias search, result counts, Reset and dimension labels. Saved item IDs and geometry are unchanged. Kitchen, Bathroom, Lighting, Appliances, Plants and Outdoor will become visible as usable assets are added; their proposed assets are not included in this release.
+
+The studio canvas now spans the viewport. Library and properties are floating, independently dismissible panels; mobile shows one at a time. Focus hides both. Build/Furnish open the library, while Finishes and Schedule retain their existing dialogs. This does not add connected-wall drawing, calibrated tracing or new model geometry.

@@ -1,4 +1,5 @@
 const paths={
+ close:'m6 6 12 12M18 6 6 18',library:'M3 4h7v16H3zM14 4h7v16h-7z',
  search:'m21 21-5-5 M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16',
  chevron:'m8 10 4 4 4-4',plus:'M12 5v14M5 12h14',minus:'M5 12h14',
  undo:'M4 9h10a6 6 0 0 1 0 12M4 9l5-5M4 9l5 5',redo:'M20 9H10a6 6 0 0 0 0 12M20 9l-5-5M20 9l-5 5',

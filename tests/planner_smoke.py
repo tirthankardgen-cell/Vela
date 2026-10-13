@@ -1,7 +1,8 @@
 import os
 BASE_URL = os.environ.get("VELA_BASE_URL", "http://127.0.0.1:8766").rstrip("/")
 """Run against a local HTTP server: python -m http.server 8765."""
-import json, os, tempfile
+import json, os, tempfile, math
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
@@ -36,6 +37,9 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
     saved=Path(tmp)/'layout.json';d.value.save_as(saved); data=json.loads(saved.read_text());assert len(data['items'])==18
     with page.expect_download() as d: page.locator('#export-image').click()
     d.value.save_as(Path(tmp)/'plan.svg');assert '<svg' in (Path(tmp)/'plan.svg').read_text()
+    exported_box=list(map(float,ET.parse(Path(tmp)/'plan.svg').getroot().attrib['viewBox'].split()))
+    xs=[v[0] for v in layout()['room']['vertices']];ys=[v[1] for v in layout()['room']['vertices']]
+    assert math.isclose(exported_box[2],max(xs)-min(xs)+1.4) and math.isclose(exported_box[3],max(ys)-min(ys)+1.4)
     if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
     page.locator('#room-preset').select_option('b2');assert len(layout()['room']['vertices'])==4
     page.locator('#file-input').set_input_files(str(saved));page.wait_for_timeout(250);assert len(layout()['items'])==18

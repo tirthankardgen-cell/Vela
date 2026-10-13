@@ -28,7 +28,7 @@ export default function Header({cloud=false,preview=false}) {
         </div>
       </header>
       <nav className="studio-nav" aria-label="Studio tools">
-        <div><button className="active" id="design-tab"><Icon name="plan"/>Design</button><button id="materials-button"><Icon name="palette"/>Finishes</button><button id="schedule-button"><Icon name="list"/>Schedule</button></div>
+        <div><button id="build-tab"><Icon name="plan"/>Build</button><button className="active" id="design-tab"><Icon name="library"/>Furnish</button><button id="materials-button"><Icon name="palette"/>Finishes</button><button id="schedule-button"><Icon name="list"/>Schedule</button></div>
         <span className="local-badge"><i /> {preview?"Preview · local saves":cloud?"Cloud workspace":"Guest · local saves"}</span>
       </nav>
     </>

@@ -1,4 +1,4 @@
-import { Component, useLayoutEffect } from 'react';
+import { Component, useLayoutEffect, useEffect, useState } from 'react';
 import { initializePlanner } from '../planner/app';
 import Header from './components/Header';
 import Library from './components/Library';
@@ -6,16 +6,30 @@ import DesignCanvas from './components/DesignCanvas';
 import Inspector from './components/Inspector';
 import DialogHost from './components/DialogHost';
 import './studio.css';
+import Icon from './components/Icon';
 
 // React owns the workspace structure. The geometry engine owns its canvas,
 // form bindings and dialog contents; every listener and renderer is disposed on unmount.
 function Studio(props) {
+  const [library,setLibrary]=useState(true),[properties,setProperties]=useState(true);
+  useEffect(()=>{const small=matchMedia('(max-width: 780px)');const adapt=()=>{if(small.matches){setLibrary(false);setProperties(false);}};adapt();small.addEventListener('change',adapt);
+    const show=()=>{setLibrary(true);if(small.matches)setProperties(false);};
+    let previous=null;
+    const selection=e=>{const id=e.detail?.id;if(id&&id!==previous){if(small.matches){setLibrary(false);setProperties(false);}else setProperties(true);}previous=id;};
+    document.addEventListener('vela:library',show);document.addEventListener('vela:selection',selection);
+    return()=>{small.removeEventListener('change',adapt);document.removeEventListener('vela:library',show);document.removeEventListener('vela:selection',selection);};
+  },[]);
+  useEffect(()=>{document.dispatchEvent(new Event('vela:viewport'));},[library,properties]);
+  const closeLibrary=()=>{setLibrary(false);document.querySelector('[aria-controls="studio-objects"]')?.focus();};
+  const closeProperties=()=>{setProperties(false);document.querySelector('[aria-controls="studio-properties"]')?.focus();};
+  const toggleLibrary=()=>{setLibrary(v=>!v);if(matchMedia('(max-width:780px)').matches)setProperties(false);};
+  const toggleProperties=()=>{setProperties(v=>!v);if(matchMedia('(max-width:780px)').matches)setLibrary(false);};
   useLayoutEffect(() => initializePlanner(props), []);
   return (
     <>
       <Header cloud={Boolean(props.store)} preview={props.store?.isDemo} />
-      <nav className="mobile-panel-nav" aria-label="Studio panels"><a href="#studio-canvas">Canvas</a><a href="#studio-objects">Objects</a><a href="#studio-properties">Properties</a></nav>
-      <main className="workspace"><Library guest={!props.store} /><DesignCanvas /><Inspector /></main>
+      <nav className="panel-dock" aria-label="Studio panels"><button aria-controls="studio-objects" aria-expanded={library} onClick={toggleLibrary}><Icon name="library"/>Library</button><button aria-controls="studio-properties" aria-expanded={properties} onClick={toggleProperties}><Icon name="sliders"/>Properties</button><button title="Focus on canvas" onClick={()=>{setLibrary(false);setProperties(false);}}><Icon name="fit"/>Focus</button></nav>
+      <main className="workspace"><Library guest={!props.store} open={library} onClose={closeLibrary}/><DesignCanvas/><Inspector open={properties} onClose={closeProperties}/></main>
       <DialogHost />
       <section id="presentation" hidden />
       <input type="file" id="file-input" accept=".json,application/json" hidden />
