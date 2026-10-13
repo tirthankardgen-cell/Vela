@@ -14,9 +14,9 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as temp:
     page = context.new_page()
     errors = []
     page.on('pageerror', lambda e: errors.append(str(e)))
-    page.goto(BASE_URL)
+    page.goto(BASE_URL+'/studio?demo=1');page.wait_for_function('Boolean(window.Vela)')
     state = lambda: page.evaluate('Vela.getLayout()')
-    assert page.title() == 'Vela — Interior design studio'
+    assert page.title() == 'Design studio · Vela'
     page.locator('#project-details').click()
     page.locator('[name="name"]').fill('Test residence <Studio>')
     page.locator('[name="client"]').fill('A & B')
@@ -73,6 +73,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as temp:
     assert state()['room']['floorColor'] == '#d2b897'
     assert state()['items'][0]['cost'] == 250.5
     page.reload()
+    page.wait_for_function('Boolean(window.Vela)')
     assert state()['project']['name'] == 'Test residence <Studio>'
     assert state()['items'][0]['cost'] == 250.5
     page.locator('#projects-button').click()

@@ -2,81 +2,74 @@
 
 **Thoughtful spaces. Beautifully presented.**
 
-Vela is an offline-capable interior design studio with a metric 2D editor, coordinated 3D model, material palettes, project library, furniture specifications, and client presentation exports.
+Vela is an interior design website built with Next.js, React, Tailwind CSS and Three.js. Its olive, ivory and champagne identity pairs self-hosted Cormorant Garamond and Manrope typography with an architectural V mark.
 
-Version **0.1.0** is a working local design application. It builds on the Roomnote planner from `tirthankardgen-cell/Interior-design-`, keeping compatibility with its layout files.
+Production URL: https://vela-dgen.vercel.app/
 
 ![Vela design studio](docs/assets/vela-studio.png)
 
-## Host the website on Vercel
+## Website workflow
 
-1. Push this repository to GitHub as **Vela**.
-2. In Vercel, choose **Add New → Project**, and import the Vela repository.
-3. Keep the repository root as the root directory. `vercel.json` sets the framework to Other, installs with `npm ci`, builds with `npm run build`, and publishes **docs**.
-4. Deploy. No environment variables or secrets are required for the current static website.
-5. Add a custom domain in Vercel when desired. Subsequent pushes can trigger deployments through Vercel's Git integration.
+1. Explore the landing page, then sign up or sign in using the labelled account simulation. Guest access is also available.
+2. Start an empty room in centimetres or feet and inches, or upload a PNG, JPEG, WebP or PDF floor plan. PDFs use their first page; uploaded plans are scaled tracing references, not automatic wall detection.
+3. Arrange furniture, walls, doors and windows in the 2D editor and inspect the matching 3D scene. Room setup supports international currencies; inspector measurements remain in centimetres.
+4. Apply finishes, record costs and suppliers, and export layout JSON, plan SVG, 3D PNG, furniture CSV or a client presentation for printing to PDF.
+5. Return to the project dashboard to reopen locally saved designs.
 
-Node 24 is pinned in `package.json`. Build settings are versioned in `vercel.json`. This site runs entirely in the browser; there is no server database or account system. A visitor's projects remain in their browser storage, separately for each domain/device. Export JSON before moving from a preview deployment to the production domain.
+## Account simulation and Firebase
 
-The build and browser workflow are locally validated. A live Vercel deployment must be verified after connecting your GitHub repository; it has not been deployed by this setup.
+**The default is preview mode. No backend or credentials are required.** Signup and login simulate the account flow; passwords are never checked or stored. An email identifies a local preview profile. Sessions use sessionStorage and projects use localStorage. These profiles are not secure accounts. Designs do not sync across devices, browsers or domains. Export JSON backups before clearing storage or moving domains.
 
-## Run Vela
+Firebase Auth, Firestore and Storage adapters are prepared but disconnected in preview mode. To connect a project later:
 
-Download `downloads/Vela.zip`, extract it, and open **Vela.html** in a modern desktop browser with hardware acceleration enabled. The app includes its JavaScript and styling; there are no CDN dependencies, accounts, or API keys.
+1. Register a Firebase web app. Add the six public web configuration values listed in `.env.example` to Vercel environment settings.
+2. Enable Email/Password authentication; optionally enable Google sign-in. Add `vela-dgen.vercel.app` and any custom domain to Authentication's authorized domains.
+3. Create Firestore and Storage, then deploy the owner-scoped rules from `firestore.rules` and `storage.rules` using Firebase CLI (`firebase deploy --only firestore:rules,storage --project YOUR_PROJECT_ID`). Review and test rules in the emulator before a public launch.
+4. Set `NEXT_PUBLIC_AUTH_MODE=firebase` and redeploy. Public configuration variables are embedded at build time. Never place service-account credentials or private keys in `NEXT_PUBLIC_` variables.
 
-For the validated local development workflow:
+Live Firebase services have not been configured or integration-tested. Preview projects are not automatically migrated; export/import JSON when switching modes.
+
+## Run and deploy
+
+Use Node **24.x** and npm:
 
 ```sh
-npm ci --cache /workspace/.npm-cache --no-audit --no-fund
+npm ci
 npm run build
 npm run dev
 ```
 
-The development server listens on port 8766. Node 20+ and Python 3 are required. The build produces `index.html`, `planner.html`, and `docs/index.html`. The `docs` directory can be published with any static host.
+Development uses port 8766. `npm run start` serves the production build on port 8767. In the prepared cloud environment, use `npm ci --cache /workspace/.npm-cache --no-audit --no-fund`.
 
-## Design workflow
+Vercel should import this repository with its root directory at the repository root. `vercel.json` selects **Next.js**, `npm ci`, and `npm run build`. Remove any old `docs` output-directory override in Vercel project settings; use the framework default. No environment variables are required for the simulation. Connected Git deployments can publish subsequent pushes.
 
-1. Open project details beside the Vela logo. Set the project, client, studio, currency, and optional furniture budget.
-2. Choose a template, or start with an empty room. Search the collection, then click or drag pieces onto the plan.
-3. Select an item to adjust dimensions, elevation, position, rotation, colour, supplier, and unit cost. Doors and windows attach to external or internal walls.
-4. Explore **Materials & finishes**. Apply a palette to a selected item, all furniture, or room floor and walls. Undo reverses these changes.
-5. Switch to **3D studio** to orbit the matching model. Export a plan SVG or a 3D PNG.
-6. Open **Furniture schedule** for the itemised estimate, remaining budget, and CSV export.
-7. Choose **Present** for a client board with the floor plan, finishes, project details, notes, and furniture schedule. Download the standalone HTML or use **Print / Save PDF**.
-8. Use **Save project** to save a named library snapshot and download a portable JSON backup. **Projects** creates new projects and opens, copies, and removes library snapshots. Draft edits autosave separately.
-
-Keyboard: R rotates; D duplicates; Delete removes; arrow keys move 5 cm, or 1 cm with Shift; Ctrl/Cmd+Z undoes; Ctrl/Cmd+Shift+Z redoes; Ctrl/Cmd+S saves and exports.
-
-## Data and pricing
-
-Projects and autosave live in this browser on this device. Browser storage can be cleared or unavailable; export JSON backups for anything important. Up to 20 named projects can be stored. Import accepts existing Roomnote JSON and Vela exports. Geometry uses metres; inspector dimensions use centimetres.
-
-Budgets use manually entered amounts. Changing currency relabels amounts without conversion. Zero or blank costs are treated as unspecified and excluded from the priced-item count. Estimates exclude taxes, installation, delivery, and unpriced items. Supplier entries are plain text references, not live vendor integrations.
-
-Material samples communicate a colour direction. This release applies colours to schematic geometry; it does not provide scanned PBR materials or photorealistic rendering. Plans are conceptual, not certified construction drawings; verify dimensions and clearances on site. Presentation plans are not to a printed scale.
+The canonical URL and sharing metadata use `https://vela-dgen.vercel.app` in `src/lib/site.js`. Brand assets are generated during preparation. Fonts are self-hosted and licensed under the SIL Open Font License; sources and palette research are in `brand/README.md`.
 
 ## Validation
 
-Install Python Playwright and provide Chromium, then keep `npm run dev` running in a separate terminal:
-
 ```sh
+npm run test:branding
+# With the development server running:
 npm test
+# Or target the production server:
+VELA_BASE_URL=http://127.0.0.1:8767 npm test
 ```
 
-The prepared environment already supplies Playwright and `/usr/bin/chromium`. On another machine, install them through your package manager or `python3 -m pip install playwright` and `python3 -m playwright install --with-deps chromium`; set `CHROMIUM_PATH` to the installed browser executable if necessary.
+Browser tests require Python Playwright and Chromium. The cloud environment supplies both. Elsewhere, install Playwright and Chromium, then set `CHROMIUM_PATH` if it differs from `/usr/bin/chromium`.
 
-`VELA_BASE_URL` overrides the default test server address. Tests exercise real browser editing, wall attachment, undo/redo, JSON round-trip, invalid import, offline 3D, export, metadata, costs, palettes, project library, CSV formula escaping, presentation PDF generation, and responsive widths. Direct `file://` execution is intended for desktop use but has not been validated by the automated HTTP-based suite.
+Tests cover editing, drag/drop, wall attachments, undo/redo, JSON round-trip, 3D, exports, material and cost workflows, React event handling, simulation signup/login, local persistence, measured rooms, image/PDF upload, mobile widths and metadata. Firebase connectivity is intentionally not exercised in simulation mode.
+
+## Standalone edition
+
+`npm run build:standalone` produces `downloads/Vela.html` and `downloads/Vela.zip`. This separate offline React editor has no account or landing-page flow. Direct file opening could not be verified here because the managed browser blocks file URLs. `index.html`, `src/main.jsx` and `vite.config.js` are its source entry points; the hosted website uses `app/` and Next.js.
 
 ## Source map
 
-- `planner/app.js` — metric geometry, 2D editing, validation, history, and Three.js scene.
-- `planner/studio.js` — project library, metadata, materials, schedule, client boards.
-- `planner/template.html` and `planner/style.css` — responsive workspace.
-- `planner/build.mjs` — self-contained HTML build.
-- `tests/` — three browser regression suites.
+- `app/`: Next.js pages and global metadata.
+- `src/auth/`, `src/onboarding/`, `src/components/`: account, room setup and React workspace.
+- `src/lib/`: measurements, preview stores, dormant Firebase adapters and plan upload processing.
+- `planner/app.js`, `planner/studio.js`: room geometry, Three.js, project tools and exports.
+- `scripts/`: branding, PDF worker preparation and standalone packaging.
+- `tests/`: browser regression and asset/unit checks.
 
-## Commercial product milestones
-
-This first release supplies a professional local workflow. Further releases can add measured floor-plan tracing, a licensed high-detail asset catalog, richer materials and rendering, cloud accounts and backup, team permissions, collaboration, billing, and an operational security/accessibility review. Those services are not implemented or implied by this release.
-
-Third-party notices are in `THIRD_PARTY_NOTICES.md`.
+Vela preserves compatibility with Roomnote layout JSON from the original `tirthankardgen-cell/Interior-design-` repository. Furniture is schematic and dimensions should be verified on site. Budgets are manually entered estimates; currency changes relabel amounts without conversion. Tax, delivery, installation and unpriced items are excluded. Photorealistic rendering, automatic floor-plan recognition, billing and collaboration are not included.

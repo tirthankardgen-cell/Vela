@@ -1,0 +1,9 @@
+export default function DesignCanvas() {
+  return (
+    <section className="studio" aria-label="Room design canvas"><div className="studio-toolbar"><div><span className="eyebrow">DESIGN / RESIDENTIAL</span><h2 id="room-title">Living & dining</h2><span id="room-dimensions" className="muted"></span></div><div className="view-switch" role="tablist" aria-label="View"><button id="plan-mode" className="active" role="tab" aria-selected="true">▦ 2D plan</button><button id="view-mode" role="tab" aria-selected="false">◇ 3D studio</button></div></div>
+<div className="canvas-tools"><div className="tool-group flex items-center gap-1.5"><button id="undo" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button><button id="redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button><span className="divider"></span><label className="check"><input type="checkbox" id="snap" defaultChecked /> Snap · 5 cm</label></div><div className="tool-group flex items-center gap-1.5"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="fit">Fit room</button><button id="export-image">↓ Plan SVG</button></div></div>
+<div className="stage" id="stage"><svg id="plan" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive floor plan"></svg><div id="three-view" hidden></div><div className="stage-tag"><span className="status-dot"></span><span id="stage-tag">Drag to move · R to rotate · arrows to nudge</span></div><div id="camera-buttons" hidden><button data-camera="entry">From entry</button><button data-camera="tv">From TV</button><button data-camera="top">Above room</button><label className="check"><input type="checkbox" id="show-walls" defaultChecked /> Walls</label></div></div>
+<div className="studio-footer"><span id="item-count"></span><span id="status-message" role="status" aria-live="polite">Choose an item to see its measurements.</span><span>METRIC · 1 M = 100 CM</span></div>
+</section>
+  );
+}

@@ -10,7 +10,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
     page=context.new_page(); errors=[]; external=[]
     page.on('pageerror',lambda e: errors.append(str(e)))
     page.on('request',lambda r: external.append(r.url) if r.url.startswith('http') and not r.url.startswith(BASE_URL + '/') else None)
-    page.goto(BASE_URL + '/')
+    page.goto(BASE_URL + '/studio?demo=1');page.wait_for_function('Boolean(window.Vela)')
     layout=lambda: page.evaluate('Roomnote.getLayout()')
     assert len(layout()['room']['zones'])==7
     page.locator('#room-preset').select_option('l1')
@@ -47,7 +47,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
     d.value.save_as(Path(tmp)/'view.png');assert (Path(tmp)/'view.png').stat().st_size>10000
     page.screenshot(path='/tmp/roomnote-3d-tested.png')
     page.locator('#plan-mode').click();page.screenshot(path='/tmp/roomnote-plan-tested.png')
-    context.set_offline(False);page.reload();assert len(layout()['items'])==18
+    context.set_offline(False);page.reload();page.wait_for_function('Boolean(window.Vela)');assert len(layout()['items'])==18
     page.set_viewport_size({'width':390,'height':844});page.screenshot(path='/tmp/roomnote-mobile.png',full_page=True)
     assert page.evaluate('document.documentElement.scrollWidth<=window.innerWidth')
     assert not errors,errors

@@ -6,3 +6,10 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+dist/
+.build/
+*.local
+
+.next/
+public/pdf.worker.min.mjs

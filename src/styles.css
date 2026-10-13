@@ -1,0 +1,34 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "../planner/style.css";
+@source "./**/*.{js,jsx}";
+
+@theme {
+  --color-gold: #978365;
+  --color-olive: #1d211c;
+  --color-ivory: #faf9f2;
+  --font-sans: Manrope, "Segoe UI", Arial, sans-serif;
+}
+
+.vela-brand { min-width: 198px; }
+.board-logo img { width: 38px; height: 38px; object-fit: contain; margin-right: 10px; }
+@media (min-width:1550px) { .vela-brand { min-width: 220px; } }
+@media (max-width:1150px) { .vela-brand { min-width: 165px; } }
+@media (max-width:780px) { .vela-brand { min-width: 0; } }
+@media print {
+  body > #root { display: block !important; }
+  #root > :not(#presentation) { display: none !important; }
+}
+
+/* Olive & Champagne — Radix olive12, gold2/6/9/11 and sand11. */
+:root{--ink:#1d211c;--muted:#63635e;--line:#e2e1de;--green:#71624b;--paper:#fdfdfc;color:#1d211c;background:#faf9f2}
+.app-header{background:#1d211c}.header-project small{color:#b9bcb8}.project-avatar{background:#34392f;border-color:#505548;color:#eae6db}.project-title{color:#faf9f2}.project-title:hover{color:#d8d0bf}.project-title span{color:#b9bcb8}
+button.primary{background:#1d211c;border-color:#1d211c;color:#faf9f2}button.primary:hover{background:#3b4237;border-color:#3b4237}
+.header-actions>button{border-color:#4c5147;color:#f2f0e7}.header-actions>button.primary{background:#d8d0bf;border-color:#d8d0bf;color:#1d211c}.header-actions>button.primary:hover{background:#eae6db;border-color:#eae6db}
+.studio{background:#faf9f2}.studio-nav{background:#fdfdfc}.studio-nav button{color:#63635e}.studio-nav button.active{color:#71624b}.studio-nav button.active:after{background:#978365}
+.library,.inspector{background:#fdfdfc}.stage{background:#fdfdfc;border-color:#deddd5}.studio-toolbar h2{color:#30372c}.studio-toolbar .muted{color:#63635e}.view-switch{background:#e9e8e2}.view-switch button{color:#60655f}.view-switch button.active{background:#fdfdfc;color:#3b352b}
+.catalogue button{background:#f6f5f0;border-color:#eeede6;color:#60655f}.catalogue button:hover{background:#f2f0e7;border-color:#b9a88d;color:#3b352b}.catalogue svg{stroke:#74796b;fill:#e9e8e0}.library-tabs button.active{color:#71624b;border-color:#978365}
+input[type=checkbox]{accent-color:#71624b}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline-color:#978365}
+.search-box input,#room-preset,.inspector textarea{background:#f9f9f5;border-color:#e6e5dd}.search-box input::placeholder{color:#73766c}.field-label,.eyebrow,.panel-heading p,.inspector p,.note p,.notice,.muted,.studio-footer,.canvas-tools .check{color:#63635e}.eyebrow{letter-spacing:1.8px}
+.help-card{background:#f2f0e7;border-color:#e1dccf}.help-number,.help-card button{color:#71624b}.help-card strong{color:#504a3f}.help-card p{color:#63635e}.note strong,.inspector-bottom h3{color:#4f5649}.project-metrics span{color:#3b4237}.project-metrics small{color:#63635e}.stage-tag{color:#60655f;border-color:#e2e1de}.status-dot{background:#978365}.local-badge{color:#60655f}
+.palette-cta{color:#71624b}.palette-card small,.dialog-intro{color:#63635e}.palette-card:hover{background:#faf9f2;border-color:#b9a88d}.schedule-summary,th{background:#f2f0e7}.schedule-summary small,td small,th{color:#63635e}.mini-swatches button:hover{box-shadow:0 0 0 2px #978365}.project-card-icon{background:#f2f0e7;color:#978365}#toast{background:#1d211c}.presentation-controls{background:#1d211c;color:#e1dccf}#presentation{background:#e9e8e2}
