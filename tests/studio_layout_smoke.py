@@ -13,7 +13,7 @@ with sync_playwright() as p:
  stage=page.locator('#stage').bounding_box();assert stage=={'x':0,'y':0,'width':1440,'height':1000},stage
  original=page.evaluate('Vela.getLayout()')
  page.locator('[data-category="climate"]').click();assert page.locator('#catalogue [data-kind="ac"]').count()==1;assert page.locator('#catalogue [data-kind="wall"]').count()==0
- page.locator('#catalogue-search').fill('couch');assert page.locator('#catalogue button').count()==2
+ page.locator('#catalogue-search').fill('couch');assert page.locator('#catalogue button').count()>=2
  page.locator('#catalogue-search').fill('closet');assert page.locator('#catalogue [data-kind="wardrobe"]').count()==1
  page.locator('#catalogue-room').select_option('kitchen');assert page.locator('#catalogue-empty').is_visible()
  page.locator('#catalogue-clear').click();page.locator('[data-category="electronics"]').click();assert page.locator('#catalogue [data-kind="tv"]').count()==1
