@@ -94,7 +94,7 @@ function shape(o){
  else if(o.kind==='fan'){s=`<circle r="${w/2}" fill="none" stroke="#9ea996" stroke-width=".014" stroke-dasharray=".05 .05"/><circle r=".10" fill="${fill}"/>`;for(let i=0;i<3;i++)s+=`<rect x=".03" y="-.065" width="${w*.42}" height=".13" rx=".06" fill="${fill}" transform="rotate(${i*120})"/>`;}
  else if(o.kind==='partition'){s=box(-w/2,-d/2,w,d,fill,.008);for(let x=-w/2+.03;x<w/2;x+=.10)s+=`<path d="M${x},${-d/2} V${d/2}" stroke="#e6d7bb" stroke-width=".012"/>`;}
  else{s=box(-w/2,-d/2,w,d,fill,o.kind==='rug'?.02:.04);if(o.kind==='sofa'||o.kind==='chair')s+=box(-w/2+.04,-d/2+.04,w-.08,.13,'#ffffff38');if(o.kind==='tv')s+=box(-w*.38,d/2-.04,w*.76,.035,'#273d37',.008);if(o.kind==='shrine')s+=`<path d="M${-w*.3},${-d*.2}L0,${d*.2}L${w*.3},${-d*.2}" fill="none" stroke="#ead9a8" stroke-width=".04"/>`;}
- return s;
+ return o.kind==='fan'?`<g transform="scale(1 ${d/w})">${s}</g>`:s;
 }
 function drawPlan(){state.items.forEach(anchor);const b=bounds(),r=stage.getBoundingClientRect(),mobile=r.width<=780,left=mobile?20:($('studio-objects').hidden?24:302),right=mobile?20:($('studio-properties').hidden?24:282),top=mobile?230:180,bottom=100,availableW=Math.max(160,r.width-left-right),availableH=Math.max(160,r.height-top-bottom),scale=Math.max(.01,Math.min(availableW/(b.w+1.4),availableH/(b.d+1.4))*zoom),vw=r.width/scale,vh=r.height/scale;svg.setAttribute('viewBox',`${b.x+b.w/2-(left+availableW/2)/scale} ${b.y+b.d/2-(top+availableH/2)/scale} ${vw} ${vh}`);
  let s=`<defs><pattern id="grid" width=".1" height=".1" patternUnits="userSpaceOnUse"><circle cx=".05" cy=".05" r=".005" fill="#cfd8ca"/></pattern></defs><rect x="-30" y="-30" width="60" height="60" fill="url(#grid)"/><path d="${pathPoly(state.room.vertices)}" fill="${esc(state.room.floorColor||'#eee9df')}" stroke="#505f56" stroke-width="${state.room.wallThickness}" stroke-linejoin="miter"/>`;
@@ -189,6 +189,7 @@ function makeFurniture(o){const g=new THREE.Group(),m=material(o.color),light=ma
  else if(o.kind==='ac'){c(0,h/2,0,w,h,d);c(0,h*.22,-d/2-.003,w*.8,.04,.007,dark);}
  else if(o.kind==='fan'){cylinder(g,0,h/2,0,.11,h,metal);for(let i=0;i<3;i++){const bg=new THREE.Group();bg.rotation.y=i*Math.PI*2/3;g.add(bg);cube(bg,w*.22,h/2,0,w*.46,.025,.12,m);}}
  else {c(0,h/2,0,w,h,d);if(o.kind==='wardrobe'){c(0,h/2,-d/2-.006,.015,h,.015,light);for(const x of [-.055,.055])c(x,h*.52,-d/2-.025,.015,.18,.025,metal);}}
+ if(o.kind==='fan')g.scale.z=d/w;
  return g;
 }
 function makeWall(ed,index){const g=new THREE.Group();g.position.set(ed.a[0],0,ed.a[1]);g.rotation.y=-ed.angle*Math.PI/180;g.userData.wall=true;const H=ed.h||state.room.edgeHeights?.[index]||state.room.height,t=ed.t||state.room.wallThickness,m=material(state.room.wallColor||'#e5e0d5');const ops=state.items.filter(o=>TYPES[o.kind].opening&&o.wall===index).map(o=>({o,start:clamp(o.offset-o.w/2,0,ed.len),end:clamp(o.offset+o.w/2,0,ed.len),low:clamp(o.e,0,H),high:clamp(o.e+o.h,0,H)}));const cuts=[...new Set([0,ed.len,...ops.flatMap(o=>[o.start,o.end])])].sort((a,b)=>a-b);
