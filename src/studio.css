@@ -134,3 +134,60 @@
 #root .wall-measurements{font-size:12px;line-height:1.8;margin:0 0 20px}
 #root #outer-wall-form label{margin-bottom:16px}
 #root #outer-wall-form .muted{margin-top:15px}
+
+/* A single workspace frame: top tools, aligned sidebars and one canvas control bar. */
+#root .app-header{top:0;left:0;right:0;height:60px;border-radius:0;box-shadow:none;padding:0 20px}
+#root .studio-nav{top:60px;left:0;right:0;width:auto;height:48px;border:0;border-bottom:1px solid #deded3;border-radius:0;box-shadow:none;padding:0 20px}
+#root .studio-nav>div{gap:24px}
+#root .studio-nav button{font-size:12px}
+#root .panel-dock{top:66px;bottom:auto;left:auto;right:162px;height:36px;border:0;border-radius:0;box-shadow:none;padding:0;background:transparent;gap:4px}
+#root .panel-dock button{font-size:11px;padding:7px 10px}
+#root .panel-dock button:last-child{font-size:0}
+#root .studio-toolbar{top:66px;left:auto;right:16px;height:36px;z-index:31}
+#root .studio-toolbar>div:first-child{position:fixed;bottom:18px;left:18px;border:0;padding:0;background:none;max-width:235px;pointer-events:none}
+#root .studio-toolbar h2{display:none}
+#root .studio-toolbar .muted{font-size:10px}
+#root .view-switch{box-shadow:none;border:0;background:#eceee5}
+#root .library,#root .inspector{top:108px;bottom:0;max-height:none;border-radius:0;box-shadow:none;padding:20px 18px;background:#fdfdfb}
+#root .library{left:0;width:260px;border-width:0 1px 0 0;padding-bottom:60px}
+#root .inspector{right:0;width:260px;border-width:0 0 0 1px}
+#root .library-heading,#root .inspector-heading{margin-bottom:20px}
+#root .catalogue button{height:94px;border-radius:8px;gap:5px}
+#root .catalogue button[data-group]{border-radius:8px;background:#f6f6ef}
+#root .catalogue button[data-group] svg{width:36px;height:28px}
+#root .catalogue-filters{margin:12px 0 0;border:0;padding:0}
+#root .catalogue-filters summary{font-size:11px;cursor:pointer;color:#69715f}
+#root .catalogue-filters .room-filter{padding-top:10px}
+#root .catalogue-meta{margin:10px 0;font-size:10px}
+#root .library-tabs{gap:5px;margin:12px 0}
+#root .library-tabs button{padding:7px;font-size:10px}
+#root .canvas-tools{bottom:16px;left:var(--canvas-centre,50%);right:auto;transform:translateX(-50%);padding:4px;background:#fdfdfb;border:1px solid #deded3;border-radius:10px;box-shadow:0 3px 14px #20251a0a;gap:4px}
+#root .tool-group{border:0;border-radius:0;box-shadow:none;background:none;padding:0}
+#root .tool-group+.tool-group{border-left:1px solid #e2e4da;padding-left:5px}
+#root .stage-tag,#root .studio-footer #item-count{display:none}
+#root #camera-buttons{top:120px;left:285px;right:285px}
+#root #toast{bottom:75px}
+#root .inspector .mini-swatches{gap:10px;margin:12px 0 20px}
+@media(max-width:1050px) and (min-width:781px){
+ #root .studio-nav>div{gap:14px}
+ #root .studio-nav button{font-size:11px}
+ #root .panel-dock button{padding:7px;font-size:10px}
+ #root .library,#root .inspector{width:240px;padding-inline:14px}
+}
+@media(max-width:780px){
+ #root .app-header{height:98px;padding:8px 12px;gap:7px}
+ #root .studio-nav{top:98px;height:44px;padding:0 12px}
+ #root .studio-nav>div{gap:8px}
+ #root .studio-nav button{font-size:11px}
+ #root .panel-dock{top:147px;left:8px;right:auto;bottom:auto;transform:none;height:32px;gap:3px}
+ #root .panel-dock button{font-size:10px;padding:6px 8px}
+ #root .panel-dock button:last-child{font-size:0}
+ #root .studio-toolbar{top:147px;left:auto;right:8px;height:32px}
+ #root .studio-toolbar>div:first-child{bottom:66px;left:12px;max-width:calc(100vw - 24px)}
+ #root .library,#root .inspector{top:186px;bottom:82px;left:8px;right:8px;width:auto;padding:16px;border:1px solid #deded3;border-radius:12px;z-index:25}
+ #root .catalogue button{height:94px}
+ #root .canvas-tools{left:50%;right:auto;bottom:12px;gap:0;width:max-content;max-width:calc(100% - 12px);padding:4px}
+ #root .canvas-tools .check{font-size:9px}
+ #root #camera-buttons{top:190px;left:12px;right:12px}
+}
+#root .studio-toolbar>div:first-child{display:none}

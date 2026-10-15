@@ -1,5 +1,6 @@
 import {initializeStudio, validateProject} from './studio.js';
 import {catalogueEntries,catalogueGroups,catalogueVariants} from '../src/lib/catalogue';
+import {feetAndInches,metric,centimetres} from '../src/lib/measurements';
 import {resizeItem} from './resize.js';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -68,8 +69,8 @@ function edges(){const segments=state.room.vertices.map((a,i)=>({a,b:state.room.
 function bounds(){const xs=state.room.vertices.map(p=>p[0]),ys=state.room.vertices.map(p=>p[1]);return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),d:Math.max(...ys)-Math.min(...ys)};}
 function anchor(o){if(!TYPES[o.kind].opening)return o;const all=edges();let index=o.wallId?all.findIndex(e=>e.id===o.wallId):o.wall||0;if(index<0){delete o.wallId;index=0;}o.wall=clamp(index,0,all.length-1);const ed=all[o.wall];if(ed.id)o.wallId=ed.id;else delete o.wallId;o.w=clamp(o.w,.03,Math.max(.03,ed.len-.04));o.offset=clamp(o.offset??ed.len/2,o.w/2,ed.len-o.w/2);o.x=ed.a[0]+ed.dx*o.offset/ed.len;o.y=ed.a[1]+ed.dy*o.offset/ed.len;o.rotation=ed.angle;return o;}
 function nearestWall(o,x,y){let best=null;edges().forEach((ed,i)=>{const t=clamp(((x-ed.a[0])*ed.dx+(y-ed.a[1])*ed.dy)/(ed.len**2),0,1),qx=ed.a[0]+ed.dx*t,qy=ed.a[1]+ed.dy*t,dist=Math.hypot(qx-x,qy-y);if(!best||dist<best.dist)best={dist,i,offset:t*ed.len};});o.wall=best.i;o.wallId=edges()[best.i].id;o.offset=best.offset;anchor(o);}
-function feet(m){const inches=Math.round(m/.0254);return `${Math.floor(inches/12)}′${inches%12}″`;}
-function dual(m){return `${feet(m)} · ${Math.round(m*100)} cm (${Number(m.toFixed(3))} m)`;}
+const feet=feetAndInches;
+function dual(m){return `${centimetres(m)} cm · ${metric(m)} · ≈ ${feet(m)}`;}
 function toast(s){$('toast').textContent=s;$('toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('show'),3600);}
 function snapshot(){return JSON.stringify(state);}
 function remember(before){if(before!==snapshot()){undoStack.push(before);if(undoStack.length>50)undoStack.shift();redoStack=[];}persist();}
@@ -100,16 +101,24 @@ function shape(o){
  else{s=box(-w/2,-d/2,w,d,fill,o.kind==='rug'?.02:.04);if(o.kind==='sofa'||o.kind==='chair')s+=box(-w/2+.04,-d/2+.04,w-.08,.13,'#ffffff38');if(o.kind==='tv')s+=box(-w*.38,d/2-.04,w*.76,.035,'#273d37',.008);if(o.kind==='shrine')s+=`<path d="M${-w*.3},${-d*.2}L0,${d*.2}L${w*.3},${-d*.2}" fill="none" stroke="#ead9a8" stroke-width=".04"/>`;}
  return o.kind==='fan'?`<g transform="scale(1 ${d/w})">${s}</g>`:s;
 }
-function drawPlan(){state.items.forEach(anchor);const b=bounds(),r=stage.getBoundingClientRect(),mobile=r.width<=780,left=mobile?20:($('studio-objects').hidden?24:302),right=mobile?20:($('studio-properties').hidden?24:282),top=mobile?230:180,bottom=100,availableW=Math.max(160,r.width-left-right),availableH=Math.max(160,r.height-top-bottom),scale=Math.max(.01,Math.min(availableW/(b.w+1.4),availableH/(b.d+1.4))*zoom),vw=r.width/scale,vh=r.height/scale;svg.setAttribute('viewBox',`${b.x+b.w/2-(left+availableW/2)/scale} ${b.y+b.d/2-(top+availableH/2)/scale} ${vw} ${vh}`);
+function drawPlan(){state.items.forEach(anchor);const b=bounds(),r=stage.getBoundingClientRect(),mobile=r.width<=780;
+ const panelWidth=id=>$(id).hidden?0:$(id).getBoundingClientRect().width;
+ const left=mobile?16:panelWidth('studio-objects')+28,right=mobile?16:panelWidth('studio-properties')+28;
+ const top=mobile?190:132,bottom=mobile?94:78,availableW=Math.max(100,r.width-left-right),availableH=Math.max(100,r.height-top-bottom);
+ const scale=Math.max(.01,Math.min(availableW/(b.w+.8),availableH/(b.d+.8))*zoom),vw=r.width/scale,vh=r.height/scale;
+ svg.setAttribute('viewBox',`${b.x+b.w/2-(left+availableW/2)/scale} ${b.y+b.d/2-(top+availableH/2)/scale} ${vw} ${vh}`);
+ $('studio-canvas').style.setProperty('--canvas-centre',`${left+availableW/2}px`);
+
  let s=`<defs><pattern id="grid" width=".1" height=".1" patternUnits="userSpaceOnUse"><circle cx=".05" cy=".05" r=".005" fill="#cfd8ca"/></pattern></defs><rect x="-30" y="-30" width="60" height="60" fill="url(#grid)"/><path d="${pathPoly(state.room.vertices)}" fill="${esc(state.room.floorColor||'#eee9df')}" stroke="#505f56" stroke-width="${state.room.wallThickness}" stroke-linejoin="miter"/>`;
  if(state.room.reference?.data&&state.room.reference.visible!==false)s+=`<image id="floorplan-reference" href="${esc(state.room.reference.data)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.d}" opacity="${state.room.reference.opacity??.45}" preserveAspectRatio="none" pointer-events="none"/>`;
  for(const z of state.room.zones||[])s+=`<text x="${z.x}" y="${z.y}" font-family="system-ui" font-size=".14" text-anchor="middle" fill="#476855" pointer-events="none">${esc(z.name)}</text>`;
  const eds=edges().slice(0,state.room.vertices.length);eds.forEach((ed,i)=>{
  const color=state.room.edgeColors?.[i]||state.room.wallColor||'#e5e0d5',active=selectedOuterWall()===i;
  s+=`<g data-outer-wall="${i}" style="cursor:pointer"><title>Outer wall ${i+1} · ${dual(ed.len)}</title><path d="M${ed.a[0]} ${ed.a[1]} L${ed.b[0]} ${ed.b[1]}" stroke="${esc(color)}" stroke-width="${state.room.wallThickness}"/><path d="M${ed.a[0]} ${ed.a[1]} L${ed.b[0]} ${ed.b[1]}" stroke="${active?'#315b4a':'transparent'}" stroke-width="${active?2/scale:Math.max(state.room.wallThickness,16/scale)}" ${active?'stroke-dasharray=".08 .04"':''} fill="none"/></g>`;
-const nx=-ed.dy/ed.len,ny=ed.dx/ed.len,x=(ed.a[0]+ed.b[0])/2-nx*.2,y=(ed.a[1]+ed.b[1])/2-ny*.2;s+=`<text x="${x}" y="${y}" font-family="system-ui" text-anchor="middle" dominant-baseline="middle" font-size=".095" fill="#7f887b" pointer-events="none">${feet(ed.len)} · ${Number(ed.len.toFixed(2))} m</text>`;});
+const nx=-ed.dy/ed.len,ny=ed.dx/ed.len,offset=state.room.wallThickness/2+18/scale,x=(ed.a[0]+ed.b[0])/2-nx*offset,y=(ed.a[1]+ed.b[1])/2-ny*offset,angle=ed.angle>90?ed.angle-180:ed.angle<=-90?ed.angle+180:ed.angle;
+ s+=`<text class="wall-dimension" x="${x}" y="${y}" transform="rotate(${angle} ${x} ${y})" font-family="system-ui" text-anchor="middle" dominant-baseline="middle" font-size="${11/scale}" fill="#626b5c" pointer-events="none">${metric(ed.len)} · ≈ ${feet(ed.len)}</text>`;});
  const ordered=[...state.items].sort((a,b)=>(a.kind==='wall'?-2:a.kind==='rug'?-1:TYPES[a.kind].opening?2:0)-(b.kind==='wall'?-2:b.kind==='rug'?-1:TYPES[b.kind].opening?2:0));
- for(const o of ordered){s+=`<g class="furniture" data-id="${esc(o.id)}" transform="translate(${o.x} ${o.y}) rotate(${o.rotation})"><title>${esc(o.label)} · ${Math.round(o.w*100)} × ${Math.round(o.d*100)} cm</title>${shape(o)}`;if(o.id===selected)s+=`<rect x="${-o.w/2-.045}" y="${-o.d/2-.045}" width="${o.w+.09}" height="${o.d+.09}" fill="none" stroke="#3a8264" stroke-width=".025" stroke-dasharray=".065 .035" rx=".035"/>`;s+='</g>';if(!['fan','rug','pillar','ac','door','window','wall'].includes(o.kind))s+=`<text x="${o.x}" y="${o.y}" text-anchor="middle" dominant-baseline="middle" font-family="system-ui" font-size=".085" fill="#394d40" pointer-events="none">${esc(o.label.slice(0,25))}</text>`;}
+ for(const o of ordered){s+=`<g class="furniture" data-id="${esc(o.id)}" transform="translate(${o.x} ${o.y}) rotate(${o.rotation})"><title>${esc(o.label)} · ${centimetres(o.w)} × ${centimetres(o.d)} cm</title>${shape(o)}`;if(o.id===selected)s+=`<rect x="${-o.w/2-.045}" y="${-o.d/2-.045}" width="${o.w+.09}" height="${o.d+.09}" fill="none" stroke="#3a8264" stroke-width=".025" stroke-dasharray=".065 .035" rx=".035"/>`;s+='</g>';if(o.id===selected&&!['fan','rug','pillar','ac','door','window','wall'].includes(o.kind))s+=`<text x="${o.x}" y="${o.y}" text-anchor="middle" dominant-baseline="middle" font-family="system-ui" font-size="${Math.min(.11,11/scale)}" fill="#394d40" pointer-events="none">${esc(o.label.slice(0,25))}</text>`;}
  const chosen=selection();
  if(chosen){const o=chosen,handles=TYPES[o.kind].opening?['w','e']:['nw','n','ne','e','se','s','sw','w'],size=10/scale,hit=22/scale;
  s+=`<g class="selection-handles" data-selection-id="${esc(o.id)}" transform="translate(${o.x} ${o.y}) rotate(${o.rotation})">`;
@@ -121,19 +130,19 @@ const nx=-ed.dy/ed.len,ny=ed.dx/ed.len,x=(ed.a[0]+ed.b[0])/2-nx*.2,y=(ed.a[1]+ed
  svg.innerHTML=s;
 }
 function inspector(){const o=selection(),wallIndex=selectedOuterWall(),wall=wallIndex!==null?edges()[wallIndex]:null;
- document.dispatchEvent(new CustomEvent('vela:selection',{detail:{id:o?.id||(wall?selected:null)}}));
+ document.dispatchEvent(new CustomEvent('vela:selection',{detail:{id:o?.id||(wall?selected:null),interacting:!!drag}}));
  $('item-form').hidden=!o;$('outer-wall-form').hidden=!wall;$('empty-inspector').hidden=!!o||!!wall;
  $('inspector-title').textContent=o?o.label:wall?`Outer wall ${wallIndex+1}`:'Your layout';
- if(wall){$('outer-wall-measurements').textContent=`Length: ${dual(wall.len)} · Height: ${dual(state.room.edgeHeights?.[wallIndex]||state.room.height)}`;$('outer-wall-color').value=state.room.edgeColors?.[wallIndex]||state.room.wallColor||'#e5e0d5';}
+ if(wall){$('outer-wall-measurements').textContent=`Centre-line length: ${dual(wall.len)} · Height: ${dual(state.room.edgeHeights?.[wallIndex]||state.room.height)}`;$('outer-wall-color').value=state.room.edgeColors?.[wallIndex]||state.room.wallColor||'#e5e0d5';}
  if(!o)return;
- $('item-label').value=o.label;for(const [field,key] of [['width','w'],['depth','d'],['height','h'],['elevation','e'],['x','x'],['y','y']]){$(`item-${field}`).value=Math.round(o[key]*100);$(`item-${field}-equivalent`).textContent=`${feet(o[key])} · ${Number(o[key].toFixed(3))} m`;}$('item-rotation').value=Math.round(o.rotation);$('item-color').value=o.color;
+ $('item-label').value=o.label;for(const [field,key] of [['width','w'],['depth','d'],['height','h'],['elevation','e'],['x','x'],['y','y']]){$(`item-${field}`).value=centimetres(o[key]);$(`item-${field}-equivalent`).textContent=`≈ ${feet(o[key])} · ${metric(o[key])}`;}$('item-rotation').value=Math.round(o.rotation);$('item-color').value=o.color;
  const opening=!!TYPES[o.kind].opening;$('wall-field').hidden=!opening;$('position-fields').hidden=opening;$('rotation-label').hidden=opening;$('rotate-item').disabled=opening;$('mirror-item').hidden=o.kind!=='lsofa';$('item-depth').disabled=opening;
  $('item-wall').innerHTML=edges().map((ed,i)=>`<option value="${i}">${esc(ed.label||`Outer wall ${i+1}`)} · ${feet(ed.len)}</option>`).join('');$('item-wall').value=o.wall??0;
  $('item-note').textContent=opening?'Drag onto an outer or internal wall to move this opening. “Above floor” is the window sill height; doors start at zero. Door swing is schematic.':o.kind==='dining'?'Width and depth measure the table. Chairs extend beyond it; leave room to pull them out.':o.kind==='lsofa'?'Depth includes the chaise. Flip chaise changes its side while keeping the sofa in place.':'Dimensions are in centimetres. Rotation is clockwise in the top plan.';
 }
 function pointInRoom(x,y){let inside=false;const p=state.room.vertices;for(let i=0,j=p.length-1;i<p.length;j=i++){const [xi,yi]=p[i],[xj,yj]=p[j];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))inside=!inside;}return inside;}
 function warnings(){const outside=state.items.filter(o=>!TYPES[o.kind].opening&&!pointInRoom(o.x,o.y));const high=state.items.filter(o=>o.e+o.h>state.room.height+.01);return outside.length?`${outside.length} item(s) have their centre outside the room.`:high.length?`${high.length} item(s) extend above the ceiling.`:'';}
-function refresh(){$('reference-controls').hidden=!state.room.reference;$('reference-visible').checked=state.room.reference?.visible!==false;$('reference-opacity').value=state.room.reference?.opacity??.45;$('room-preset').value='current';const b=bounds();$('room-title').textContent=state.room.name;$('room-dimensions').textContent=`${feet(b.w)} × ${feet(b.d)} · ${Number(b.w.toFixed(2))} × ${Number(b.d.toFixed(2))} m`;$('room-name').value=state.room.name;$('room-width').value=Math.round(b.w*100);$('room-depth').value=Math.round(b.d*100);$('room-height').value=Math.round(state.room.height*100);$('notes').value=state.notes;$('item-count').textContent=`${state.items.length} items placed`;$('status-message').dataset.warning=String(Boolean(warnings()));$('status-message').textContent=warnings()||(selection()?'Selected: '+selection().label:'Choose an item to see its measurements.');drawPlan();inspector();buttons();if(mode==='3d')build3D();document.dispatchEvent(new Event('vela:change'));}
+function refresh(){$('reference-controls').hidden=!state.room.reference;$('reference-visible').checked=state.room.reference?.visible!==false;$('reference-opacity').value=state.room.reference?.opacity??.45;$('room-preset').value='current';const b=bounds();$('room-title').textContent=state.room.name;$('room-dimensions').textContent=`${feet(b.w)} × ${feet(b.d)} · ${Number(b.w.toFixed(2))} × ${Number(b.d.toFixed(2))} m`;$('room-name').value=state.room.name;$('room-width').value=centimetres(b.w);$('room-depth').value=centimetres(b.d);$('room-height').value=centimetres(state.room.height);$('notes').value=state.notes;$('item-count').textContent=`${state.items.length} items placed`;$('status-message').dataset.warning=String(Boolean(warnings()));$('status-message').textContent=warnings()||(selection()?'Selected: '+selection().label:'Choose an item to see its measurements.');drawPlan();inspector();buttons();if(mode==='3d')build3D();document.dispatchEvent(new Event('vela:change'));}
 function add(key,p){const variant=catalogueVariants[key],kind=variant?.kind||key;if(!TYPES[kind])return;const b=bounds();mutate(()=>{const o=item(kind,p?.x??b.x+b.w/2,p?.y??b.y+b.d/2,variant?{label:variant.label,w:variant.w,d:variant.d,h:variant.h,e:variant.e??TYPES[kind].e??0,variant:key}:{});if(TYPES[kind].opening)nearestWall(o,o.x,o.y);if(kind==='fan')o.e=Math.max(0,state.room.height-.4);state.items.push(o);selected=o.id;});toast(`${variant?.label||TYPES[kind].label} added. Drag to place it.`);}
 let cataloguePath=[],catalogueAnimation;
 const climateKinds=new Set(['ac','fan','heater']);
@@ -236,6 +245,8 @@ function captureCamera(){if(camera&&mode==='3d')state.camera={position:camera.po
 function restoreCamera(){if(state.camera){loading=true;camera.position.fromArray(state.camera.position);controls.target.fromArray(state.camera.target);camera.fov=clamp(state.camera.fov||45,20,90);camera.updateProjectionMatrix();controls.update();loading=false;}else setCamera('top');}
 function setMode(next){if(next==='3d'&&!init3D())return;mode=next;$('plan').hidden=mode!=='plan';$('three-view').hidden=mode!=='3d';$('camera-buttons').hidden=mode!=='3d';$('plan-mode').classList.toggle('active',mode==='plan');$('view-mode').classList.toggle('active',mode==='3d');$('plan-mode').setAttribute('aria-selected',mode==='plan');$('view-mode').setAttribute('aria-selected',mode==='3d');$('export-label').textContent=mode==='plan'?'Plan SVG':'View PNG';$('stage-tag').textContent=mode==='plan'?'Drag to move · handles to resize · R to rotate':'Drag to orbit · scroll to zoom';$('zoom-in').disabled=mode==='3d';$('zoom-out').disabled=mode==='3d';if(mode==='3d'){build3D();restoreCamera();}}
 listen(document,'vela:viewport',()=>{drawPlan();});
+const planResizeObserver=new ResizeObserver(()=>drawPlan());
+planResizeObserver.observe(stage);
 $('plan-mode').onclick=()=>setMode('plan');$('view-mode').onclick=()=>setMode('3d');document.querySelectorAll('[data-camera]').forEach(b=>b.onclick=()=>setCamera(b.dataset.camera));$('show-walls').onchange=()=>{content?.children.filter(o=>o.userData.wall).forEach(o=>o.visible=$('show-walls').checked);};
 try{const saved=localStorage.getItem(STORAGE);if(initialLayout)state=validate(initialLayout);else if(saved)state=validate(JSON.parse(saved));}catch{toast('Could not restore the browser draft. Open a saved layout file if you have one.');}
 initializeStudio({listen,owner,store,standalone,getState:()=>state,selection,mutate,replace:raw=>{state=validate(raw);selected=null;zoom=1;},newProject:()=>{state=preset('blank');state.project=validateProject({name:'Untitled project'});selected=null;zoom=1;},refresh,catalogue,toast,download,svg,captureCamera});
@@ -249,6 +260,7 @@ return () => {
  clearTimeout(toast.timer);
  catalogueAnimation?.cancel();
  resizeObserver?.disconnect();
+ planResizeObserver.disconnect();
  renderer?.setAnimationLoop(null);
  controls?.dispose();
  if (scene) disposeTree(scene);

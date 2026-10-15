@@ -5,7 +5,7 @@ BASE=os.environ.get('VELA_BASE_URL','http://127.0.0.1:8766').rstrip('/')
 with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']);page=b.new_page(viewport={'width':1440,'height':1000});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
  page.goto(BASE+'/start?demo=1');assert 'entire house or flat' in page.locator('.home-dimensions-note').inner_text()
- assert 'cm' in page.locator('.dimension-equivalent').first.inner_text() and 'ft' in page.locator('.dimension-equivalent').first.inner_text()
+ assert 'cm' in page.locator('.dimension-equivalent').first.inner_text() and '′' in page.locator('.dimension-equivalent').first.inner_text()
  page.get_by_role('button',name='Open the studio').click();page.wait_for_function('Boolean(window.Vela)');assert page.evaluate('Vela.getLayout().items.length')==0
  page.get_by_role('button',name='Focus',exact=True).click();page.wait_for_timeout(200)
  def select_wall(index):

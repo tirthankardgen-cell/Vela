@@ -1,5 +1,5 @@
 import Icon from './Icon';
-const dimension=(label,id,props={})=><label>{label} · cm<input id={id} type="number" step="1" {...props}/><small className="dimension-equivalent" id={`${id}-equivalent`}/></label>;
+const dimension=(label,id,props={})=><label>{label} · cm<input id={id} type="number" step="any" {...props}/><small className="dimension-equivalent" id={`${id}-equivalent`}/></label>;
 export default function Inspector({open=true,onClose}) {
  return <aside hidden={!open} className="inspector" id="studio-properties" tabIndex={-1}>
   <div className="inspector-heading"><h2 id="inspector-title">Your layout</h2><button className="panel-close" onClick={onClose} aria-label="Close properties"><Icon name="close" size={16}/></button></div>

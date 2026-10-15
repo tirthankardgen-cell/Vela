@@ -15,7 +15,7 @@ with sync_playwright() as p:
  page.locator('[data-category="electronics"]').click();page.locator('[data-group="Climate control"]').click();page.locator('[data-group="Air conditioning"]').click();assert page.locator('#catalogue [data-kind="ac"]').count()==1;assert page.locator('#catalogue [data-kind="wall"]').count()==0
  page.locator('#catalogue-search').fill('couch');assert page.locator('#catalogue button').count()>=2
  page.locator('#catalogue-search').fill('closet');assert page.locator('#catalogue [data-kind="wardrobe"]').count()==1
- page.locator('#catalogue-room').select_option('kitchen');assert page.locator('#catalogue-empty').is_visible()
+ page.locator('.catalogue-filters').evaluate('(el)=>el.open=true');page.locator('#catalogue-room').select_option('kitchen');assert page.locator('#catalogue-empty').is_visible()
  page.locator('#catalogue-clear').click();page.locator('[data-category="electronics"]').click();page.locator('[data-group="TV & media"]').click();assert page.locator('#catalogue [data-kind="tv"]').count()==1
  page.locator('#catalogue-clear').click();page.locator('[data-category="decor"]').click();page.locator('[data-group="Rugs"]').click();assert page.locator('#catalogue [data-kind="rug"]').count()==1
  assert page.evaluate('Vela.getLayout()')==original

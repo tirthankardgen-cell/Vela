@@ -11,3 +11,7 @@ Validation: `node --test tests/resize.test.mjs` and `VELA_BASE_URL=<local previe
 Outer walls can be selected in the 2D plan and coloured independently. Their per-edge colours are stored with the room, validated on import, and used in the plan and 3D model. Internal walls use their individual item colour. Resetting an outer wall restores the home's default wall colour. Undo/redo and JSON exports preserve these changes.
 
 The setup dimensions describe the whole house or flat; internal walls divide the footprint into rooms. Setup shows feet/inches, centimetres and metres together. Studio dimensions include imperial and metric equivalents. The properties panel keeps name, footprint size, colour and common actions visible; height/position and optional cost/supplier fields are expandable.
+
+The workspace uses one top navigation bar, aligned side panels and a single canvas toolbar. Properties opens on selection, after any active drag finishes. The plan fits the space between visible desktop panels; on mobile the panels can be dismissed to work on the full canvas. Viewport resizing preserves model dimensions and keeps wall labels at a readable screen size.
+
+Whole-home dimensions measure between wall centre lines, not clear internal or external wall faces. Dimensions are stored in metres; centimetre inputs retain decimals and feet/inches labels round to two decimal places, marked approximate. Switching setup units preserves precision instead of rounding to whole inches.
