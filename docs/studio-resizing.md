@@ -10,10 +10,18 @@ Validation: `node --test tests/resize.test.mjs` and `VELA_BASE_URL=<local previe
 
 Outer walls can be selected in the 2D plan and coloured independently. Their per-edge colours are stored with the room, validated on import, and used in the plan and 3D model. Internal walls use their individual item colour. Resetting an outer wall restores the home's default wall colour. Undo/redo and JSON exports preserve these changes.
 
-The setup dimensions describe the whole house or flat; internal walls divide the footprint into rooms. Setup shows feet/inches, centimetres and metres together. Studio dimensions include imperial and metric equivalents. The properties panel keeps name, footprint size, colour and common actions visible; height/position and optional cost/supplier fields are expandable.
+The setup dimensions describe the room being created; internal walls can divide the layout further. Setup shows feet/inches, centimetres and metres together. Studio dimensions include imperial and metric equivalents. The properties panel keeps name, footprint size, colour and common actions visible; height/position and optional cost/supplier fields are expandable.
 
 The workspace uses one top navigation bar, floating, collapsible side panels and a single canvas toolbar. Properties opens on selection, after any active drag finishes. The plan fits the space between visible desktop panels; on mobile the panels can be dismissed to work on the full canvas. Viewport resizing preserves model dimensions without adding dimension labels to the plan.
 
 Whole-home dimensions measure between wall centre lines, not clear internal or external wall faces. Dimensions are stored in metres; centimetre inputs retain decimals and feet/inches labels round to two decimal places, marked approximate. Switching setup units preserves precision instead of rounding to whole inches.
 
 Select a wall or object to read its measurements in Properties. The visible Above floor field sets vertical placement in centimetres; Raise/Lower moves it by 5 cm. Changes affect the 3D model, support undo/redo and persist with the layout. Panels float above the canvas; Collapse hides them and the persistent Library/Properties buttons reopen them.
+
+## Rooms and two-sided wall finishes
+
+The library’s Add room dialog creates named rectangular rooms inside the current layout outline. Specify centre-line width/depth and offsets from the outline’s top-left bounds. Matching full walls are reused, so adjacent rooms paint opposite faces of the same wall. Crossing walls, partial overlaps, duplicate rooms and rooms outside the outline are rejected with a message. This first version does not extend the outer footprint automatically; enlarge the outline using Room size & walls when needed. Add doors and windows from the library.
+
+Outer walls expose Inside and Outside colours. Internal walls expose Side A and Side B, marked on selection in the plan. Face A is the positive local wall-depth side; for clockwise outer edges it faces inward. The two long faces receive separate 3D materials, including wall sections around openings. End caps and tops retain the base wall colour. Older files with one wall colour still display that colour on both faces.
+
+Rooms & wall colours paints either the inward wall faces of a named room or both faces of every wall in the layout. Named rooms retain references to their walls when these are moved. Individual wall edits can override room paint. All changes are undoable and persist in JSON export/import and browser saves.

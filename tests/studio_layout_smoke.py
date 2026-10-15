@@ -34,7 +34,7 @@ with sync_playwright() as p:
  if not page.locator('#studio-objects').is_visible(): page.get_by_role('button',name='Library',exact=True).click()
  assert page.locator('#studio-objects').is_visible()
  page.get_by_role('link',name='New space',exact=True).click();page.wait_for_url('**/start?demo=1')
- assert page.get_by_role('button',name='An empty home').is_visible()
+ assert page.get_by_role('button',name='An empty room').is_visible()
  assert page.get_by_role('button',name='Upload a floor plan').is_visible()
  assert page.evaluate('JSON.parse(localStorage.getItem("vela-projects-v1")).some(p=>p.layout.notes==="Keep this design")')
  assert not errors,errors
