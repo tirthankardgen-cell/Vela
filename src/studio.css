@@ -117,11 +117,20 @@
 @media print{#root{position:static;inset:auto}#root #presentation{position:static}}
 @media(prefers-reduced-motion:reduce){#root *{transition:none}}
 
-#root .catalogue{display:block}
-#root .catalogue-group{border:0;border-bottom:1px solid #e0e2d6;padding:0 0 12px;margin:0 0 12px}
-#root .catalogue-group summary{cursor:pointer;font-size:12px;font-weight:600;padding:10px 0;color:#343d2e}
-#root .catalogue-group summary small{float:right;font-size:9px;font-weight:400;padding-top:3px}
-#root .catalogue-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:5px}
-#root .catalogue-options button{width:100%;height:112px;padding:8px 5px}
-#root .catalogue-options button span{line-height:1.3}
-#root .catalogue-group summary:focus-visible{outline:2px solid #978365;outline-offset:2px}
+#root .catalogue{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#root .catalogue button{width:100%;height:116px;padding:10px 6px;gap:8px}
+#root .catalogue button span{line-height:1.35}
+#root .catalogue button[data-group]{background:#f3f3ea;border:1px solid #e2e3d7;border-radius:12px}
+#root .catalogue button[data-group]:hover{background:#e9ecdf;border-color:#a3ac94}
+#root .catalogue button[data-group] svg{width:44px;height:34px}
+#root .catalogue-navigation{display:flex;align-items:center;gap:12px;margin:4px 0 16px}
+#root .catalogue-navigation h3{font-size:15px;font-weight:600;margin:0;color:#343d2e}
+#root #catalogue-back{display:grid;place-items:center;min-width:40px;height:40px;padding:8px;border-radius:10px}
+#root .catalogue-inside .library-tabs,#root .catalogue-inside .room-settings{display:none}
+#root .catalogue-inside .catalogue-navigation{margin-top:12px}
+#root .dimension-equivalent{display:block;font-size:10px;color:#717765;margin:5px 0 0;line-height:1.6}
+#root .inspector-details{border-top:1px solid #e0e2d6;padding-top:12px;margin-top:14px}
+#root .inspector-details summary{cursor:pointer;font-size:12px;padding-bottom:14px;font-weight:500}
+#root .wall-measurements{font-size:12px;line-height:1.8;margin:0 0 20px}
+#root #outer-wall-form label{margin-bottom:16px}
+#root #outer-wall-form .muted{margin-top:15px}

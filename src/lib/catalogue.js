@@ -1,5 +1,5 @@
 // Browsing metadata is separate from geometry and persisted item IDs.
-export const categories=[['furniture','Furniture'],['electronics','Electronics'],['climate','Climate'],['decor','Decor'],['structure','Build']];
+export const categories=[['furniture','Furniture'],['electronics','Electronics'],['decor','Decor'],['structure','Build']];
 export const rooms=[['all','All rooms'],['living','Living'],['bedroom','Bedroom'],['dining','Dining'],['office','Office'],['kitchen','Kitchen'],['bathroom','Bathroom']];
 export const catalogueMeta={
  sofa:{category:'furniture',aliases:'couch seating settee',rooms:['living']},
@@ -11,8 +11,9 @@ export const catalogueMeta={
  wardrobe:{category:'furniture',aliases:'closet clothes storage cabinet',rooms:['bedroom']},
  shrine:{category:'furniture',aliases:'altar meditation shrine prayer puja optional collection',rooms:['living','bedroom']},
  tv:{category:'electronics',aliases:'television screen display media tv console combined set',rooms:['living','bedroom']},
- ac:{category:'climate',aliases:'air conditioner air conditioning cooling hvac',rooms:[]},
- fan:{category:'climate',aliases:'ceiling fan cooling ventilation',rooms:[]},
+ ac:{category:'electronics',aliases:'climate control air conditioner air conditioning cooling hvac',rooms:[]},
+ fan:{category:'electronics',aliases:'climate control ceiling fan cooling ventilation',rooms:[]},
+ heater:{category:'electronics',aliases:'climate control heater heating radiator electric',rooms:[]},
  rug:{category:'decor',aliases:'rug carpet mat textile',rooms:['living','bedroom','dining','office']},
  partition:{category:'structure',aliases:'divider partition screen',rooms:[]},
  wall:{category:'structure',aliases:'wall internal partition',rooms:[]},
@@ -26,7 +27,7 @@ export function matchesCatalogue(kind,label,{category='furniture',room='all',que
  return (!q?meta.category===category:q.split(/\s+/).every(word=>`${label} ${meta.aliases} ${meta.category}`.toLowerCase().includes(word)))&&(room==='all'||!meta.rooms.length||meta.rooms.includes(room));
 }
 
-export const catalogueGroups={sofa:'Sofas',lsofa:'Sofas',chair:'Chairs',dining:'Dining sets',table:'Tables',bed:'Beds',wardrobe:'Storage',shrine:'Meditation',tv:'TV & media',ac:'Air conditioning',fan:'Fans',rug:'Rugs',partition:'Partitions',wall:'Walls',pillar:'Columns',door:'Doors',window:'Windows'};
+export const catalogueGroups={sofa:'Sofas',lsofa:'Sofas',chair:'Chairs',dining:'Dining sets',table:'Tables',bed:'Beds',wardrobe:'Storage',shrine:'Meditation',tv:'TV & media',ac:'Air conditioning',fan:'Fans',heater:'Heaters',rug:'Rugs',partition:'Partitions',wall:'Walls',pillar:'Columns',door:'Doors',window:'Windows'};
 // Variants retain the established geometry kind so existing projects remain compatible.
 export const catalogueVariants={
  'sofa-loveseat':{kind:'sofa',label:'Loveseat',w:1.5,d:.85,h:.85},
@@ -47,6 +48,8 @@ export const catalogueVariants={
  'tv-compact':{kind:'tv',label:'Compact TV console',w:1.2,d:.35,h:.45},
  'tv-wide':{kind:'tv',label:'Wide media console',w:2.4,d:.4,h:.5},
  'ac-wide':{kind:'ac',label:'Large wall AC',w:1.1,d:.3,h:.32},
+ 'heater-panel':{kind:'heater',label:'Panel heater',w:1,d:.12,h:.5,e:.15},
+ 'heater-compact':{kind:'heater',label:'Compact heater',w:.35,d:.25,h:.45},
  'fan-compact':{kind:'fan',label:'Compact ceiling fan',w:.9,d:.9,h:.1},
  'fan-large':{kind:'fan',label:'Large ceiling fan',w:1.5,d:1.5,h:.1},
  'rug-runner':{kind:'rug',label:'Runner rug',w:.8,d:2.5,h:.015},

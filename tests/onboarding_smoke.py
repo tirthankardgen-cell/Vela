@@ -20,7 +20,7 @@ with sync_playwright() as p:
  state=page.evaluate('Vela.getLayout()')
  assert state['items']==[] and state['project']['currency']=='EUR'
  assert math.isclose(state['room']['vertices'][2][0],3.81) and math.isclose(state['room']['vertices'][2][1],4.572)
- page.locator('[data-kind="chair"]').click();page.locator('#projects-button').click();page.wait_for_url('**/projects')
+ page.locator('[data-group="Chairs"]').click();page.locator('[data-kind="chair"]').click();page.locator('#projects-button').click();page.wait_for_url('**/projects')
  page.get_by_role('heading',name='Garden suite').wait_for()
  assert 'NeverStored123!' not in page.evaluate('JSON.stringify(localStorage)+JSON.stringify(sessionStorage)')
  page.get_by_role('button',name='Sign out').click();page.wait_for_url('**/login')

@@ -6,7 +6,7 @@ with sync_playwright() as p:
  b=p.chromium.launch(executable_path=os.environ.get('CHROMIUM_PATH','/usr/bin/chromium'),args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']); page=b.new_page(viewport={'width':1440,'height':1100});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
  page.goto(BASE_URL + '/studio?demo=1');page.wait_for_function('Boolean(window.Vela)'); page.screenshot(path='/tmp/whole-flat.png'); initial=page.evaluate('Roomnote.getLayout()'); page.evaluate('Roomnote.validate(Roomnote.getLayout())')
  wall=next(o for o in initial['items'] if o['kind']=='wall');door=next(o for o in initial['items'] if o.get('wallId')==wall['id'])
- page.locator('[data-category="structure"]').click();page.locator('[data-kind="window"]').click();page.locator('#item-wall').select_option('6'); attached=page.evaluate('Roomnote.getLayout().items.at(-1)');assert attached['wallId']==wall['id']
+ page.locator('#catalogue-clear').click();page.locator('[data-category="structure"]').click();page.locator('[data-group="Windows"]').click();page.locator('[data-kind="window"]').click();page.locator('#placement-details').evaluate('(el)=>el.open=true');page.locator('#item-wall').select_option('6'); attached=page.evaluate('Roomnote.getLayout().items.at(-1)');assert attached['wallId']==wall['id']
  page.locator('[data-id="'+wall['id']+'"]').click(position={'x':3,'y':3},force=True)
  page.locator('#item-x').fill(str(round(wall['x']*100+10)));page.locator('#item-x').press('Tab')
  edited=page.evaluate('Roomnote.getLayout()');shifted=next(o for o in edited['items'] if o['id']==door['id']);assert abs(shifted['x']-door['x']-.1)<.02

@@ -14,12 +14,13 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
     page.goto(BASE_URL + '/studio?demo=1');page.wait_for_function('Boolean(window.Vela)')
     layout=lambda: page.evaluate('Roomnote.getLayout()')
     assert len(layout()['room']['zones'])==7
+    page.locator('#catalogue-clear').click()
     if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
     page.locator('#room-preset').select_option('l1')
     original=layout(); assert len(original['items'])==16
     # All further interactions must work without a network connection.
     context.set_offline(True)
-    page.locator('[data-kind="chair"]').click(); assert len(layout()['items'])==17
+    page.locator('[data-group="Chairs"]').click();page.locator('[data-kind="chair"]').click(); assert len(layout()['items'])==17
     chair=layout()['items'][-1]; cid=chair['id']
     page.locator('#item-width').fill('85');page.locator('#item-width').press('Tab')
     assert layout()['items'][-1]['w']==.85
@@ -31,7 +32,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
     page.locator('#delete-item').click();assert len(layout()['items'])==17
     page.locator('#undo').click();assert len(layout()['items'])==18
     page.locator('#redo').click();assert len(layout()['items'])==17
-    page.locator('[data-category="structure"]').click();page.locator('[data-kind="window"]').click()
+    page.locator('#catalogue-clear').click();page.locator('[data-category="structure"]').click();page.locator('[data-group="Windows"]').click();page.locator('[data-kind="window"]').click()
     assert layout()['items'][-1]['kind']=='window' and 'wall' in layout()['items'][-1]
     with page.expect_download() as d: page.locator('#save-file').click()
     saved=Path(tmp)/'layout.json';d.value.save_as(saved); data=json.loads(saved.read_text());assert len(data['items'])==18
@@ -40,6 +41,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
     exported_box=list(map(float,ET.parse(Path(tmp)/'plan.svg').getroot().attrib['viewBox'].split()))
     xs=[v[0] for v in layout()['room']['vertices']];ys=[v[1] for v in layout()['room']['vertices']]
     assert math.isclose(exported_box[2],max(xs)-min(xs)+1.4) and math.isclose(exported_box[3],max(ys)-min(ys)+1.4)
+    page.locator('#catalogue-clear').click()
     if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
     page.locator('#room-preset').select_option('b2');assert len(layout()['room']['vertices'])==4
     page.locator('#file-input').set_input_files(str(saved));page.wait_for_timeout(250);assert len(layout()['items'])==18

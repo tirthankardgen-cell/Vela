@@ -1,4 +1,7 @@
 import Link from 'next/link';
+import {faqs} from '@/src/lib/faq';
+import {siteUrl} from '@/src/lib/site';
+import PublicLinks from '@/src/marketing/PublicLinks';
 import SiteHeader from '@/src/marketing/SiteHeader';
 import Wordmark from '@/src/marketing/Wordmark';
 import Icon from '@/src/components/Icon';
@@ -11,6 +14,7 @@ const possibilities=[
  {icon:'present',number:'03',title:'Bring the idea together.',copy:'Move between 2D and 3D, collect your finishes and prepare a considered design presentation.'},
 ];
 export default function Home(){return <main className="marketing landing">
+<script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({'@context':'https://schema.org','@graph':[{'@type':'WebSite','@id':`${siteUrl}/#website`,url:siteUrl,name:'Vela',description:'Browser-based 2D and 3D interior design planner'},{'@type':'SoftwareApplication',name:'Vela',url:siteUrl,applicationCategory:'DesignApplication',operatingSystem:'Web browser',description:'Plan a whole home, arrange furniture, colour walls and export 2D and 3D designs.'},{'@type':'FAQPage','@id':`${siteUrl}/#faq`,mainEntity:faqs.map(f=>({'@type':'Question',name:f.question,acceptedAnswer:{'@type':'Answer',text:f.answer}}))}]}).replace(/</g,'\\u003c')}}/>
 <LandingMotion/><div className="reading-progress" aria-hidden="true"/>
 <section className="editorial-hero" aria-labelledby="home-title">
  <SiteHeader/>
@@ -35,6 +39,7 @@ export default function Home(){return <main className="marketing landing">
  ['A clearer way to imagine how a room could feel, before moving a single piece.','Homeowner perspective','Planning a first home'],
  ['The small details matter. So does being able to see the whole idea together.','Designer perspective','Exploring a client concept'],
  ].map(([quote,role,context])=><figure className="testimonial-card" key={role} data-reveal><Icon name="quote" size={29}/><blockquote>{quote}</blockquote><figcaption><span className="testimonial-monogram" aria-hidden="true"><Icon name={role.startsWith('Home')?'home':'palette'} size={20}/></span><span><strong>{role}</strong><small>{context}</small></span><span className="sample-tag">Sample quote</span></figcaption></figure>)}</div></div></section>
+<section id="faq" className="landing-faq landing-width" aria-labelledby="faq-title"><span className="lux-kicker">A LITTLE MORE CLARITY</span><h2 id="faq-title">Your questions.<br/><em>Considered answers.</em></h2><div className="faq-list">{faqs.map(f=><details key={f.question}><summary>{f.question}</summary><p>{f.answer}</p></details>)}</div></section>
 <section className="landing-closing"><div data-reveal><span className="lux-kicker">YOUR NEXT CHAPTER, BEAUTIFULLY ARRANGED</span><h2>Make yourself<br/><em>at home.</em></h2><Link href="/signup" className="lux-button lux-button-light">Begin your space <Icon name="arrow" size={18}/></Link><p>Your space. Your pace. Your point of view.</p></div><div className="closing-orbit" aria-hidden="true"/></section>
-<footer className="landing-footer landing-width"><div><Wordmark/><p>Thoughtful spaces.<br/>Beautifully presented.</p></div><nav aria-label="Footer navigation"><a href="#inspiration">Inspiration</a><a href="#process">The approach</a><a href="#testimonials">Stories</a><Link href="/about">About</Link><Link href="/login">Sign in</Link></nav><div className="footer-bottom"><small>© {new Date().getFullYear()} Vela</small><span>DESIGNED AROUND YOU</span><a href="#home-title">Back to top <Icon name="up" size={14}/></a></div></footer>
+<footer className="landing-footer landing-width"><div><Wordmark/><p>Thoughtful spaces.<br/>Beautifully presented.</p></div><nav aria-label="Footer navigation"><a href="#inspiration">Inspiration</a><a href="#process">The approach</a><a href="#testimonials">Stories</a><Link href="/about">About</Link><Link href="/login">Sign in</Link></nav><PublicLinks/><div className="footer-bottom"><small>© {new Date().getFullYear()} Vela</small><span>DESIGNED AROUND YOU</span><a href="#home-title">Back to top <Icon name="up" size={14}/></a></div></footer>
 </main>;}

@@ -12,7 +12,7 @@ with sync_playwright() as p:
  assert page.locator('#root .workspace').count()==1
  assert page.locator('.vela-brand img').evaluate('(img)=>img.complete && img.naturalWidth>0')
  initial=page.evaluate('Vela.getLayout().items.length')
- page.locator('[data-kind="chair"]').click()
+ page.locator('[data-group="Chairs"]').click();page.locator('[data-kind="chair"]').click()
  assert page.evaluate('Vela.getLayout().items.length')==initial+1
  page.locator('#stage').click(position={'x':700,'y':140})
  # Select the added object through the model's stable ID, then send one key event.

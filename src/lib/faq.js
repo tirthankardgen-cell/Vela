@@ -1,0 +1,10 @@
+export const faqs=[
+ {question:'What is Vela?',answer:'Vela is a browser-based interior design planner for arranging a house or flat in 2D and exploring the same layout in 3D. You can add walls, doors, windows and furniture, adjust measurements and colours, and export your design.'},
+ {question:'Do I enter the size of one room or the whole home?',answer:'Enter the outer width and depth of the whole house or flat. In the studio, open Build, then Walls, to add internal walls and divide the space into individual rooms.'},
+ {question:'Can I use feet and inches or metric measurements?',answer:'Yes. Set up your home in feet and inches or centimetres. The setup form also shows equivalent measurements in feet/inches, centimetres and metres. Studio dimensions display both imperial and metric equivalents.'},
+ {question:'Can I upload an existing floor plan?',answer:'Yes. Upload a PNG, JPG, WebP or PDF up to 10 MB. Vela uses the first PDF page as a tracing reference. Enter the measured outer dimensions, then add walls and openings yourself; Vela does not automatically detect rooms.'},
+ {question:'Can I resize furniture and colour each wall?',answer:'Yes. In the 2D plan, select an object and drag its corner or edge handles to resize it. Select an outer or internal wall to change its colour. Doors and windows remain attached to their wall when resized.'},
+ {question:'Where are my projects saved?',answer:'In the current preview, guest and simulated-account projects are stored in your browser on this device. Preview sign-in does not verify or save passwords. Export your project JSON as a backup; clearing browser storage can remove local projects.'},
+ {question:'Can I export my design?',answer:'Yes. Export a project JSON file to reopen later, a 2D plan as SVG, a 3D view as PNG, or a design presentation. The presentation can be printed or saved as a PDF using your browser.'},
+ {question:'Are these plans suitable for construction?',answer:'Vela is a concept planning tool. Verify dimensions, structural changes, clearances, electrical requirements and local regulations with qualified professionals before building or purchasing.'},
+];

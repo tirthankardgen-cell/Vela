@@ -25,6 +25,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as temp:
     page.locator('[name="budget"]').fill('1000')
     page.locator('#project-form button[type="submit"]').click()
     project_id = state()['project']['id']
+    page.locator('#catalogue-clear').click()
     if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
     page.locator('#room-preset').select_option('blank')
     assert state()['project']['id'] == project_id
@@ -32,6 +33,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as temp:
     page.locator('#catalogue-search').fill('armchair')
     assert page.locator('#catalogue button').count() == 1
     page.locator('[data-kind="chair"]').click()
+    page.locator('#cost-details').evaluate('(el)=>el.open=true')
     page.locator('#item-cost').fill('250.50')
     page.locator('#item-cost').press('Tab')
     page.locator('#item-supplier').fill('=Test supplier')
@@ -67,6 +69,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as temp:
     assert rows[1][1] == "'=Test supplier"
     assert rows[1][-1] == '250.5'
     page.locator('#close-dialog').click()
+    page.locator('#catalogue-clear').click()
     if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
     page.locator('#room-preset').select_option('flat')
     page.locator('#file-input').set_input_files(str(exported))

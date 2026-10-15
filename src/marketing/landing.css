@@ -177,3 +177,12 @@
  .landing .site-header .lux-button svg{display:none}
  .landing .site-header .site-primary-nav{gap:28px;font-size:12px}
 }
+.landing-faq{padding:85px 0}
+.landing-faq h2{margin:20px 0 35px}
+.faq-list{max-width:900px}
+.faq-list details{border-bottom:1px solid var(--landing-line);padding:20px 0}
+.faq-list summary{cursor:pointer;font-size:14px;font-weight:500;line-height:1.6}
+.faq-list p{max-width:780px;margin:14px 0 0;font-size:13px;color:#636b5b}
+.faq-list summary:focus-visible{outline:2px solid #978365;outline-offset:5px}
+.landing-footer .public-links{width:100%;display:flex;gap:18px 25px;flex-wrap:wrap;font-size:11px;padding:0}
+@media(max-width:700px){.landing-faq{padding:60px 0}.faq-list summary{font-size:13px}}

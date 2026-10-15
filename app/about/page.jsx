@@ -1,4 +1,6 @@
+import {publicMetadata} from '@/src/lib/site';
 import Link from 'next/link';
+import PublicLinks from '@/src/marketing/PublicLinks';
 import SiteHeader from '@/src/marketing/SiteHeader';
 import Wordmark from '@/src/marketing/Wordmark';
 import Icon from '@/src/components/Icon';
@@ -6,7 +8,7 @@ import '@/src/marketing/landing.css';
 import './about.css';
 
 const description='Meet Vela: a thoughtful place to plan rooms, explore layouts and imagine a home that feels like you.';
-export const metadata={title:'About',description,alternates:{canonical:'/about'},openGraph:{title:'About Vela',description,url:'/about',images:[{url:'/brand/vela-social.png',width:1200,height:630}]}};
+export const metadata=publicMetadata('About',description,'/about');
 export default function About(){
  return <main className="marketing landing about-page">
   <section className="about-hero" aria-labelledby="about-title">
@@ -25,6 +27,6 @@ export default function About(){
    ].map(([icon,title,copy])=><article key={title}><Icon name={icon} size={28}/><h3>{title}</h3><p>{copy}</p></article>)}
   </section>
   <section className="landing-closing"><span className="lux-kicker">MAKE ROOM FOR POSSIBILITY</span><h2>Your space.<br/><em>Your story.</em></h2><Link className="lux-button lux-button-light" href="/signup">Begin your space <Icon name="arrow" size={18}/></Link></section>
-  <footer className="landing-footer landing-width"><Wordmark/><nav aria-label="Footer navigation"><Link href="/">Home</Link><Link href="/#inspiration">Inspiration</Link><Link href="/about" aria-current="page">About</Link><Link href="/login">Sign in</Link></nav><div className="footer-bottom"><small>© {new Date().getFullYear()} Vela</small><span>DESIGNED AROUND YOU</span></div></footer>
+  <footer className="landing-footer landing-width"><Wordmark/><nav aria-label="Footer navigation"><Link href="/">Home</Link><Link href="/#inspiration">Inspiration</Link><Link href="/about" aria-current="page">About</Link><Link href="/login">Sign in</Link></nav><PublicLinks/><div className="footer-bottom"><small>© {new Date().getFullYear()} Vela</small><span>DESIGNED AROUND YOU</span></div></footer>
  </main>;
 }

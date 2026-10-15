@@ -7,7 +7,7 @@ with sync_playwright() as p:
  page=b.new_page(viewport={'width':1440,'height':1000});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
  page.goto(BASE+'/studio?demo=1');page.wait_for_function('Boolean(window.Vela)')
  page.get_by_text('Replace with a template',exact=True).click();page.locator('#room-preset').select_option('blank')
- page.locator('#catalogue-search').fill('table');assert page.locator('.catalogue-group[data-group="Tables"] button').count()==6
+ page.locator('#catalogue-search').fill('table');assert page.locator('#catalogue [data-kind^="table"]').count()==6
  page.locator('[data-kind="table-round"]').click();o=page.evaluate('Vela.getLayout().items.at(-1)');id=o['id']
  assert o['variant']=='table-round' and o['w']==.8
  assert page.locator(f'.furniture[data-id="{id}"] ellipse').count()==1
@@ -34,7 +34,7 @@ with sync_playwright() as p:
  page.get_by_role('button',name='Focus',exact=True).click();gesture('s',0,40);assert state()['d']>fan['d']
  transform=page.locator(f'.furniture[data-id="{fan["id"]}"] > g').get_attribute('transform');assert transform.startswith('scale(1 ') and transform!='scale(1 1)'
  page.get_by_role('button',name='Library',exact=True).click();page.locator('#catalogue-search').fill('door')
- assert page.locator('.catalogue-group[data-group="Doors"] button').count()==4
+ assert page.locator('#catalogue [data-kind^="door"]').count()==4
  page.locator('[data-kind="door-double"]').click();double=state();assert double['variant']=='door-double'
  page.locator('[data-kind="door-sliding"]').click();door=state();assert door['variant']=='door-sliding'
  assert page.locator('[data-resize]').count()==2
@@ -46,7 +46,7 @@ with sync_playwright() as p:
  page.locator('#plan-mode').click();page.reload();page.wait_for_function('Boolean(window.Vela)');assert state()['variant']=='door-sliding'
  assert page.evaluate('Vela.getLayout().items[0].w')==after['w']
  page.get_by_role('button',name='Library',exact=True).click() if not page.locator('#studio-objects').is_visible() else None
- page.locator('[data-category="structure"]').click();page.locator('.catalogue-group[data-group="Doors"] summary').click();assert not page.locator('[data-kind="door-double"]').is_visible()
+ page.locator('[data-category="structure"]').click();assert page.locator('[data-kind]').count()==0;page.locator('[data-group="Doors"]').click();assert page.locator('[data-kind="door-double"]').is_visible()
  page.locator('#catalogue-search').fill('double hinged');assert page.locator('[data-kind="door-double"]').is_visible()
  page.locator('#catalogue-search').fill('desk');page.locator('#catalogue-room').select_option('office');assert page.locator('[data-kind="table-desk"]').is_visible()
  page.set_viewport_size({'width':390,'height':844});assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
