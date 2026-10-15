@@ -12,6 +12,8 @@ Outer walls can be selected in the 2D plan and coloured independently. Their per
 
 The setup dimensions describe the whole house or flat; internal walls divide the footprint into rooms. Setup shows feet/inches, centimetres and metres together. Studio dimensions include imperial and metric equivalents. The properties panel keeps name, footprint size, colour and common actions visible; height/position and optional cost/supplier fields are expandable.
 
-The workspace uses one top navigation bar, aligned side panels and a single canvas toolbar. Properties opens on selection, after any active drag finishes. The plan fits the space between visible desktop panels; on mobile the panels can be dismissed to work on the full canvas. Viewport resizing preserves model dimensions and keeps wall labels at a readable screen size.
+The workspace uses one top navigation bar, floating, collapsible side panels and a single canvas toolbar. Properties opens on selection, after any active drag finishes. The plan fits the space between visible desktop panels; on mobile the panels can be dismissed to work on the full canvas. Viewport resizing preserves model dimensions without adding dimension labels to the plan.
 
 Whole-home dimensions measure between wall centre lines, not clear internal or external wall faces. Dimensions are stored in metres; centimetre inputs retain decimals and feet/inches labels round to two decimal places, marked approximate. Switching setup units preserves precision instead of rounding to whole inches.
+
+Select a wall or object to read its measurements in Properties. The visible Above floor field sets vertical placement in centimetres; Raise/Lower moves it by 5 cm. Changes affect the 3D model, support undo/redo and persist with the layout. Panels float above the canvas; Collapse hides them and the persistent Library/Properties buttons reopen them.

@@ -15,7 +15,7 @@ function Studio(props) {
   useEffect(()=>{const small=matchMedia('(max-width: 780px)');const adapt=()=>{if(small.matches){setLibrary(false);setProperties(false);}};adapt();small.addEventListener('change',adapt);
     const show=()=>{setLibrary(true);if(small.matches)setProperties(false);};
     let previous=null;
-    const selection=e=>{if(e.detail?.interacting)return;const id=e.detail?.id;if(id&&id!==previous){if(small.matches){setLibrary(false);setProperties(false);}else setProperties(true);}previous=id;};
+    const selection=e=>{if(e.detail?.interacting)return;const id=e.detail?.id;if(id&&id!==previous){if(small.matches)setLibrary(false);setProperties(true);}previous=id;};
     document.addEventListener('vela:library',show);document.addEventListener('vela:selection',selection);
     return()=>{small.removeEventListener('change',adapt);document.removeEventListener('vela:library',show);document.removeEventListener('vela:selection',selection);};
   },[]);

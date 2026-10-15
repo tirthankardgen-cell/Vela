@@ -15,6 +15,19 @@ with sync_playwright() as p:
  page.locator('#item-width').fill('95.25');page.locator('#item-width').press('Tab');assert math.isclose(page.evaluate('Vela.getLayout().items.at(-1).w'),.9525)
  assert page.locator('#item-width').input_value()=='95.25'
  assert '1.5″' in page.locator('#item-width-equivalent').inner_text()
+ # Vertical placement is exposed without opening advanced settings.
+ assert page.locator('#item-elevation').is_visible()
+ page.locator('#item-elevation').fill('125.5');page.locator('#item-elevation').press('Tab')
+ page.locator('#raise-item').click();assert math.isclose(page.evaluate('Vela.getLayout().items.at(-1).e'),1.305)
+ page.locator('#lower-item').click();assert math.isclose(page.evaluate('Vela.getLayout().items.at(-1).e'),1.255)
+ page.locator('#undo').click();assert math.isclose(page.evaluate('Vela.getLayout().items.at(-1).e'),1.305)
+ page.locator('#redo').click();assert math.isclose(page.evaluate('Vela.getLayout().items.at(-1).e'),1.255)
+ page.locator('.furniture').last.click()
+ page.get_by_role('button',name='Collapse properties',exact=True).click();assert not page.locator('#studio-properties').is_visible()
+ page.get_by_role('button',name='Properties',exact=True).click();page.locator('#item-elevation').wait_for(state='visible')
+ page.get_by_role('button',name='Collapse library',exact=True).click();assert not page.locator('#studio-objects').is_visible()
+ page.get_by_role('button',name='Library',exact=True).click();page.locator('#studio-objects').wait_for(state='visible')
+ box=page.locator('#studio-objects').bounding_box();assert box['x']>0 and box['y']>108
  # SVG uses the same scale on both axes; changing the viewport never changes the model.
  before=page.evaluate('Vela.getLayout()')
  for width,height in [(1366,680),(1024,768),(390,844)]:
@@ -23,8 +36,10 @@ with sync_playwright() as p:
   for selector in ['.app-header','.studio-nav','.panel-dock','.view-switch','.canvas-tools']:
    box=page.locator(selector).bounding_box();assert box['x']>=-1 and box['x']+box['width']<=width+1,(width,selector,box)
   matrix=page.locator('#plan').evaluate('(svg)=>{const m=svg.getScreenCTM();return {x:m.a,y:m.d}}');assert math.isclose(matrix['x'],matrix['y'],rel_tol=1e-9)
-  labels=page.locator('.wall-dimension').evaluate_all('(nodes)=>nodes.map(n=>parseFloat(n.getAttribute("font-size"))*Math.hypot(n.getScreenCTM().a,n.getScreenCTM().b))');assert all(abs(v-11)<.01 for v in labels)
+  assert page.locator('.wall-dimension').count()==0
   assert page.evaluate('Vela.getLayout()')==before
   page.screenshot(path=f'/tmp/vela-clean-studio-{width}.png')
+ page.reload();page.wait_for_function('Boolean(window.Vela)')
+ assert math.isclose(page.evaluate('Vela.getLayout().items.at(-1).e'),1.255)
  assert not errors,errors;b.close()
-print('PASS clear workspace, responsive controls, uniform plan scale, readable labels, exact decimal inputs and repeated unit conversion')
+print('PASS clear workspace, responsive controls, uniform plan scale, uncluttered plan, exact decimal inputs and repeated unit conversion')

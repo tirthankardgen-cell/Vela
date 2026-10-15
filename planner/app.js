@@ -115,8 +115,7 @@ function drawPlan(){state.items.forEach(anchor);const b=bounds(),r=stage.getBoun
  const eds=edges().slice(0,state.room.vertices.length);eds.forEach((ed,i)=>{
  const color=state.room.edgeColors?.[i]||state.room.wallColor||'#e5e0d5',active=selectedOuterWall()===i;
  s+=`<g data-outer-wall="${i}" style="cursor:pointer"><title>Outer wall ${i+1} · ${dual(ed.len)}</title><path d="M${ed.a[0]} ${ed.a[1]} L${ed.b[0]} ${ed.b[1]}" stroke="${esc(color)}" stroke-width="${state.room.wallThickness}"/><path d="M${ed.a[0]} ${ed.a[1]} L${ed.b[0]} ${ed.b[1]}" stroke="${active?'#315b4a':'transparent'}" stroke-width="${active?2/scale:Math.max(state.room.wallThickness,16/scale)}" ${active?'stroke-dasharray=".08 .04"':''} fill="none"/></g>`;
-const nx=-ed.dy/ed.len,ny=ed.dx/ed.len,offset=state.room.wallThickness/2+18/scale,x=(ed.a[0]+ed.b[0])/2-nx*offset,y=(ed.a[1]+ed.b[1])/2-ny*offset,angle=ed.angle>90?ed.angle-180:ed.angle<=-90?ed.angle+180:ed.angle;
- s+=`<text class="wall-dimension" x="${x}" y="${y}" transform="rotate(${angle} ${x} ${y})" font-family="system-ui" text-anchor="middle" dominant-baseline="middle" font-size="${11/scale}" fill="#626b5c" pointer-events="none">${metric(ed.len)} · ≈ ${feet(ed.len)}</text>`;});
+});
  const ordered=[...state.items].sort((a,b)=>(a.kind==='wall'?-2:a.kind==='rug'?-1:TYPES[a.kind].opening?2:0)-(b.kind==='wall'?-2:b.kind==='rug'?-1:TYPES[b.kind].opening?2:0));
  for(const o of ordered){s+=`<g class="furniture" data-id="${esc(o.id)}" transform="translate(${o.x} ${o.y}) rotate(${o.rotation})"><title>${esc(o.label)} · ${centimetres(o.w)} × ${centimetres(o.d)} cm</title>${shape(o)}`;if(o.id===selected)s+=`<rect x="${-o.w/2-.045}" y="${-o.d/2-.045}" width="${o.w+.09}" height="${o.d+.09}" fill="none" stroke="#3a8264" stroke-width=".025" stroke-dasharray=".065 .035" rx=".035"/>`;s+='</g>';if(o.id===selected&&!['fan','rug','pillar','ac','door','window','wall'].includes(o.kind))s+=`<text x="${o.x}" y="${o.y}" text-anchor="middle" dominant-baseline="middle" font-family="system-ui" font-size="${Math.min(.11,11/scale)}" fill="#394d40" pointer-events="none">${esc(o.label.slice(0,25))}</text>`;}
  const chosen=selection();
@@ -186,6 +185,7 @@ $('outer-wall-color').onchange=e=>mutate(()=>{const i=selectedOuterWall();if(i!=
 $('outer-wall-reset').onclick=()=>mutate(()=>{const i=selectedOuterWall();if(i!==null&&state.room.edgeColors)delete state.room.edgeColors[i];});
 listen($('item-form'),'submit',e=>e.preventDefault());
 for(const [field,key] of [['width','w'],['depth','d'],['height','h'],['elevation','e'],['x','x'],['y','y']])listen($(`item-${field}`),'change',e=>{const v=Number(e.target.value)/100;if(!Number.isFinite(v))return;mutate(()=>{const o=selection();if(!o)return;o[key]=clamp(v,['x','y'].includes(key)?-20:key==='e'?0:.015,['x','y'].includes(key)?25:key==='e'||key==='h'?6:10);});});
+for(const [id,delta] of [['lower-item',-.05],['raise-item',.05]])$(id).onclick=()=>mutate(()=>{const o=selection();if(o)o.e=Math.round(clamp(o.e+delta,0,6)*1e8)/1e8;});
 $('item-label').onchange=e=>mutate(()=>{if(selection())selection().label=e.target.value.slice(0,80)||TYPES[selection().kind].label;});
 $('item-rotation').onchange=e=>mutate(()=>{if(selection())selection().rotation=((Number(e.target.value)||0)%360+360)%360;});
 $('item-color').onchange=e=>mutate(()=>{if(selection())selection().color=e.target.value;});
