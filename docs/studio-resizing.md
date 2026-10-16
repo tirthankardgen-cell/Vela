@@ -25,3 +25,11 @@ The library’s Add room dialog creates named rectangular rooms inside the curre
 Outer walls expose Inside and Outside colours. Internal walls expose Side A and Side B, marked on selection in the plan. Face A is the positive local wall-depth side; for clockwise outer edges it faces inward. The two long faces receive separate 3D materials, including wall sections around openings. End caps and tops retain the base wall colour. Older files with one wall colour still display that colour on both faces.
 
 Rooms & wall colours paints either the inward wall faces of a named room or both faces of every wall in the layout. Named rooms retain references to their walls when these are moved. Individual wall edits can override room paint. All changes are undoable and persist in JSON export/import and browser saves.
+
+## Navigation, room floors and moving rooms
+
+Scroll over the 2D canvas to zoom around the pointer. Hold the right mouse button and drag to pan; Escape cancels an active pan. These gestures only change the view, not the saved geometry or undo history. Fit resets pan/zoom and includes named rooms moved beyond the original outline.
+
+Select a room’s floor or name to view its floor colour in Properties. The library’s Rooms & wall colours section also offers a floor colour for each named room; the whole-layout option applies a floor colour across the layout. Floors appear in 2D and 3D and are retained in saved files. Existing files inherit the layout floor colour until a room colour is set.
+
+Drag a named room’s floor/name to translate all of its walls and floor. Attached doors/windows travel with their wall. A shared wall is copied for the moving room on the first movement; the neighbouring room keeps the original wall and openings. This separation and translation are one undo step; Escape restores everything. Furniture is independent of named room groups. Named rooms may move beyond the initial outline. Dragging the original layout floor moves the outer outline and its contents together within the supported coordinate range. The room floor requires a closed wall loop; reconnect individually edited walls if the floor is no longer visible.

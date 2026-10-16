@@ -193,7 +193,7 @@
 #root .studio-toolbar>div:first-child{display:none}
 
 /* Floating panels keep the plan visible around their edges. */
-#root .library,#root .inspector{top:124px;bottom:84px;border:1px solid #dcded1;border-radius:14px;box-shadow:0 12px 36px #2029191a;background:#fdfdfbf7;padding:16px;max-height:none}
+#root .library,#root .inspector{top:124px;bottom:16px;border:1px solid #dcded1;border-radius:14px;box-shadow:0 12px 36px #2029191a;background:#fdfdfbf7;padding:16px;max-height:none}
 #root .library{left:16px;width:270px}
 #root .inspector{right:16px;width:270px}
 #root .panel-close{display:flex;gap:4px;align-items:center;font-size:10px;border:1px solid #e1e3d8;border-radius:6px;padding:5px;color:#535c49}
@@ -204,7 +204,7 @@
 #root .vertical-position .two-fields{margin:8px 0}
 #root .vertical-position button{font-size:10px;padding:7px 4px;display:flex;align-items:center;justify-content:center;gap:4px}
 @media(max-width:1050px) and (min-width:781px){#root .library,#root .inspector{width:240px}}
-@media(max-width:780px){#root .library,#root .inspector{top:186px;bottom:82px;left:8px;right:8px;width:auto}}
+@media(max-width:780px){#root .library,#root .inspector{top:186px;bottom:8px;left:8px;right:8px;width:auto}}
 #root .room-tools{border-bottom:1px solid #e1e3d8;padding-bottom:14px;margin-bottom:14px}
 #root .room-tools>button{width:100%;display:flex;align-items:center;justify-content:center;gap:6px}
 #root .room-tools details{margin-top:12px}
@@ -212,3 +212,5 @@
 #root .room-tools label{font-size:11px;margin-top:12px}
 #root .room-tools small,#root #wall-face-note{display:block;font-size:10px;line-height:1.6;color:#68715f;margin:8px 0}
 #new-room-error{color:#a34432;font-size:13px}
+
+#plan [data-space]{cursor:grab}#plan[data-panning=true]{cursor:grabbing}#plan[data-panning=true] *{cursor:grabbing}

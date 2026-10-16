@@ -24,3 +24,13 @@ export function planRoom({x,y,width,depth},polygon,edges){
  return result;
 }
 export function cleanFaces(value){const out={};for(const side of ['a','b'])if(typeof value?.[side]==='string'&&/^#[0-9a-f]{6}$/i.test(value[side]))out[side]=value[side];return out;}
+
+// Wall references are ordered around the room; side B reverses their direction.
+export function spacePolygon(space,edges){
+ const segments=space.walls.map(ref=>{const e=edges.find((e,i)=>ref.id?e.id===ref.id:!e.id&&i===ref.index);return e&&(ref.side==='b'?{a:e.b,b:e.a}:e);});
+ if(segments.length<3||segments.some(e=>!e))return null;
+ if(segments.some((e,i)=>!same(e.b,segments[(i+1)%segments.length].a)))return null;
+ return segments.map(e=>[...e.a]);
+}
+
+export {inside as pointInPolygon};

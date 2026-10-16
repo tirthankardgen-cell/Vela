@@ -19,3 +19,13 @@ test('room bounds, concave footprints and imported colours are validated',()=>{
  assert.throws(()=>planRoom({x:1,y:1,width:3,depth:3},concave,concave.map((a,i)=>({a,b:concave[(i+1)%8]}))),/inside|overlap|intersect/);
  assert.deepEqual(cleanFaces({a:'#abcdef',b:'url(bad)',c:'#123456'}),{a:'#abcdef'});
 });
+
+test('floor polygon follows ordered wall references and opposite shared-wall direction',async()=>{
+ const {spacePolygon}=await import('../planner/rooms.js');
+ const all=[{id:'a',a:[0,0],b:[2,0]},{id:'b',a:[2,2],b:[2,0]},{id:'c',a:[2,2],b:[0,2]},{id:'d',a:[0,2],b:[0,0]}];
+ const room={walls:[{id:'a',side:'a'},{id:'b',side:'b'},{id:'c',side:'a'},{id:'d',side:'a'}]};
+ assert.deepEqual(spacePolygon(room,all),[[0,0],[2,0],[2,2],[0,2]]);
+ const moved=all.map(e=>({...e,a:e.a.map((v,i)=>v+(i?3:-4)),b:e.b.map((v,i)=>v+(i?3:-4))}));
+ assert.deepEqual(spacePolygon(room,moved),[[-4,3],[-2,3],[-2,5],[-4,5]]);
+ assert.equal(spacePolygon(room,all.slice(1)),null);
+});
