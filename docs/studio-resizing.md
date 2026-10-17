@@ -33,3 +33,9 @@ Scroll over the 2D canvas to zoom around the pointer. Hold the right mouse butto
 Select a room’s floor or name to view its floor colour in Properties. The library’s Rooms & wall colours section also offers a floor colour for each named room; the whole-layout option applies a floor colour across the layout. Floors appear in 2D and 3D and are retained in saved files. Existing files inherit the layout floor colour until a room colour is set.
 
 Drag a named room’s floor/name to translate all of its walls and floor. Attached doors/windows travel with their wall. A shared wall is copied for the moving room on the first movement; the neighbouring room keeps the original wall and openings. This separation and translation are one undo step; Escape restores everything. Furniture is independent of named room groups. Named rooms may move beyond the initial outline. Dragging the original layout floor moves the outer outline and its contents together within the supported coordinate range. The room floor requires a closed wall loop; reconnect individually edited walls if the floor is no longer visible.
+
+## Library presentation
+
+The floating library starts with a room selector and Add room action, followed by search, category tabs and an always-visible room-type filter. Category families use compact line-icon buttons. The overview includes quick-add sofa cards; opened families keep search and filtering visible, with a back row, category icon, item count and supported type filters (sofas, beds, tables and doors). The All tab browses every catalogue category. Reset library filters clears search, room/type filters and the nested path.
+
+Item cards use coloured SVG previews from the same plan geometry as placed objects, rather than stock product photographs. Cards support click-to-add and drag-to-place. Room finishes and project/setup tools remain available below the collection. Reduced-motion settings and keyboard navigation are preserved.

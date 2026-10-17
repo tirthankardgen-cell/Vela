@@ -15,7 +15,7 @@ with sync_playwright() as p:
  page.locator('[data-category="electronics"]').click();page.locator('[data-group="Climate control"]').click();page.locator('[data-group="Air conditioning"]').click();assert page.locator('#catalogue [data-kind="ac"]').count()==1;assert page.locator('#catalogue [data-kind="wall"]').count()==0
  page.locator('#catalogue-search').fill('couch');assert page.locator('#catalogue button').count()>=2
  page.locator('#catalogue-search').fill('closet');assert page.locator('#catalogue [data-kind="wardrobe"]').count()==1
- page.locator('.catalogue-filters').evaluate('(el)=>el.open=true');page.locator('#catalogue-room').select_option('kitchen');assert page.locator('#catalogue-empty').is_visible()
+ page.locator('#catalogue-room').select_option('kitchen');assert page.locator('#catalogue-empty').is_visible()
  page.locator('#catalogue-clear').click();page.locator('[data-category="electronics"]').click();page.locator('[data-group="TV & media"]').click();assert page.locator('#catalogue [data-kind="tv"]').count()==1
  page.locator('#catalogue-clear').click();page.locator('[data-category="decor"]').click();page.locator('[data-group="Rugs"]').click();assert page.locator('#catalogue [data-kind="rug"]').count()==1
  assert page.evaluate('Vela.getLayout()')==original
@@ -31,7 +31,8 @@ with sync_playwright() as p:
  for width in [1440,1024,820,780,390,360]:
   page.set_viewport_size({'width':width,'height':900});assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),width
   for id in ['open-file','save-file','projects-button','present-button']:assert page.locator('#'+id).is_visible(),(width,id)
- if not page.locator('#studio-objects').is_visible(): page.get_by_role('button',name='Library',exact=True).click()
+ page.locator('#studio-objects').wait_for(state='hidden')
+ page.get_by_role('button',name='Library',exact=True).click();page.locator('#studio-objects').wait_for(state='visible')
  assert page.locator('#studio-objects').is_visible()
  page.get_by_role('link',name='New space',exact=True).click();page.wait_for_url('**/start?demo=1')
  assert page.get_by_role('button',name='An empty room').is_visible()

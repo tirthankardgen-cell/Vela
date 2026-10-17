@@ -1,5 +1,5 @@
 // Browsing metadata is separate from geometry and persisted item IDs.
-export const categories=[['furniture','Furniture'],['electronics','Electronics'],['decor','Decor'],['structure','Build']];
+export const categories=[['all','All'],['furniture','Furniture'],['electronics','Electronics'],['decor','Decor'],['structure','Build']];
 export const rooms=[['all','All rooms'],['living','Living'],['bedroom','Bedroom'],['dining','Dining'],['office','Office'],['kitchen','Kitchen'],['bathroom','Bathroom']];
 export const catalogueMeta={
  sofa:{category:'furniture',aliases:'couch seating settee',rooms:['living']},
@@ -68,6 +68,15 @@ export const catalogueVariants={
 export function catalogueEntries(types,filters){
  return [...Object.entries(types).map(([id,t])=>({id,kind:id,...t})),...Object.entries(catalogueVariants).map(([id,v])=>({id,...types[v.kind],...v}))].filter(v=>{
   const meta=catalogueMeta[v.kind],q=filters.query.trim().toLowerCase(),roomList=v.rooms||meta.rooms;
-  return (q?q.split(/\s+/).every(word=>`${v.label} ${meta.aliases} ${meta.category} ${catalogueGroups[v.kind]}`.toLowerCase().includes(word)):meta.category===filters.category)&&(filters.room==='all'||!roomList.length||roomList.includes(filters.room));
+  return (q?q.split(/\s+/).every(word=>`${v.label} ${meta.aliases} ${meta.category} ${catalogueGroups[v.kind]}`.toLowerCase().includes(word)):filters.category==='all'||meta.category===filters.category)&&(filters.room==='all'||!roomList.length||roomList.includes(filters.room));
  });
+}
+
+export function catalogueType(v){
+ if(v.kind==='lsofa')return 'Sectional';
+ if(v.kind==='sofa')return v.id==='sofa-loveseat'?'Loveseat':v.id==='sofa-large'?'Three-seat':'Standard';
+ if(v.kind==='bed')return v.id==='bed-single'?'Single':v.id==='bed-double'?'Double':v.id==='bed-king'?'King':'Queen';
+ if(v.kind==='table')return v.id==='table-side'?'Side':v.id==='table-console'?'Console':v.id==='table-desk'?'Desk':v.id==='table-dining'?'Dining':'Coffee';
+ if(v.kind==='door')return v.form==='sliding'?'Sliding':v.form==='double'?'Double':'Hinged';
+ return null;
 }

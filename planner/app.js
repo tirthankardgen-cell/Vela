@@ -1,5 +1,6 @@
 import {initializeStudio, validateProject} from './studio.js';
-import {catalogueEntries,catalogueGroups,catalogueVariants} from '../src/lib/catalogue';
+import {catalogueIcons} from '../src/lib/catalogue-icons';
+import {catalogueEntries,catalogueGroups,catalogueVariants,catalogueType} from '../src/lib/catalogue';
 import {feetAndInches,metric,centimetres} from '../src/lib/measurements';
 import {planRoom,cleanFaces,spacePolygon,pointInPolygon} from './rooms.js';
 import {resizeItem} from './resize.js';
@@ -82,7 +83,7 @@ function detachSpace(room){
 }
 function wallFaces(ed,index){const o=ed.id?state.items.find(o=>o.id===ed.id):null,base=o?.color||state.room.edgeColors?.[index]||state.room.wallColor||'#e5e0d5',faces=o?.faceColors||state.room.edgeFaceColors?.[index]||{};return {a:faces.a||base,b:faces.b||base,base};}
 function paintFace(ref,color){if(ref.id){const o=state.items.find(o=>o.id===ref.id&&o.kind==='wall');if(o){o.faceColors??={};o.faceColors[ref.side]=color;}}else if(ref.index<state.room.vertices.length){state.room.edgeFaceColors??={};state.room.edgeFaceColors[ref.index]??={};state.room.edgeFaceColors[ref.index][ref.side]=color;}}
-function roomPaintOptions(){const current=$('paint-room').value;$('paint-room').innerHTML='<option value="home">Whole layout · all walls</option>'+(state.room.spaces||[]).map(r=>`<option value="${esc(r.id)}">${esc(r.name)}</option>`).join('');if([...$('paint-room').options].some(o=>o.value===current))$('paint-room').value=current;$('paint-room').onchange?.();}
+function roomPaintOptions(){const current=$('paint-room').value;$('paint-room').innerHTML=`<option value="home">${esc(state.room.name||'My room')}</option>`+(state.room.spaces||[]).map(r=>`<option value="${esc(r.id)}">${esc(r.name)}</option>`).join('');if([...$('paint-room').options].some(o=>o.value===current))$('paint-room').value=current;$('paint-room').onchange?.();}
 function bounds(){const xs=state.room.vertices.map(p=>p[0]),ys=state.room.vertices.map(p=>p[1]);return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),d:Math.max(...ys)-Math.min(...ys)};}
 function anchor(o){if(!TYPES[o.kind].opening)return o;const all=edges();let index=o.wallId?all.findIndex(e=>e.id===o.wallId):o.wall||0;if(index<0){delete o.wallId;index=0;}o.wall=clamp(index,0,all.length-1);const ed=all[o.wall];if(ed.id)o.wallId=ed.id;else delete o.wallId;o.w=clamp(o.w,.03,Math.max(.03,ed.len-.04));o.offset=clamp(o.offset??ed.len/2,o.w/2,ed.len-o.w/2);o.x=ed.a[0]+ed.dx*o.offset/ed.len;o.y=ed.a[1]+ed.dy*o.offset/ed.len;o.rotation=ed.angle;return o;}
 function nearestWall(o,x,y){let best=null;edges().forEach((ed,i)=>{const t=clamp(((x-ed.a[0])*ed.dx+(y-ed.a[1])*ed.dy)/(ed.len**2),0,1),qx=ed.a[0]+ed.dx*t,qy=ed.a[1]+ed.dy*t,dist=Math.hypot(qx-x,qy-y);if(!best||dist<best.dist)best={dist,i,offset:t*ed.len};});o.wall=best.i;o.wallId=edges()[best.i].id;o.offset=best.offset;anchor(o);}
@@ -166,34 +167,50 @@ function pointInRoom(x,y){return [state.room.vertices,...(state.room.spaces||[])
 function warnings(){const outside=state.items.filter(o=>!TYPES[o.kind].opening&&!pointInRoom(o.x,o.y));const high=state.items.filter(o=>o.e+o.h>state.room.height+.01);return outside.length?`${outside.length} item(s) have their centre outside the room.`:high.length?`${high.length} item(s) extend above the ceiling.`:'';}
 function refresh(){roomPaintOptions();$('reference-controls').hidden=!state.room.reference;$('reference-visible').checked=state.room.reference?.visible!==false;$('reference-opacity').value=state.room.reference?.opacity??.45;$('room-preset').value='current';const b=bounds();$('room-title').textContent=state.room.name;$('room-dimensions').textContent=`${feet(b.w)} × ${feet(b.d)} · ${Number(b.w.toFixed(2))} × ${Number(b.d.toFixed(2))} m`;$('room-name').value=state.room.name;$('room-width').value=centimetres(b.w);$('room-depth').value=centimetres(b.d);$('room-height').value=centimetres(state.room.height);$('notes').value=state.notes;$('item-count').textContent=`${state.items.length} items placed`;$('status-message').dataset.warning=String(Boolean(warnings()));$('status-message').textContent=warnings()||(selection()?'Selected: '+selection().label:'Choose an item to see its measurements.');drawPlan();inspector();buttons();if(mode==='3d')build3D();document.dispatchEvent(new Event('vela:change'));}
 function add(key,p){const variant=catalogueVariants[key],kind=variant?.kind||key;if(!TYPES[kind])return;const b=bounds();mutate(()=>{const o=item(kind,p?.x??b.x+b.w/2,p?.y??b.y+b.d/2,variant?{label:variant.label,w:variant.w,d:variant.d,h:variant.h,e:variant.e??TYPES[kind].e??0,variant:key}:{});if(TYPES[kind].opening)nearestWall(o,o.x,o.y);if(kind==='fan')o.e=Math.max(0,state.room.height-.4);state.items.push(o);selected=o.id;});toast(`${variant?.label||TYPES[kind].label} added. Drag to place it.`);}
-let cataloguePath=[],catalogueAnimation;
+let cataloguePath=[],catalogueAnimation,catalogueTypeFilter='All';
 const climateKinds=new Set(['ac','fan','heater']);
 function catalogue(direction=0,restoreGroup){
  const query=$('catalogue-search').value,room=$('catalogue-room').value,searching=!!query.trim(),entries=catalogueEntries(TYPES,{category,room,query}),nested=cataloguePath.length>0;
  const current=cataloguePath.at(-1),climate=current==='Climate control',leaf=nested&&!climate;
- const visible=searching?entries:entries.filter(v=>!nested||(climate?climateKinds.has(v.kind):catalogueGroups[v.kind]===current));
+ let visible=searching?entries:entries.filter(v=>!nested||(climate?climateKinds.has(v.kind):catalogueGroups[v.kind]===current));
+ const typeOptions=leaf&&!searching?[...new Set(visible.map(catalogueType).filter(Boolean))]:[];
+ if(direction||!typeOptions.includes(catalogueTypeFilter))catalogueTypeFilter='All';
+ $('catalogue-type-filters').hidden=typeOptions.length<2;
+ $('catalogue-type-filters').innerHTML=typeOptions.length<2?'':`<span>Type</span><div>${['All',...typeOptions].map(type=>`<button type="button" data-type="${esc(type)}" aria-pressed="${catalogueTypeFilter===type}">${esc(type)}</button>`).join('')}</div>`;
+ if(catalogueTypeFilter!=='All')visible=visible.filter(v=>catalogueType(v)===catalogueTypeFilter);
  const groups=new Map();
- if(!searching&&!leaf)for(const v of visible){const name=category==='electronics'&&!nested&&climateKinds.has(v.kind)?'Climate control':catalogueGroups[v.kind];if(!groups.has(name))groups.set(name,[]);groups.get(name).push(v);}
+ if(!searching&&!leaf)for(const v of visible){const name=['electronics','all'].includes(category)&&!nested&&climateKinds.has(v.kind)?'Climate control':catalogueGroups[v.kind];if(!groups.has(name))groups.set(name,[]);groups.get(name).push(v);}
+ const groupIcon=(name,v)=>catalogueIcons[name]?`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${catalogueIcons[name]}"/></svg>`:icon(v);
+ const preview=v=>{const pad=v.kind==='dining'?.45:.16,w=v.w+pad*2,d=Math.max(v.d,v.kind==='door'?v.w*2:v.d)+pad*2;return `<svg class="item-preview" viewBox="${-w/2} ${-d/2} ${w} ${d}" aria-hidden="true">${shape({...v,variant:v.id})}</svg>`;};
+ const card=v=>`<button class="catalogue-item-card" draggable="true" data-kind="${v.id}" title="Add ${esc(v.label)}"><div class="item-preview-stage">${preview(v)}</div><span>${esc(v.label)}</span><small>${Math.round(v.w*100)} × ${Math.round(v.d*100)} cm</small></button>`;
  const icon=v=>`<svg viewBox="0 0 42 32" aria-hidden="true"><path d="${v.icon}"/></svg>`;
- $('catalogue').innerHTML=searching||leaf?visible.map(v=>`<button draggable="true" data-kind="${v.id}" title="Add ${esc(v.label)}">${icon(v)}<span>${esc(v.label)}</span><small>${Math.round(v.w*100)} × ${Math.round(v.d*100)} cm</small></button>`).join(''):[...groups].map(([name,items])=>`<button data-group="${esc(name)}" aria-label="Open ${esc(name)}">${icon(items[0])}<span>${esc(name)}</span><small>${items.length} options <span aria-hidden="true">→</span></small></button>`).join('');
+ $('catalogue').innerHTML=searching||leaf?visible.map(card).join(''):[...groups].map(([name,items])=>`<button data-group="${esc(name)}" aria-label="Open ${esc(name)}">${groupIcon(name,items[0])}<span>${esc(name)}</span></button>`).join('');
+ $('catalogue-section-title').textContent=searching?'Results':leaf?'Collection':'Categories';
+ const featured=!nested&&!searching&&category==='furniture'?(groups.get('Sofas')||[]):[];
+ $('catalogue-featured').hidden=!featured.length;
+ $('catalogue-featured').innerHTML=featured.length?`<div class="catalogue-meta"><h3>Sofas</h3><span>${featured.length} items</span></div><div class="catalogue">${featured.map(card).join('')}</div>`:'';
  $('catalogue-empty').hidden=visible.length>0;
  $('catalogue-count').textContent=searching?`${visible.length} results · all categories`:leaf?`${visible.length} options`:`${groups.size} categories`;
+ $('collection-count').textContent=leaf||searching?`${visible.length} items`:`${groups.size} categories`;
  $('catalogue-navigation').hidden=!nested&&!searching;
- $('catalogue-title').textContent=searching?'Search results':current||'';
+ $('catalogue-title').textContent=searching?'Search results':current||'';$('catalogue-heading-icon').innerHTML=!searching&&visible[0]?groupIcon(current,visible[0]):'';
  const parent=searching?(current||'categories'):(cataloguePath.at(-2)||'categories');
- $('catalogue-back').setAttribute('aria-label',`Back to ${parent}`);
+ $('catalogue-back').setAttribute('aria-label',`Back to ${parent}`);$('catalogue-back-label').textContent=parent==='categories'?'All categories':parent;
  $('studio-objects').classList.toggle('catalogue-inside',nested||searching);
  catalogueAnimation?.cancel();
  if(direction){$('studio-objects').scrollTop=0;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)catalogueAnimation=$('catalogue').animate([{transform:`translateX(${direction*40}px)`,opacity:.25},{transform:'translateX(0)',opacity:1}],{duration:240,easing:'cubic-bezier(.22,.68,0,1)'});
  const restored=[...$('catalogue').querySelectorAll('[data-group]')].find(n=>n.dataset.group===restoreGroup);
  (restored||(!nested&&!searching?$('catalogue-search'):$('catalogue-title'))).focus({preventScroll:true});}
 }
-function chooseCategory(next){category=next;cataloguePath=[];$('catalogue-search').value='';document.querySelectorAll('[data-category]').forEach(n=>{const active=n.dataset.category===next;n.classList.toggle('active',active);n.setAttribute('aria-pressed',String(active));});$('build-tab').classList.toggle('active',next==='structure');$('design-tab').classList.toggle('active',next!=='structure');catalogue();$('studio-objects').scrollTop=0;}
+function chooseCategory(next){category=next;catalogueTypeFilter='All';cataloguePath=[];$('catalogue-search').value='';document.querySelectorAll('[data-category]').forEach(n=>{const active=n.dataset.category===next;n.classList.toggle('active',active);n.setAttribute('aria-pressed',String(active));});$('build-tab').classList.toggle('active',next==='structure');$('design-tab').classList.toggle('active',next!=='structure');catalogue();$('studio-objects').scrollTop=0;}
 $('catalogue-back').onclick=()=>{if($('catalogue-search').value.trim()){$('catalogue-search').value='';catalogue(-1);}else{const previous=cataloguePath.pop();catalogue(-1,previous);}};
-$('catalogue-room').onchange=()=>catalogue();$('catalogue-clear').onclick=()=>{$('catalogue-search').value='';$('catalogue-room').value='all';cataloguePath=[];catalogue();};
+listen($('catalogue-type-filters'),'click',e=>{const button=e.target.closest('[data-type]');if(!button)return;catalogueTypeFilter=button.dataset.type;catalogue();[...$('catalogue-type-filters').querySelectorAll('[data-type]')].find(b=>b.dataset.type===catalogueTypeFilter)?.focus({preventScroll:true});});
+$('catalogue-room').onchange=()=>{catalogueTypeFilter='All';catalogue();};$('catalogue-clear').onclick=()=>{catalogueTypeFilter='All';$('catalogue-search').value='';$('catalogue-room').value='all';cataloguePath=[];catalogue();};
 $('build-tab').onclick=()=>{chooseCategory('structure');document.dispatchEvent(new Event('vela:library'));};
 listen($('design-tab'),'click',()=>{chooseCategory('furniture');document.dispatchEvent(new Event('vela:library'));});
 listen($('catalogue'),'click',e=>{const group=e.target.closest('[data-group]');if(group){cataloguePath.push(group.dataset.group);catalogue(1);return;}const b=e.target.closest('[data-kind]');if(b)add(b.dataset.kind);});
+listen($('catalogue-featured'),'click',e=>{const b=e.target.closest('[data-kind]');if(b)add(b.dataset.kind);});
+listen($('catalogue-featured'),'dragstart',e=>{const b=e.target.closest('[data-kind]');if(b)e.dataTransfer.setData('text/roomnote-kind',b.dataset.kind);});
 listen($('catalogue'),'dragstart',e=>{const b=e.target.closest('[data-kind]');if(b)e.dataTransfer.setData('text/roomnote-kind',b.dataset.kind);});
 listen(svg,'dragover',e=>e.preventDefault());listen(svg,'drop',e=>{e.preventDefault();const kind=e.dataTransfer.getData('text/roomnote-kind');if(TYPES[kind]||catalogueVariants[kind])add(kind,point(e));});
 document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>chooseCategory(b.dataset.category));

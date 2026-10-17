@@ -48,7 +48,7 @@ with sync_playwright() as p:
  page.get_by_role('button',name='Library',exact=True).click() if not page.locator('#studio-objects').is_visible() else None
  page.locator('[data-category="structure"]').click();assert page.locator('[data-kind]').count()==0;page.locator('[data-group="Doors"]').click();assert page.locator('[data-kind="door-double"]').is_visible()
  page.locator('#catalogue-search').fill('double hinged');assert page.locator('[data-kind="door-double"]').is_visible()
- page.locator('#catalogue-search').fill('desk');page.locator('.catalogue-filters').evaluate('(el)=>el.open=true');page.locator('#catalogue-room').select_option('office');assert page.locator('[data-kind="table-desk"]').is_visible()
+ page.locator('#catalogue-search').fill('desk');page.locator('#catalogue-room').select_option('office');assert page.locator('[data-kind="table-desk"]').is_visible()
  page.set_viewport_size({'width':390,'height':844});assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
  assert not errors,errors
  b.close()

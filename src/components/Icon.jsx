@@ -1,4 +1,5 @@
 const paths={
+ filter:'M3 4h18l-7 8v7l-4 2v-9L3 4z',
  arrow:'M5 12h14m-6-6 6 6-6 6',down:'M12 4v16m-6-6 6 6 6-6',up:'M12 20V4m-6 6 6-6 6 6',
  sparkle:'m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2z',
  quote:'M10 5H4v8h4c0 3-1 4-3 5M20 5h-6v8h4c0 3-1 4-3 5',home:'m3 11 9-8 9 8M5 10v11h14V10M9 21v-7h6v7',
