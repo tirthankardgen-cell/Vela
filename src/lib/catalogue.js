@@ -20,6 +20,14 @@ export const catalogueMeta={
  pillar:{category:'structure',aliases:'column pillar structure',rooms:[]},
  door:{category:'structure',aliases:'door opening entrance hinged',rooms:[]},
  window:{category:'structure',aliases:'window glazing opening',rooms:[]},
+ counter:{category:'furniture',aliases:'kitchen cabinet base worktop countertop kitchen unit',rooms:['kitchen']},
+ sink:{category:'structure',aliases:'kitchen sink plumbing wash basin',rooms:['kitchen']},
+ hob:{category:'electronics',aliases:'hob cooktop stove cooking kitchen appliance',rooms:['kitchen']},
+ fridge:{category:'electronics',aliases:'fridge refrigerator freezer kitchen appliance',rooms:['kitchen']},
+ washer:{category:'electronics',aliases:'washing machine washer laundry utility appliance',rooms:['kitchen','bathroom']},
+ toilet:{category:'structure',aliases:'wc toilet sanitary bathroom fixture',rooms:['bathroom']},
+ basin:{category:'structure',aliases:'washbasin wash basin vanity bathroom sink',rooms:['bathroom']},
+ shower:{category:'structure',aliases:'shower enclosure tray bathroom sanitary fixture',rooms:['bathroom']},
 };
 export function matchesCatalogue(kind,label,{category='furniture',room='all',query=''}){
  const meta=catalogueMeta[kind];if(!meta)return false;
@@ -27,7 +35,7 @@ export function matchesCatalogue(kind,label,{category='furniture',room='all',que
  return (!q?meta.category===category:q.split(/\s+/).every(word=>`${label} ${meta.aliases} ${meta.category}`.toLowerCase().includes(word)))&&(room==='all'||!meta.rooms.length||meta.rooms.includes(room));
 }
 
-export const catalogueGroups={sofa:'Sofas',lsofa:'Sofas',chair:'Chairs',dining:'Dining sets',table:'Tables',bed:'Beds',wardrobe:'Storage',shrine:'Meditation',tv:'TV & media',ac:'Air conditioning',fan:'Fans',heater:'Heaters',rug:'Rugs',partition:'Partitions',wall:'Walls',pillar:'Columns',door:'Doors',window:'Windows'};
+export const catalogueGroups={sofa:'Sofas',lsofa:'Sofas',chair:'Chairs',dining:'Dining sets',table:'Tables',bed:'Beds',wardrobe:'Storage',shrine:'Meditation',tv:'TV & media',ac:'Air conditioning',fan:'Fans',heater:'Heaters',rug:'Rugs',partition:'Partitions',wall:'Walls',pillar:'Columns',door:'Doors',window:'Windows',counter:'Kitchen cabinets',sink:'Kitchen fixtures',hob:'Kitchen appliances',fridge:'Kitchen appliances',washer:'Laundry',toilet:'Bathroom fixtures',basin:'Bathroom fixtures',shower:'Bathroom fixtures'};
 // Variants retain the established geometry kind so existing projects remain compatible.
 export const catalogueVariants={
  'sofa-loveseat':{kind:'sofa',label:'Loveseat',w:1.5,d:.85,h:.85},
@@ -40,6 +48,7 @@ export const catalogueVariants={
  'table-desk':{kind:'table',label:'Writing desk',w:1.2,d:.6,h:.75,rooms:['office','bedroom']},
  'table-dining':{kind:'table',label:'Dining table',w:1.6,d:.9,h:.76,rooms:['dining','kitchen']},
  'dining-square':{kind:'dining',label:'Square dining set',w:1,d:1,h:.76},
+ 'dining-six':{kind:'dining',label:'Six-seat dining set',w:1.8,d:.9,h:.76,form:'six-seat'},
  'bed-single':{kind:'bed',label:'Single bed',w:.95,d:2,h:.55},
  'bed-double':{kind:'bed',label:'Double bed',w:1.4,d:2,h:.55},
  'bed-king':{kind:'bed',label:'King bed',w:1.93,d:2.03,h:.55},
@@ -61,6 +70,7 @@ export const catalogueVariants={
  'door-double':{kind:'door',label:'Double hinged door',w:1.6,d:.12,h:2.1,form:'double'},
  'door-sliding':{kind:'door',label:'Sliding door',w:1.8,d:.12,h:2.1,form:'sliding'},
  'door-narrow':{kind:'door',label:'Narrow hinged door',w:.7,d:.12,h:2.1},
+ 'door-open':{kind:'door',label:'Open passage',w:1.2,d:.12,h:2.4,form:'open'},
  'window-wide':{kind:'window',label:'Wide window',w:2,d:.12,h:1.2,e:.9},
  'window-tall':{kind:'window',label:'Tall window',w:.8,d:.12,h:1.8,e:.4},
  'shrine-compact':{kind:'shrine',label:'Compact meditation altar',w:.5,d:.35,h:1.2},
@@ -77,6 +87,6 @@ export function catalogueType(v){
  if(v.kind==='sofa')return v.id==='sofa-loveseat'?'Loveseat':v.id==='sofa-large'?'Three-seat':'Standard';
  if(v.kind==='bed')return v.id==='bed-single'?'Single':v.id==='bed-double'?'Double':v.id==='bed-king'?'King':'Queen';
  if(v.kind==='table')return v.id==='table-side'?'Side':v.id==='table-console'?'Console':v.id==='table-desk'?'Desk':v.id==='table-dining'?'Dining':'Coffee';
- if(v.kind==='door')return v.form==='sliding'?'Sliding':v.form==='double'?'Double':'Hinged';
+ if(v.kind==='door')return v.form==='open'?'Open passage':v.form==='sliding'?'Sliding':v.form==='double'?'Double':'Hinged';
  return null;
 }

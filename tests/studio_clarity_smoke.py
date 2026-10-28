@@ -2,7 +2,7 @@ import os,math
 from playwright.sync_api import sync_playwright
 BASE=os.environ.get('VELA_BASE_URL','http://127.0.0.1:8766').rstrip('/')
 with sync_playwright() as p:
- b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox']);page=b.new_page(viewport={'width':1366,'height':680});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
+ b=p.chromium.launch(executable_path=os.environ.get('CHROMIUM_PATH','/usr/bin/chromium'),args=['--no-sandbox']);page=b.new_page(viewport={'width':1366,'height':680});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
  page.goto(BASE+'/start?demo=1');page.get_by_label('Width centimetres').fill('400.05')
  for _ in range(4):page.get_by_role('button',name='Feet & inches',exact=True).click();page.get_by_role('button',name='Centimetres',exact=True).click()
  assert math.isclose(float(page.get_by_label('Width centimetres').input_value()),400.05,abs_tol=1e-6)

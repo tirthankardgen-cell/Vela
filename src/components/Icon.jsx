@@ -1,4 +1,5 @@
 const paths={
+ check:'m5 12 4 4L19 6',
  filter:'M3 4h18l-7 8v7l-4 2v-9L3 4z',
  arrow:'M5 12h14m-6-6 6 6-6 6',down:'M12 4v16m-6-6 6 6 6-6',up:'M12 20V4m-6 6 6-6 6 6',
  sparkle:'m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2z',

@@ -34,7 +34,7 @@ with sync_playwright() as p:
  page.get_by_role('button',name='Focus',exact=True).click();gesture('s',0,40);assert state()['d']>fan['d']
  transform=page.locator(f'.furniture[data-id="{fan["id"]}"] > g').get_attribute('transform');assert transform.startswith('scale(1 ') and transform!='scale(1 1)'
  page.get_by_role('button',name='Library',exact=True).click();page.locator('#catalogue-search').fill('door')
- assert page.locator('#catalogue [data-kind^="door"]').count()==4
+ assert page.locator('#catalogue [data-kind^="door"]').count()==5
  page.locator('[data-kind="door-double"]').click();double=state();assert double['variant']=='door-double'
  page.locator('[data-kind="door-sliding"]').click();door=state();assert door['variant']=='door-sliding'
  assert page.locator('[data-resize]').count()==2

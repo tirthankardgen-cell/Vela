@@ -3,7 +3,7 @@ from playwright.sync_api import sync_playwright
 BASE=os.environ.get('VELA_BASE_URL','http://127.0.0.1:8766').rstrip('/')
 SITE='https://vela-dgen.vercel.app'
 with sync_playwright() as p:
- b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox']);page=b.new_page(viewport={'width':390,'height':844})
+ b=p.chromium.launch(executable_path=os.environ.get('CHROMIUM_PATH','/usr/bin/chromium'),args=['--no-sandbox']);page=b.new_page(viewport={'width':390,'height':844})
  for route in ['/','/about','/terms','/privacy']:
   response=page.goto(BASE+route);assert response.status==200
   assert page.locator('h1').count()==1

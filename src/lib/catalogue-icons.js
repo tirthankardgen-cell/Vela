@@ -1,5 +1,10 @@
 // Consistent front-view category symbols; object previews use the actual plan geometry.
 export const catalogueIcons={
+ 'Kitchen cabinets':'M2 7h20v14H2zM2 5h20M8 8v13m8-13v13M4 11h2m4 0h4m4 0h2',
+ 'Kitchen fixtures':'M3 6h18v14H3zM6 10h12v7H6zM11 10V3h5',
+ 'Kitchen appliances':'M4 3h16v18H4zM4 10h16M7 5v3m0 5v4',
+ 'Laundry':'M3 3h18v18H3zM3 8h18M6 5h4M12 11a4 4 0 1 0 0 8a4 4 0 1 0 0-8',
+ 'Bathroom fixtures':'M7 3h10v4H7zM7 8h10c4 9-1 13-5 13S3 17 7 8z',
  'Sofas':'M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M3 10h3v7h12v-7h3v10H3zM5 20v2m14-2v2M7 13h10',
  'Chairs':'M7 12V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v7M4 11h3v6h10v-6h3v9H4zM6 20v2m12-2v2',
  'Tables':'M2 5h20M4 5v16m16-16v16M4 10h16',

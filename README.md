@@ -15,10 +15,16 @@ The studio uses a full-screen canvas with floating library, properties and tool 
 ## Website workflow
 
 1. Explore the landing page, then sign up or sign in using the labelled account simulation. Guest access is also available.
-2. Start an empty room in centimetres or feet and inches, or upload a PNG, JPEG, WebP or PDF floor plan. PDFs use their first page; uploaded plans are scaled tracing references, not automatic wall detection.
+2. Start an empty room in centimetres or feet and inches, choose a furnished 1BHK, 2BHK, 3BHK or 4BHK flat, or upload a PNG, JPEG, WebP or PDF floor plan. PDFs use their first page; uploaded plans are scaled tracing references, not automatic wall detection.
 3. Arrange furniture, walls, doors and windows in the 2D editor and inspect the matching 3D scene. Room setup supports international currencies; inspector measurements remain in centimetres.
 4. Apply finishes, record costs and suppliers, and export layout JSON, plan SVG, 3D PNG, furniture CSV or a client presentation for printing to PDF.
 5. Return to the project dashboard to reopen locally saved designs.
+
+## Flat templates
+
+The collection contains **eight furnished flats**, with two layouts for each BHK size. Choose **A furnished flat** during setup, or open **Flat templates** in the studio library to preview and replace a layout. The previous sample flat, living-room sketch and bedroom sketch have been removed. Replacement preserves project details and supports undo.
+
+Each flat includes named rooms, shared walls, attached doors with editable swings, exterior windows, fitted kitchen units, bathroom fixtures and measured furniture. Previews and the editor show clear room sizes; overall dimensions and plan area follow wall centre lines. The [template dimensions and conventions](docs/flat-templates.md) explain the collection and its checks.
 
 ## Account simulation and Firebase
 
@@ -65,7 +71,7 @@ Tests cover editing, drag/drop, wall attachments, undo/redo, JSON round-trip, 3D
 
 ## Standalone edition
 
-`npm run build:standalone` produces `downloads/Vela.html` and `downloads/Vela.zip`. This separate offline React editor has no account or landing-page flow. Direct file opening could not be verified here because the managed browser blocks file URLs. `index.html`, `src/main.jsx` and `vite.config.js` are its source entry points; the hosted website uses `app/` and Next.js.
+`npm run build:standalone` produces `downloads/Vela.html` and `downloads/Vela.zip`. This separate offline React editor has no account or landing-page flow. The bundled editor includes all eight flat templates and has been verified in Chrome directly from a local file without network access, including template replacement, undo/redo, saving and 3D. `index.html`, `src/main.jsx` and `vite.config.js` are its source entry points; the hosted website uses `app/` and Next.js.
 
 ## Source map
 

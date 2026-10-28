@@ -71,7 +71,7 @@ with sync_playwright() as p, tempfile.TemporaryDirectory() as temp:
     page.locator('#close-dialog').click()
     page.locator('#catalogue-clear').click()
     if not page.locator('#room-preset').is_visible(): page.get_by_text('Replace with a template',exact=True).click()
-    page.locator('#room-preset').select_option('flat')
+    page.locator('#room-preset').select_option('2bhk-family')
     page.locator('#file-input').set_input_files(str(exported))
     page.wait_for_function('Vela.getLayout().items.length === 1')
     assert state()['project']['id'] == project_id

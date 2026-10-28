@@ -3,7 +3,7 @@ import os
 from playwright.sync_api import sync_playwright
 BASE=os.environ.get('VELA_BASE_URL','http://127.0.0.1:8766').rstrip('/')
 with sync_playwright() as p:
- b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
+ b=p.chromium.launch(executable_path=os.environ.get('CHROMIUM_PATH','/usr/bin/chromium'),args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
  page=b.new_page(viewport={'width':1440,'height':1000});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
  page.goto(BASE+'/studio?demo=1');page.wait_for_function('Boolean(window.Vela)');before=page.evaluate('Vela.getLayout()')
  assert page.locator('#catalogue details').count()==0 and page.locator('#catalogue [data-kind]').count()==0
@@ -25,7 +25,7 @@ with sync_playwright() as p:
  assert page.locator('#catalogue').evaluate('(el)=>el.getAnimations().length')==1
  page.locator('#catalogue-back').click();assert page.locator('[data-group="Tables"]').evaluate('(el)=>el===document.activeElement')
  page.locator('[data-category="electronics"]').click();assert page.locator('[data-category="climate"]').count()==0
- assert page.locator('#catalogue [data-group]').count()==2
+ assert page.locator('#catalogue [data-group]').count()==4;assert page.locator('[data-group="Kitchen appliances"]').is_visible();assert page.locator('[data-group="Laundry"]').is_visible()
  page.locator('[data-group="Climate control"]').click();assert page.locator('#catalogue [data-group]').count()==3
  page.locator('[data-group="Heaters"]').click();assert page.locator('#catalogue [data-kind]').count()==3
  assert page.evaluate('Vela.getLayout()')==before

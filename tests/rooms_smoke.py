@@ -3,7 +3,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 BASE=os.environ.get('VELA_BASE_URL','http://127.0.0.1:8784')
 with sync_playwright() as p, tempfile.TemporaryDirectory() as tmp:
- b=p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
+ b=p.chromium.launch(executable_path=os.environ.get('CHROMIUM_PATH','/usr/bin/chromium'),args=['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
  page=b.new_page(viewport={'width':1440,'height':1000});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
  page.goto(BASE+'/start?demo=1');assert 'whole room you are creating' in page.locator('.home-dimensions-note').inner_text()
  page.get_by_label('Width centimetres').fill('800');page.get_by_label('Depth centimetres').fill('600');page.get_by_role('button',name='Open the studio').click();page.wait_for_function('Boolean(window.Vela)')

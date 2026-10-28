@@ -16,9 +16,11 @@ with sync_playwright() as p:
  assert page.locator('.editorial-hero-copy a').get_attribute('href')=='/signup'
  assert page.locator('.editorial-hero-copy svg').count()==1
  # Scrolling drives image movement and reveals offscreen content.
- page.wait_for_timeout(150)
+ page.wait_for_function('document.querySelector(".hero-photograph img").style.getPropertyValue("--parallax-y")!==""')
  hero=page.locator('.hero-photograph img');before=hero.evaluate('(el)=>getComputedStyle(el).transform')
- page.evaluate('scrollTo(0,500)');page.wait_for_timeout(150);after=hero.evaluate('(el)=>getComputedStyle(el).transform');assert before!=after,(before,after)
+ page.evaluate('scrollTo(0,500)')
+ page.wait_for_function('(before)=>getComputedStyle(document.querySelector(".hero-photograph img")).transform!==before',arg=before,timeout=5000)
+ after=hero.evaluate('(el)=>getComputedStyle(el).transform');assert before!=after,(before,after)
  for section in ['#inspiration','#possibilities','.material-story','#process','#testimonials','.landing-closing']:
   page.locator(section).scroll_into_view_if_needed();page.wait_for_timeout(950)
   for el in page.locator(section+' [data-reveal]').all():
