@@ -67,6 +67,8 @@ export const catalogueVariants={
  'wall-half':{kind:'wall',label:'Half-height wall',w:1.5,d:.12,h:1.1},
  'wall-thick':{kind:'wall',label:'Thick partition wall',w:2,d:.2,h:2.85},
  'pillar-wide':{kind:'pillar',label:'Wide column',w:.45,d:.45,h:2.85},
+ 'door-exterior':{kind:'door',label:'Exterior hinged door',w:1,d:.12,h:2.2,doorUse:'exterior',aliases:'outside front entrance entry main external'},
+ 'door-interior':{kind:'door',label:'Interior room door',w:.8,d:.12,h:2.1,doorUse:'room',aliases:'inside internal bedroom bathroom room'},
  'door-double':{kind:'door',label:'Double hinged door',w:1.6,d:.12,h:2.1,form:'double'},
  'door-sliding':{kind:'door',label:'Sliding door',w:1.8,d:.12,h:2.1,form:'sliding'},
  'door-narrow':{kind:'door',label:'Narrow hinged door',w:.7,d:.12,h:2.1},
@@ -78,7 +80,7 @@ export const catalogueVariants={
 export function catalogueEntries(types,filters){
  return [...Object.entries(types).map(([id,t])=>({id,kind:id,...t})),...Object.entries(catalogueVariants).map(([id,v])=>({id,...types[v.kind],...v}))].filter(v=>{
   const meta=catalogueMeta[v.kind],q=filters.query.trim().toLowerCase(),roomList=v.rooms||meta.rooms;
-  return (q?q.split(/\s+/).every(word=>`${v.label} ${meta.aliases} ${meta.category} ${catalogueGroups[v.kind]}`.toLowerCase().includes(word)):filters.category==='all'||meta.category===filters.category)&&(filters.room==='all'||!roomList.length||roomList.includes(filters.room));
+  return (q?q.split(/\s+/).every(word=>`${v.label} ${v.aliases||''} ${meta.aliases} ${meta.category} ${catalogueGroups[v.kind]}`.toLowerCase().includes(word)):filters.category==='all'||meta.category===filters.category)&&(filters.room==='all'||!roomList.length||roomList.includes(filters.room));
  });
 }
 
@@ -87,6 +89,7 @@ export function catalogueType(v){
  if(v.kind==='sofa')return v.id==='sofa-loveseat'?'Loveseat':v.id==='sofa-large'?'Three-seat':'Standard';
  if(v.kind==='bed')return v.id==='bed-single'?'Single':v.id==='bed-double'?'Double':v.id==='bed-king'?'King':'Queen';
  if(v.kind==='table')return v.id==='table-side'?'Side':v.id==='table-console'?'Console':v.id==='table-desk'?'Desk':v.id==='table-dining'?'Dining':'Coffee';
+ if(v.kind==='door'&&v.doorUse)return v.doorUse==='exterior'?'Exterior doors':'Room doors';
  if(v.kind==='door')return v.form==='open'?'Open passage':v.form==='sliding'?'Sliding':v.form==='double'?'Double':'Hinged';
  return null;
 }

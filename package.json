@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node scripts/prepare.mjs && next build",
     "dev": "node scripts/prepare.mjs && next dev --hostname 127.0.0.1 --port 8766",
-    "test": "python3 tests/planner_smoke.py && python3 tests/whole_flat_smoke.py && python3 tests/templates_smoke.py && python3 tests/studio_smoke.py && python3 tests/react_smoke.py && python3 tests/onboarding_smoke.py && python3 tests/studio_layout_smoke.py && python3 tests/landing_smoke.py && node --test tests/resize.test.mjs tests/measurements.test.mjs tests/rooms.test.mjs tests/templates.test.mjs && python3 tests/studio_resize_smoke.py && python3 tests/catalogue_navigation_smoke.py && python3 tests/wall_finish_smoke.py && python3 tests/seo_smoke.py && python3 tests/studio_clarity_smoke.py && python3 tests/rooms_smoke.py && python3 tests/room_movement_smoke.py",
+    "test": "python3 tests/planner_smoke.py && python3 tests/whole_flat_smoke.py && python3 tests/templates_smoke.py && python3 tests/studio_smoke.py && python3 tests/react_smoke.py && python3 tests/onboarding_smoke.py && python3 tests/studio_layout_smoke.py && python3 tests/landing_smoke.py && node --test tests/resize.test.mjs tests/measurements.test.mjs tests/rooms.test.mjs tests/templates.test.mjs tests/doors.test.mjs && python3 tests/studio_resize_smoke.py && python3 tests/catalogue_navigation_smoke.py && python3 tests/wall_finish_smoke.py && python3 tests/seo_smoke.py && python3 tests/studio_clarity_smoke.py && python3 tests/rooms_smoke.py && python3 tests/room_movement_smoke.py && python3 tests/door_swing_smoke.py",
     "preview": "npm run start",
     "build:standalone": "node scripts/standalone.mjs",
     "test:branding": "node --test tests/branding.test.mjs",

@@ -1,3 +1,4 @@
+import {doorPose} from './doors.js';
 import {catalogueVariants} from '../src/lib/catalogue.js';
 
 export const escapeSVG = value => String(value).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
@@ -94,5 +95,6 @@ export function planItemShape(o) {
     if (o.kind === 'shrine') s += line('M' + -w * .3 + ',' + -d * .2 + ' L0,' + d * .2 + ' L' + w * .3 + ',' + -d * .2, '#ead9a8', .04);
   }
   if (o.kind === 'fan') return '<g transform="scale(1 ' + d / w + ')">' + s + '</g>';
-  return o.kind === 'door' && o.flip && !['open', 'sliding'].includes(form) ? '<g transform="scale(1 -1)">' + s + '</g>' : s;
+  if(o.kind==='door'&&!['open','sliding'].includes(form)){const pose=doorPose(o,form);return `<g class="door-swing-shape" transform="scale(${pose.mirrorX} ${pose.side})">${s}</g>`;}
+  return s;
 }
