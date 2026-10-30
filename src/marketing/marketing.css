@@ -38,3 +38,18 @@ body{font-family:Manrope,'Segoe UI',sans-serif}.studio-toolbar h2,.panel-heading
 .auth-minimal a:focus-visible,.auth-minimal button:focus-visible{outline:2px solid #71624b;outline-offset:4px}
 @media(max-width:700px){.auth-page.auth-minimal{padding:18px 24px 12px;gap:18px}.auth-minimal .wordmark-label{display:none}.auth-minimal #auth-title{font-size:38px}}
 @media(max-height:740px){.auth-page.auth-minimal{padding-top:14px;padding-bottom:10px;gap:12px}.auth-minimal .lux-form{margin-top:14px;gap:10px}.auth-minimal .auth-preview{margin-top:10px}.auth-minimal .auth-switch{margin-top:12px!important}.auth-minimal .guest-link{margin-top:6px}.auth-minimal #auth-title{font-size:36px}}
+
+/* The room enters from the left; the form stays steady and usable throughout. */
+.auth-page.auth-split{grid-template-columns:1.15fr 1fr;padding-left:0;padding-right:0;column-gap:0;overflow-x:clip}
+.auth-split .auth-header{grid-column:1/-1;padding:0 4%}
+.auth-split .auth-art{grid-column:1;grid-row:2;align-self:center;width:100%;opacity:0;transform:translateX(-12%);pointer-events:none}
+.auth-split .auth-art img{display:block;width:100%;height:auto}
+.auth-split .auth-art.is-ready{animation:auth-room-enter 1.1s cubic-bezier(.16,1,.3,1) both}
+.auth-split .auth-panel{grid-column:2;grid-row:2;padding:12px 9%}
+.auth-split .auth-form-wrap{max-width:380px}
+.auth-split .auth-footer{grid-column:2;padding:0 24px}
+@keyframes auth-room-enter{from{opacity:0;transform:translateX(-12%)}to{opacity:1;transform:translateX(0)}}
+@media(min-width:900px) and (max-height:740px){.auth-split .auth-art{max-height:calc(100svh - 105px)}.auth-split .auth-art img{max-height:calc(100svh - 105px);object-fit:contain;object-position:left center}}
+@media(max-width:899px){.auth-page.auth-split{grid-template-columns:1fr;padding:18px 24px 12px;gap:18px}.auth-split .auth-header{padding:0}.auth-split .auth-art{display:none}.auth-split .auth-panel{grid-column:1;grid-row:2;padding:0}.auth-split .auth-footer{grid-column:1}.auth-split .wordmark-label{display:none}}
+@media(prefers-reduced-motion:reduce){.auth-split .auth-art,.auth-split .auth-art.is-ready{animation:none;opacity:1;transform:none}}
+@media(max-width:899px) and (max-height:740px){.auth-page.auth-split{padding:14px 24px 10px;gap:12px}}
