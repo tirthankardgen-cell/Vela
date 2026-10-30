@@ -14,3 +14,27 @@ body{font-family:Manrope,'Segoe UI',sans-serif}.studio-toolbar h2,.panel-heading
 .site-preview-banner{display:flex;align-items:center;justify-content:center;gap:16px;padding:9px 6%;background:#ece8da;color:#71624b;font-size:8px;font-weight:600;letter-spacing:1.3px}.site-preview-banner span{letter-spacing:0;font-weight:400;font-size:9px}@media(max-width:700px){.site-preview-banner{align-items:flex-start;gap:10px;font-size:7px}.site-preview-banner span{font-size:8px}}
 .setup-page .home-dimensions-note{font-size:12px;line-height:1.8;background:#f0f0e5;padding:15px 18px;border-left:2px solid #978365;margin:0 0 24px}
 .setup-page .dimension-equivalent{display:block;font-size:10px;line-height:1.7;color:#727567;margin-top:10px}
+
+/* A quiet, compact account screen. Content remains scrollable on short displays. */
+.auth-page.auth-minimal{min-height:100svh;grid-template-columns:1fr;grid-template-rows:auto 1fr auto;padding:24px 5% 16px;gap:18px;box-sizing:border-box}
+.auth-minimal .auth-header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.auth-minimal .auth-back{font-size:12px}
+.auth-minimal .auth-panel{padding:0;display:flex;align-items:center;justify-content:center;min-width:0}
+.auth-minimal .auth-form-wrap{width:100%;max-width:360px;margin:0}
+.auth-minimal #auth-title{font-size:42px;letter-spacing:-1.2px;text-align:center}
+.auth-minimal .auth-intro{text-align:center;margin:8px 0 0;font-size:13px;line-height:1.5}
+.auth-minimal .auth-preview{font-size:11px;line-height:1.5;text-align:center;margin:14px 0 0;color:#73786c}
+.auth-minimal .lux-form{gap:12px;margin-top:20px}
+.auth-minimal .lux-form label{font-size:12px}
+.auth-minimal .lux-form input{display:block;box-sizing:border-box;width:100%;height:44px;margin-top:4px;font-size:16px;padding:10px 12px;border-radius:7px}
+.auth-minimal .lux-form .lux-button{min-height:44px;padding:12px 18px;margin:2px 0 0;justify-content:center;border-radius:7px;font-size:13px}
+.auth-minimal .forgot-link{font-size:12px;margin:0;line-height:20px}
+.auth-minimal .form-divider{margin:20px 0 10px;height:0}
+.auth-minimal .google-button{min-height:44px;padding:10px 14px;border-radius:7px;font-size:13px}
+.auth-minimal .auth-switch{margin-top:18px!important;font-size:12px!important;line-height:1.5}
+.auth-minimal .guest-link{font-size:12px;margin-top:12px;line-height:24px}
+.auth-minimal .auth-footer{display:flex;justify-content:center;align-items:center;gap:16px;color:#73786c;font-size:11px;min-height:24px}
+.auth-minimal .form-error,.auth-minimal .form-success{margin:0;padding:10px 12px}
+.auth-minimal a:focus-visible,.auth-minimal button:focus-visible{outline:2px solid #71624b;outline-offset:4px}
+@media(max-width:700px){.auth-page.auth-minimal{padding:18px 24px 12px;gap:18px}.auth-minimal .wordmark-label{display:none}.auth-minimal #auth-title{font-size:38px}}
+@media(max-height:740px){.auth-page.auth-minimal{padding-top:14px;padding-bottom:10px;gap:12px}.auth-minimal .lux-form{margin-top:14px;gap:10px}.auth-minimal .auth-preview{margin-top:10px}.auth-minimal .auth-switch{margin-top:12px!important}.auth-minimal .guest-link{margin-top:6px}.auth-minimal #auth-title{font-size:36px}}
