@@ -239,7 +239,6 @@
 #root .catalogue button[data-group]{height:61px;padding:10px;display:flex;flex-direction:row;justify-content:flex-start;text-align:left;gap:10px;background:#fdfdfb;border-color:#e0e2d8;border-radius:8px;font-size:12px}
 #root .catalogue button[data-group] svg{width:30px;height:30px;flex:none;stroke:#415141;stroke-width:1.5;fill:none}
 #root .catalogue button[data-group]:hover,#root .catalogue button[data-group]:focus-visible{background:#ecefe4;border-color:#64735b}
-#root .library-featured{border-top:1px solid #e1e4d8;margin-top:18px;padding-top:17px}
 #root .catalogue .catalogue-item-card{height:auto;min-height:134px;padding:8px;display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:5px;background:#fdfdfb;border:1px solid #e0e2d8;border-radius:8px}
 #root .catalogue .catalogue-item-card>span{font-size:12px;line-height:1.4}
 #root .catalogue .catalogue-item-card>small{font-size:10px;color:#7b806f}

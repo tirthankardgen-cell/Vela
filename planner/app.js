@@ -163,9 +163,6 @@ function catalogue(direction=0,restoreGroup){
  const icon=v=>`<svg viewBox="0 0 42 32" aria-hidden="true"><path d="${v.icon}"/></svg>`;
  $('catalogue').innerHTML=searching||leaf?visible.map(card).join(''):[...groups].map(([name,items])=>`<button data-group="${esc(name)}" aria-label="Open ${esc(name)}">${groupIcon(name,items[0])}<span>${esc(name)}</span></button>`).join('');
  $('catalogue-section-title').textContent=searching?'Results':leaf?'Collection':'Categories';
- const featured=!nested&&!searching&&category==='furniture'?(groups.get('Sofas')||[]):[];
- $('catalogue-featured').hidden=!featured.length;
- $('catalogue-featured').innerHTML=featured.length?`<div class="catalogue-meta"><h3>Sofas</h3><span>${featured.length} items</span></div><div class="catalogue">${featured.map(card).join('')}</div>`:'';
  $('catalogue-empty').hidden=visible.length>0;
  $('catalogue-count').textContent=searching?`${visible.length} results · all categories`:leaf?`${visible.length} options`:`${groups.size} categories`;
  $('collection-count').textContent=leaf||searching?`${visible.length} items`:`${groups.size} categories`;
@@ -186,8 +183,6 @@ $('catalogue-room').onchange=()=>{catalogueTypeFilter='All';catalogue();};$('cat
 $('build-tab').onclick=()=>{chooseCategory('structure');document.dispatchEvent(new Event('vela:library'));};
 listen($('design-tab'),'click',()=>{chooseCategory('furniture');document.dispatchEvent(new Event('vela:library'));});
 listen($('catalogue'),'click',e=>{const group=e.target.closest('[data-group]');if(group){cataloguePath.push(group.dataset.group);catalogue(1);return;}const b=e.target.closest('[data-kind]');if(b)add(b.dataset.kind);});
-listen($('catalogue-featured'),'click',e=>{const b=e.target.closest('[data-kind]');if(b)add(b.dataset.kind);});
-listen($('catalogue-featured'),'dragstart',e=>{const b=e.target.closest('[data-kind]');if(b)e.dataTransfer.setData('text/roomnote-kind',b.dataset.kind);});
 listen($('catalogue'),'dragstart',e=>{const b=e.target.closest('[data-kind]');if(b)e.dataTransfer.setData('text/roomnote-kind',b.dataset.kind);});
 listen(svg,'dragover',e=>e.preventDefault());listen(svg,'drop',e=>{e.preventDefault();const kind=e.dataTransfer.getData('text/roomnote-kind');if(TYPES[kind]||catalogueVariants[kind])add(kind,point(e));});
 document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>chooseCategory(b.dataset.category));

@@ -7,7 +7,8 @@ with sync_playwright() as p:
  page=b.new_page(viewport={'width':1440,'height':1000});errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
  page.goto(BASE+'/studio?demo=1');page.wait_for_function('Boolean(window.Vela)');before=page.evaluate('Vela.getLayout()')
  assert page.locator('#catalogue details').count()==0 and page.locator('#catalogue [data-kind]').count()==0
- assert page.locator('#catalogue-featured .catalogue-item-card').count()==4
+ assert page.locator('#studio-objects .catalogue-item-card').count()==0
+ assert not page.locator('#catalogue-type-filters').is_visible()
  assert page.locator('#catalogue-room').is_visible()
  page.screenshot(path='/tmp/vela-library-overview.png')
  page.locator('[data-group="Sofas"]').click();assert page.locator('.library-tabs').is_visible()
