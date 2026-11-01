@@ -1,12 +1,17 @@
 import Link from 'next/link';
 import {faqs} from '@/src/lib/faq';
 import {siteUrl} from '@/src/lib/site';
+import {faqSchema} from '@/src/lib/structured-data';
+import {posts} from '@/src/lib/blog';
+import JsonLd from '@/src/marketing/JsonLd';
+import BlogCard from '@/src/marketing/BlogCard';
 import PublicLinks from '@/src/marketing/PublicLinks';
 import SiteHeader from '@/src/marketing/SiteHeader';
 import Wordmark from '@/src/marketing/Wordmark';
 import Icon from '@/src/components/Icon';
 import LandingMotion from '@/src/marketing/LandingMotion';
 import '@/src/marketing/landing.css';
+import '@/src/marketing/content.css';
 
 const possibilities=[
  {icon:'plan',number:'01',title:'Start with what’s yours.',copy:'A room, a floor plan, a fresh perspective. Bring your measurements in feet, inches or centimetres.'},
@@ -14,12 +19,12 @@ const possibilities=[
  {icon:'present',number:'03',title:'Bring the idea together.',copy:'Move between 2D and 3D, collect your finishes and prepare a considered design presentation.'},
 ];
 export default function Home(){return <main className="marketing landing">
-<script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({'@context':'https://schema.org','@graph':[{'@type':'WebSite','@id':`${siteUrl}/#website`,url:siteUrl,name:'Vela',description:'Browser-based 2D and 3D interior design planner'},{'@type':'SoftwareApplication',name:'Vela',url:siteUrl,applicationCategory:'DesignApplication',operatingSystem:'Web browser',description:'Plan a whole home, arrange furniture, colour walls and export 2D and 3D designs.'},{'@type':'FAQPage','@id':`${siteUrl}/#faq`,mainEntity:faqs.map(f=>({'@type':'Question',name:f.question,acceptedAnswer:{'@type':'Answer',text:f.answer}}))}]}).replace(/</g,'\\u003c')}}/>
+<JsonLd data={{'@context':'https://schema.org','@graph':[{'@type':'SoftwareApplication','@id':siteUrl+'/#planner',name:'Vela',url:siteUrl,applicationCategory:'DesignApplication',operatingSystem:'Web browser',description:'Plan a home concept, arrange furniture, colour walls and export 2D and 3D designs in the current free preview.',isAccessibleForFree:true,publisher:{'@id':siteUrl+'/#organization'}},faqSchema(faqs,'/')]}}/>
 <LandingMotion/><div className="reading-progress" aria-hidden="true"/>
 <section className="editorial-hero" aria-labelledby="home-title">
  <SiteHeader/>
  <div className="hero-photograph"><img src="/images/vela-interior.webp" alt="Sunlit living room with an ivory sofa, olive lounge chair, walnut table and soft linen curtains" width="1800" height="1200" fetchPriority="high" data-parallax/></div>
- <div className="hero-shade"/><div className="editorial-hero-copy"><span className="lux-kicker">A MORE CONSIDERED HOME</span><h1 id="home-title">Good spaces.<br/><em>Beautiful living.</em></h1><p>A little imagination. A sense of possibility.<br/>Make room for the way you want to live.</p><Link href="/signup" className="lux-button hero-cta">Begin your space <Icon name="arrow" size={18}/></Link></div>
+ <div className="hero-shade"/><div className="editorial-hero-copy"><span className="lux-kicker">A MORE CONSIDERED HOME</span><h1 id="home-title">Good spaces.<br/><em>Beautiful living.</em></h1><p>Plan your room or flat in 2D. Explore it in 3D.<br/>Vela gives your next home idea a place to take shape.</p><Link href="/signup" className="lux-button hero-cta">Begin your space <Icon name="arrow" size={18}/></Link></div>
  <div className="hero-bottom"><span>VELA / SPACE, WITH INTENTION</span><a href="#inspiration">Discover a different perspective <Icon name="down" size={16}/></a><span>01 — THE LIVING ROOM</span></div>
 </section>
 <section className="landing-intro landing-width" data-reveal><span className="lux-kicker">THOUGHTFUL BY DESIGN</span><div><h2>More than a room.<br/><em>A reflection of you.</em></h2><p>The quiet corner. The table everyone gathers around. The light at the end of the day. Beautiful spaces begin with the things that matter to you.</p></div><div className="intro-signature"><Icon name="sparkle" size={34}/><span>Imagine freely.<br/>Design thoughtfully.</span></div></section>
@@ -35,11 +40,8 @@ export default function Home(){return <main className="marketing landing">
  ['Make it yours.','Arrange your space, consider the proportions and refine your palette.'],
  ['See it together.','Explore the design in 3D, then save a layout or share a presentation.'],
  ].map(([title,copy],i)=><li key={title} data-reveal><span>0{i+1}</span><div><h3>{title}</h3><p>{copy}</p></div><Icon name="arrow" size={18}/></li>)}</ol></section>
-<section id="testimonials" className="testimonials-section"><div className="landing-width"><div className="landing-section-heading" data-reveal><div><span className="lux-kicker">ROOM FOR YOUR STORIES</span><h2>Every space has<br/><em>a personal side.</em></h2></div><p>Sample testimonials for this design preview.<br/>Not reviews from real customers.</p></div><div className="testimonial-grid">{[
- ['A clearer way to imagine how a room could feel, before moving a single piece.','Homeowner perspective','Planning a first home'],
- ['The small details matter. So does being able to see the whole idea together.','Designer perspective','Exploring a client concept'],
- ].map(([quote,role,context])=><figure className="testimonial-card" key={role} data-reveal><Icon name="quote" size={29}/><blockquote>{quote}</blockquote><figcaption><span className="testimonial-monogram" aria-hidden="true"><Icon name={role.startsWith('Home')?'home':'palette'} size={20}/></span><span><strong>{role}</strong><small>{context}</small></span><span className="sample-tag">Sample quote</span></figcaption></figure>)}</div></div></section>
-<section id="faq" className="landing-faq landing-width" aria-labelledby="faq-title"><span className="lux-kicker">A LITTLE MORE CLARITY</span><h2 id="faq-title">Your questions.<br/><em>Considered answers.</em></h2><div className="faq-list">{faqs.map(f=><details key={f.question}><summary>{f.question}</summary><p>{f.answer}</p></details>)}</div></section>
+<section id="journal" className="testimonials-section"><div className="landing-width"><div className="landing-section-heading" data-reveal><div><span className="lux-kicker">THE PLANNING JOURNAL</span><h2>A clearer plan.<br/><em>A thoughtful beginning.</em></h2></div><p>Practical guides for measuring your space,<br/>choosing a layout and keeping your work.</p></div><div className="blog-grid">{posts.slice(0,3).map(post=><BlogCard key={post.slug} post={post}/>)}</div><Link className="landing-text-link" href="/blog">Explore all planning guides →</Link></div></section>
+<section id="faq" className="landing-faq landing-width" aria-labelledby="faq-title"><span className="lux-kicker">A LITTLE MORE CLARITY</span><h2 id="faq-title">Your questions.<br/><em>Considered answers.</em></h2><div className="faq-list">{faqs.map(f=><details key={f.question}><summary>{f.question}</summary><p>{f.answer}</p></details>)}</div><Link href="/faq" className="landing-text-link">All questions & answers →</Link></section>
 <section className="landing-closing"><div data-reveal><span className="lux-kicker">YOUR NEXT CHAPTER, BEAUTIFULLY ARRANGED</span><h2>Make yourself<br/><em>at home.</em></h2><Link href="/signup" className="lux-button lux-button-light">Begin your space <Icon name="arrow" size={18}/></Link><p>Your space. Your pace. Your point of view.</p></div><div className="closing-orbit" aria-hidden="true"/></section>
-<footer className="landing-footer landing-width"><div><Wordmark/><p>Thoughtful spaces.<br/>Beautifully presented.</p></div><nav aria-label="Footer navigation"><a href="#inspiration">Inspiration</a><a href="#process">The approach</a><a href="#testimonials">Stories</a><Link href="/about">About</Link><Link href="/login">Sign in</Link></nav><PublicLinks/><div className="footer-bottom"><small>© {new Date().getFullYear()} Vela</small><span>DESIGNED AROUND YOU</span><a href="#home-title">Back to top <Icon name="up" size={14}/></a></div></footer>
+<footer className="landing-footer landing-width"><div><Wordmark/><p>Thoughtful spaces.<br/>Beautifully presented.</p></div><nav aria-label="Footer navigation"><a href="#inspiration">Inspiration</a><Link href="/how-it-works">The approach</Link><Link href="/blog">Guides</Link><Link href="/contact">Contact</Link><Link href="/login">Sign in</Link></nav><PublicLinks/><div className="footer-bottom"><small>© {new Date().getFullYear()} Vela</small><span>DESIGNED AROUND YOU</span><a href="#home-title">Back to top <Icon name="up" size={14}/></a></div></footer>
 </main>;}

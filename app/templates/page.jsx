@@ -1,0 +1,13 @@
+import Link from 'next/link';
+import {publicMetadata} from '@/src/lib/site';
+import ContentPage,{PlanningCta} from '@/src/marketing/ContentPage';
+const title='1BHK, 2BHK, 3BHK & 4BHK flat templates';
+const description='Start with eight furnished concept flat layouts in Vela, with two alternatives for every BHK size. Compare room arrangements and adapt them to your measurements.';
+export const metadata=publicMetadata(title,description,'/templates');
+const types=[
+ ['1BHK','A one-bedroom starting point for comparing living, sleeping, kitchen and everyday storage space.'],
+ ['2BHK','Two-bedroom concepts to explore shared living space and different roles for a second bedroom.'],
+ ['3BHK','Three-bedroom concepts for considering room roles, furniture and circulation across a larger flat.'],
+ ['4BHK','Four-bedroom concepts for comparing private rooms, shared areas and the paths between them.'],
+];
+export default function Templates(){return <ContentPage title={title} description={description} path="/templates"><div className="content-answer"><h2>What does BHK mean?</h2><p>BHK means bedroom, hall and kitchen. A 2BHK flat has two bedrooms plus a hall and kitchen. The label does not specify the total area, bathrooms or balcony arrangement.</p></div><div className="content-grid">{types.map(([name,copy])=><section className="content-card" key={name}><span className="lux-kicker">TWO FURNISHED ALTERNATIVES</span><h2>{name} flat templates</h2><p>{copy}</p><Link className="landing-text-link" href="/signup">Choose a flat in setup →</Link></section>)}</div><div className="content-prose"><h2>What is included?</h2><p>The collection includes named rooms, shared walls, attached doors with editable swings, exterior windows, fitted kitchen units, bathroom fixtures and measured furniture. Room sizes and the overall plan dimensions follow wall-centre-line conventions.</p><h2>How do I choose or change a template?</h2><p>During room setup, select “A furnished flat”. In an existing studio, open “Flat templates” in the library to preview and replace the layout. Replacement preserves project details and supports undo. Export JSON before replacing a design you want to keep.</p><h2>Will a template fit my property?</h2><p>Compare the actual footprint, room dimensions, opening positions and fixed services with your survey. Templates are concept examples, not site-specific architectural plans. Confirm structural and service changes with qualified professionals.</p><p><Link href="/blog/1bhk-2bhk-3bhk-4bhk-flat-planning">Read the flat-planning guide →</Link></p></div><PlanningCta/></ContentPage>;}

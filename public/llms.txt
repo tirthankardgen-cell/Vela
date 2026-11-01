@@ -1,0 +1,44 @@
+# Vela
+
+> Vela is a browser-based 2D and 3D interior concept planner at https://velastudio.space. The current planner is free. Configured accounts save private plans in Firestore; guest projects, recovery drafts and tracing images remain in the current browser.
+
+## Product and support
+
+- [Home](https://velastudio.space/): Product introduction.
+- [About](https://velastudio.space/about): Vela's purpose and current product scope.
+- [Features](https://velastudio.space/features): Measured layouts, furniture, schematic 3D views, finishes, tracing references and exports.
+- [How it works](https://velastudio.space/how-it-works): The measurement-to-export workflow.
+- [Flat templates](https://velastudio.space/templates): Eight furnished concepts, two each for 1BHK, 2BHK, 3BHK and 4BHK.
+- [Pricing](https://velastudio.space/pricing): Current free planner; no paid subscription or checkout.
+- [FAQ](https://velastudio.space/faq): Answers about units, files, local storage and product limitations.
+- [Contact](https://velastudio.space/contact): Product and privacy help at contact@velastudio.space.
+
+## Planning guides
+
+- [Measuring a room](https://velastudio.space/blog/how-to-measure-a-room-for-a-floor-plan): Survey checklist and dimension conventions.
+- [Small living room layouts](https://velastudio.space/blog/small-living-room-furniture-layout): Furniture dimensions, movement and alternatives.
+- [BHK flat planning](https://velastudio.space/blog/1bhk-2bhk-3bhk-4bhk-flat-planning): Adapting a concept template to a real property.
+- [Upload and trace a plan](https://velastudio.space/blog/upload-a-floor-plan-and-trace-it): Supported files and manual tracing.
+- [2D versus 3D](https://velastudio.space/blog/2d-vs-3d-interior-design-planning): Choosing a view for each planning task.
+- [Export and backup](https://velastudio.space/blog/export-and-back-up-your-interior-design): JSON, SVG, PNG, CSV and presentations.
+
+## Policies
+
+- [Privacy](https://velastudio.space/privacy)
+- [Terms](https://velastudio.space/terms)
+- [Cookies and choices](https://velastudio.space/cookies)
+
+## Facts and limits
+
+- Accounts use Firebase Authentication when configured. Signed-in editable plans sync privately through Firestore. Guests and unsynced drafts remain local. Tracing images are excluded from cloud saves.
+- Plan dimensions follow wall centre lines. Verify site dimensions and wall thicknesses.
+- PNG, JPG, WebP and PDF uploads up to 10 MB are tracing references. Only the first PDF page is used. No automatic room recognition.
+- Editable backups use project JSON. Exports also include plan SVG, 3D PNG, furniture CSV and a presentation that can be printed to PDF.
+- Models are schematic. Editorial interior images are AI-created inspiration, not Vela renderings.
+- Costs are user-entered estimates. Currency changes relabel amounts without conversion; tax, delivery and installation are not automatically included.
+- Vela supports concept planning. Qualified professionals must verify construction, safety and local requirements.
+
+## Discovery
+
+- [Sitemap](https://velastudio.space/sitemap.xml)
+- [Blog feed](https://velastudio.space/feed.xml)

@@ -8,8 +8,8 @@ with sync_playwright() as p:
  page.on('pageerror',lambda e:errors.append(str(e)))
  page.on('request',lambda r:backend.append(r.url) if any(s in r.url for s in ['googleapis.com','firebaseio.com','firebasestorage']) else None)
  page.goto(BASE)
- assert page.locator('link[rel="canonical"]').get_attribute('href').rstrip('/')=='https://vela-dgen.vercel.app'
- assert page.locator('meta[property="og:image"]').get_attribute('content')=='https://vela-dgen.vercel.app/brand/vela-social.png'
+ assert page.locator('link[rel="canonical"]').get_attribute('href').rstrip('/')=='https://velastudio.space'
+ assert page.locator('meta[property="og:image"]').get_attribute('content')=='https://velastudio.space/brand/vela-social.png'
  page.goto(BASE+'/signup')
  page.get_by_label('Your name').fill('Alex Designer');page.get_by_label('Email address').fill('alex@example.com');page.get_by_label('Password',exact=True).fill('NeverStored123!')
  page.get_by_role('button',name='Create your account').click();page.wait_for_url('**/start')

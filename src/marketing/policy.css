@@ -4,6 +4,7 @@
 .policy-content h2{font:500 30px var(--font-display);letter-spacing:-.4px;line-height:1.2;margin:38px 0 14px}
 .policy-content p,.policy-content li{font-size:14px;line-height:1.9;color:#535b4c}
 .policy-content a{text-decoration:underline;text-underline-offset:3px}
+.policy-content{overflow-wrap:anywhere}
 .policy-content .policy-updated{font-size:11px;color:#737966}
 .policy-footer{border-top:1px solid #deddd1;padding:30px 7%}
 .public-links{display:flex;gap:18px 25px;flex-wrap:wrap;font-size:11px}

@@ -8,3 +8,13 @@ export const faqs=[
  {question:'Can I export my design?',answer:'Yes. Export a project JSON file to reopen later, a 2D plan as SVG, a 3D view as PNG, or a design presentation. The presentation can be printed or saved as a PDF using your browser.'},
  {question:'Are these plans suitable for construction?',answer:'Vela is a concept planning tool. Verify dimensions, structural changes, clearances, electrical requirements and local regulations with qualified professionals before building or purchasing.'},
 ];
+export const moreFaqs=[
+ {question:'Is Vela free to use?',answer:'The current Vela preview has no paid subscription or checkout. You can explore the planner, templates and exports. Any future paid services will have their features and terms published before purchase is offered.'},
+ {question:'Does Vela have 1BHK, 2BHK, 3BHK and 4BHK layouts?',answer:'Yes. Vela includes eight furnished concept flats, with two alternatives for each BHK size. Choose “A furnished flat” during setup or open Flat templates in the studio library. Compare the template measurements with your actual property.'},
+ {question:'Do I need to install an app?',answer:'The hosted Vela planner runs in a modern web browser. No desktop installation is required. Use a device and browser that support WebGL for the 3D view; a larger screen is helpful for detailed editing.'},
+ {question:'Does my account sync designs between devices?',answer:'Yes. Sign in with the same email account or Google account to reopen your saved plans. Geometry, finishes, furniture, costs and notes sync; uploaded tracing images do not. Guest projects remain on the current device until you export and import them into a signed-in workspace.'},
+ {question:'Can Vela automatically recognise walls in a floor plan?',answer:'No. Uploaded plans are tracing references. Set the measured dimensions, then add walls, doors and windows manually. For PDFs, only the first page is used.'},
+ {question:'Are currency changes and furniture costs automatic?',answer:'No. Enter costs yourself. Changing the project currency relabels amounts without converting them. Tax, delivery, installation and unpriced items are not automatically included; get supplier quotes before buying.'},
+ {question:'Are the website’s interior images made in Vela?',answer:'The editorial interior images are AI-created inspiration. They are not exported Vela renderings. Vela’s actual 3D view uses schematic furniture and room geometry.'},
+ {question:'How do I contact Vela?',answer:'Email contact@velastudio.space for product or privacy questions. Do not send passwords. If you share a plan or export for support, remove personal details and confirm you have permission to share it.'},
+];

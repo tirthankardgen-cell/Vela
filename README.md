@@ -4,7 +4,9 @@
 
 Vela is an interior design website built with Next.js, React, Tailwind CSS and Three.js. Its olive, ivory and champagne identity pairs self-hosted Cormorant Garamond and Manrope typography with an architectural V mark.
 
-Production URL: https://vela-dgen.vercel.app/
+Production URL: https://velastudio.space/
+
+Search, public content and AdSense setup: [launch and publishing guide](docs/seo-launch.md).
 
 ![Vela design studio](docs/assets/vela-studio.png)
 
@@ -48,7 +50,7 @@ Development uses port 8766. `npm run start` serves the production build on port 
 
 Vercel should import this repository with its root directory at the repository root. `vercel.json` selects **Next.js**, `npm ci`, `npm run build`, and explicitly sets the output directory to `.next`. This overrides the legacy `docs` project setting. If editing the Vercel dashboard settings, use `.next` or disable the output-directory override; never use `docs` for this Next.js application. Set the Firebase environment variables before deploying real accounts. Connected Git deployments can publish subsequent pushes.
 
-The canonical URL and sharing metadata use `https://vela-dgen.vercel.app` in `src/lib/site.js`. Brand assets are generated during preparation. Fonts are self-hosted and licensed under the SIL Open Font License; sources and palette research are in `brand/README.md`. The editorial landing page uses local WebP inspiration images, SVG icons, scroll reveals and gentle parallax with reduced-motion and no-JavaScript fallbacks. Its testimonial cards are explicitly labelled sample quotes; replace them with approved customer feedback before presenting them as real reviews. Image provenance is recorded in the brand guide.
+The canonical URL and sharing metadata use `https://velastudio.space` in `src/lib/site.js`. Public feature, workflow, template, pricing, contact, FAQ and blog pages provide crawlable content with structured data. Sample testimonial cards have been replaced by practical planning guides. AdSense verification and ads.txt use the supplied publisher ID; ad delivery defaults to off until account setup is complete. See the launch guide for the production environment settings. Brand assets are generated during preparation. Fonts are self-hosted and licensed under the SIL Open Font License; sources, palette research and image provenance are in `brand/README.md`. The editorial landing page uses local WebP inspiration images, SVG icons, scroll reveals and gentle parallax with reduced-motion and no-JavaScript fallbacks.
 
 ## Validation
 

@@ -6,7 +6,7 @@ import {siteUrl} from '../src/lib/site.js';
 import {measurementToMetres,newRoom} from '../src/lib/room.js';
 
 test('uses the supplied production domain',()=>{
- assert.equal(siteUrl,'https://vela-dgen.vercel.app');
+ assert.equal(siteUrl,'https://velastudio.space');
 });
 test('converts room dimensions without losing inches',()=>{
  assert.equal(measurementToMetres('ft-in',12,6),3.81);
