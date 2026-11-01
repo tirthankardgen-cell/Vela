@@ -21,7 +21,7 @@ export default function Header({cloud=false,preview=false}) {
         <Brand />
         <div className="header-project">
           <span className="project-avatar" aria-hidden="true">{project.name.charAt(0).toUpperCase()}</span>
-          <div className="min-w-0"><button id="project-details" className="project-title">{project.name} <Icon name="chevron" size={14}/></button><small id="save-state">Local workspace</small></div>
+          <div className="min-w-0"><button id="project-details" className="project-title">{project.name} <Icon name="chevron" size={14}/></button><small id="save-state" role="status" aria-live="polite">{cloud?'Opening cloud workspace…':'Local workspace'}</small><button id="retry-save" hidden>Retry save</button><a id="recover-draft" href="/projects" hidden>Recover draft</a></div>
         </div>
         <div className="header-actions">
           <button id="projects-button"><Icon name="folder"/>Projects</button><button id="open-file"><Icon name="upload"/>Import</button><button id="save-file"><Icon name="save"/>Save project</button><button id="present-button" className="primary"><Icon name="present"/>Present</button>

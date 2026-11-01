@@ -3,14 +3,26 @@ service cloud.firestore {
  match /databases/{database}/documents {
   match /users/{userId}/projects/{projectId} {
    function owner() { return request.auth != null && request.auth.uid == userId; }
+   function validProject() {
+    let data = request.resource.data;
+    return projectId.matches('^[A-Za-z0-9_-]{1,80}$')
+     && data.keys().hasAll(['schemaVersion','id','name','client','itemCount','layoutJson','revision','createdAt','updatedAt'])
+     && data.keys().hasOnly(['schemaVersion','id','name','client','itemCount','layoutJson','revision','createdAt','updatedAt'])
+     && data.schemaVersion == 2 && data.id == projectId
+     && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+     && data.client is string && data.client.size() <= 100
+     && data.itemCount is int && data.itemCount >= 0 && data.itemCount <= 200
+     && data.layoutJson is string && data.layoutJson.size() > 0 && data.layoutJson.size() <= 900000
+     && data.revision is int && data.revision > 0
+     && data.createdAt is timestamp && data.updatedAt == request.time;
+   }
    allow read, delete: if owner();
-   allow create, update: if owner()
-    && request.resource.data.keys().hasOnly(['name', 'layout', 'createdAt', 'updatedAt'])
-    && request.resource.data.name is string
-    && request.resource.data.name.size() <= 100
-    && request.resource.data.layout is map
-    && request.resource.data.layout.project.id == projectId
-    && request.resource.data.updatedAt == request.time;
+   allow create: if owner() && validProject()
+    && request.resource.data.revision == 1 && request.resource.data.createdAt == request.time;
+   allow update: if owner() && validProject()
+    && request.resource.data.createdAt == resource.data.createdAt
+    && request.resource.data.revision == resource.data.get('revision', 0) + 1;
   }
+  // All other paths, including account-wide collection queries, are denied by default.
  }
 }

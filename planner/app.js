@@ -1,4 +1,6 @@
 import {initializeStudio, validateProject} from './studio.js';
+import {createAutosave} from '../src/lib/autosave.js';
+import {writeDraft,clearDraft} from '../src/lib/drafts.js';
 import {catalogueIcons} from '../src/lib/catalogue-icons';
 import {catalogueEntries,catalogueGroups,catalogueVariants,catalogueType} from '../src/lib/catalogue';
 import {feetAndInches,metric,centimetres} from '../src/lib/measurements';
@@ -12,9 +14,29 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 
 export function initializePlanner(options = {}) {
-const {owner="guest",store=null,initialLayout=null,onStarted=()=>{},standalone=false}=options;
-let saveTimer,saveSequence=0,disposed=false,saveChain=Promise.resolve();
-function cloudSave(layout){if(!store)return;const sequence=++saveSequence;clearTimeout(saveTimer);$("save-state").textContent=store.isDemo?"Saving preview…":"Saving to your workspace…";saveTimer=setTimeout(()=>{saveChain=saveChain.catch(()=>{}).then(()=>store.save(layout)).then(()=>{if(!disposed&&sequence===saveSequence)$("save-state").textContent=store.isDemo?"Preview saved on this device":"Saved to your cloud workspace";}).catch(()=>{if(!disposed)$("save-state").textContent=store.isDemo?"Preview save failed · export your project":"Cloud save failed · local draft kept";});},900);}
+const {owner="guest",store=null,initialLayout=null,saveOnStart=false,onStarted=()=>{},standalone=false}=options;
+let localDraftSaved=true;
+const autosave=store?createAutosave({
+ save:async layout=>{if(navigator.onLine===false)throw Object.assign(new Error('Offline'),{code:'unavailable'});await store.save(layout);if(!store.isDemo)clearDraft(owner,layout.project.id,layout);},
+ onStatus:(status,error)=>{
+  $('retry-save').hidden=status!=='error';
+  $('recover-draft').hidden=status!=='error'||store.isDemo||!localDraftSaved;
+  if(status==='error'){
+   const conflict=error?.code==='project/conflict';
+   $('save-state').textContent=conflict?'Cloud conflict · export or recover draft':localDraftSaved?'Not synced · browser draft kept':'Not synced · export a backup';
+   $('save-state').title=conflict?'Another tab or device changed this project. Export your edits or recover the draft as a copy from Projects.':'Check your connection and try saving again.';
+   if(conflict)toast($('save-state').title);
+  }else{
+   $('save-state').title='';
+   $('save-state').textContent=status==='saved'?(store.isDemo?'Preview saved on this device':'Saved to your cloud workspace'):(store.isDemo?'Saving preview…':'Saving to your workspace…');
+  }
+ }
+}):null;
+function saveDraft(){
+ try{localStorage.setItem(STORAGE,snapshot());if(store&&!store.isDemo)writeDraft(owner,state);localDraftSaved=true;}
+ catch{localDraftSaved=false;}
+}
+async function flushSave(){const before=snapshot();captureCamera();if(autosave&&(autosave.dirty||before!==snapshot())){saveDraft();autosave.schedule(state);await autosave.flush();}}
 
 const abort = new AbortController();
 const listen = (target, event, handler, options = {}) => target.addEventListener(event, handler, {...options, signal: abort.signal});
@@ -77,7 +99,7 @@ function dual(m){return `${centimetres(m)} cm · ${metric(m)} · ≈ ${feet(m)}`
 function toast(s){$('toast').textContent=s;$('toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('show'),3600);}
 function snapshot(){return JSON.stringify(state);}
 function remember(before){if(before!==snapshot()){undoStack.push(before);if(undoStack.length>50)undoStack.shift();redoStack=[];}persist();}
-function persist(){if(store)cloudSave(copy(state));try{localStorage.setItem(STORAGE,snapshot());if(!store)$('save-state').textContent='All changes saved locally';}catch{$('save-state').textContent='Storage unavailable · export your project';}buttons();}
+function persist(){saveDraft();if(autosave)autosave.schedule(state);else $('save-state').textContent=localDraftSaved?'All changes saved locally':'Storage unavailable · export your project';buttons();}
 function buttons(){$('undo').disabled=!undoStack.length;$('redo').disabled=!redoStack.length;}
 function mutate(fn){const before=snapshot();fn();state.items.forEach(anchor);remember(before);refresh();}
 function undo(){if(!undoStack.length)return;redoStack.push(snapshot());state=JSON.parse(undoStack.pop());selected=null;refresh();persist();}
@@ -324,14 +346,18 @@ const planResizeObserver=new ResizeObserver(()=>drawPlan());
 planResizeObserver.observe(stage);
 $('plan-mode').onclick=()=>setMode('plan');$('view-mode').onclick=()=>setMode('3d');document.querySelectorAll('[data-camera]').forEach(b=>b.onclick=()=>setCamera(b.dataset.camera));$('show-walls').onchange=()=>{content?.children.filter(o=>o.userData.wall).forEach(o=>o.visible=$('show-walls').checked);};
 try{const saved=localStorage.getItem(STORAGE);if(initialLayout)state=validate(initialLayout);else if(saved)state=validate(JSON.parse(saved));}catch{toast('Could not restore the browser draft. Open a saved layout file if you have one.');}
-initializeStudio({listen,owner,store,standalone,getState:()=>state,selection,mutate,replace:raw=>{state=validate(raw);selected=null;zoom=1;pan={x:0,y:0};fitFrame=null;},newProject:()=>{state=preset('blank');state.project=validateProject({name:'Untitled project'});selected=null;zoom=1;pan={x:0,y:0};fitFrame=null;},refresh,catalogue,toast,download,svg,captureCamera});
-catalogue();refresh();if(initialLayout)persist();onStarted();
+initializeStudio({listen,owner,store,flushSave,standalone,getState:()=>state,selection,mutate,replace:raw=>{state=validate(raw);selected=null;zoom=1;pan={x:0,y:0};fitFrame=null;},newProject:()=>{state=preset('blank');state.project=validateProject({name:'Untitled project'});selected=null;zoom=1;pan={x:0,y:0};fitFrame=null;},refresh,catalogue,toast,download,svg,captureCamera});
+catalogue();refresh();if(initialLayout&&(!store||store.isDemo||saveOnStart))persist();else if(store)$('save-state').textContent=store.isDemo?'Preview saved on this device':'Saved to your cloud workspace';onStarted();
+$('retry-save').onclick=()=>flushSave().catch(()=>{});
+listen(window,'online',()=>autosave?.flush().catch(()=>{}));
+listen(window,'beforeunload',event=>{if(autosave?.dirty){event.preventDefault();event.returnValue='';}});
+listen(document,'visibilitychange',()=>{if(document.visibilityState==='hidden')autosave?.flush().catch(()=>{});});
 // A small read-only bridge makes the saved model inspectable for local verification.
 window.Vela=window.Roomnote={getLayout:()=>copy(state),validate:raw=>validate(raw),getView:()=>mode};
 
 window.dispatchEvent(new Event('vela:ready'));
 return () => {
- disposed=true;clearTimeout(saveTimer);abort.abort();
+ autosave?.dispose();abort.abort();
  clearTimeout(toast.timer);
  catalogueAnimation?.cancel();
  resizeObserver?.disconnect();

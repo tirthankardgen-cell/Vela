@@ -6,6 +6,7 @@ import {createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordRe
 import {firebase,firebaseConfigured,friendlyError} from '../lib/firebase';
 import {demoMode,signInDemo} from '../lib/demo-auth';
 import Wordmark from '../marketing/Wordmark';
+import {siteUrl} from '../lib/site';
 import {GoogleIcon} from '../components/Icon';
 
 export default function AuthForm({mode='login'}){
@@ -20,10 +21,10 @@ export default function AuthForm({mode='login'}){
   try{
    if(demoMode){if(reset){setMessage('Preview only: no email was sent. You can sign in with any demo password.');}else{await signInDemo({email,name:signup?String(data.get('name')).trim():undefined});router.push(signup?'/start':'/projects');}return;}
    const {auth}=firebase();
-   if(reset){await sendPasswordResetEmail(auth,email,{url:'https://vela-dgen.vercel.app/login'});setMessage('If that email has an account, a reset link is on its way.');}
-   else if(signup){const {user}=await createUserWithEmailAndPassword(auth,email,password);await updateProfile(user,{displayName:String(data.get('name')).trim().slice(0,80)});sendEmailVerification(user).catch(()=>{});router.push('/start');}
+   if(reset){await sendPasswordResetEmail(auth,email,{url:`${siteUrl}/login`});setMessage('If that email has an account, a reset link is on its way.');}
+   else if(signup){const {user}=await createUserWithEmailAndPassword(auth,email,password);await updateProfile(user,{displayName:String(data.get('name')).trim().slice(0,80)});sendEmailVerification(user,{url:`${siteUrl}/projects`}).catch(()=>{});router.push('/start');}
    else {await signInWithEmailAndPassword(auth,email,password);router.push('/projects');}
-  }catch(err){setError(friendlyError(err));}finally{setBusy(false);}
+  }catch(err){if(reset&&err.code==='auth/user-not-found')setMessage('If that email has an account, a reset link is on its way.');else setError(friendlyError(err));}finally{setBusy(false);}
  }
  async function google(){setError('');setBusy(true);try{if(demoMode){await signInDemo({email:'designer@vela.example',name:'Preview Designer'});router.push('/projects');return;}await signInWithPopup(firebase().auth,new GoogleAuthProvider());router.push('/projects');}catch(err){setError(friendlyError(err));}finally{setBusy(false);}}
  return <main className="marketing auth-page auth-minimal auth-split"><header className="auth-header"><Wordmark/><Link href="/" className="auth-back">← Back to home</Link></header><div className={`auth-art ${artReady?'is-ready':''}`} aria-hidden="true"><img src="/images/auth/room-capsule.webp" alt="" width="1440" height="1080" fetchPriority="high" onLoad={()=>setArtReady(true)} ref={node=>{if(node?.complete&&node.naturalWidth)setArtReady(true);}}/></div><section className="auth-panel" aria-labelledby="auth-title"><div className="auth-form-wrap"><h1 id="auth-title">{signup?'Create an account':reset?'Reset password':'Welcome back'}</h1><p className="auth-intro">{signup?'A little space for your next idea.':reset?'We’ll email you a reset link.':'Sign in to your design space.'}</p>

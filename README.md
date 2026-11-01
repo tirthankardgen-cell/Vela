@@ -14,11 +14,11 @@ The studio uses a full-screen canvas with floating library, properties and tool 
 
 ## Website workflow
 
-1. Explore the landing page, then sign up or sign in using the labelled account simulation. Guest access is also available.
+1. Explore the landing page, then sign up or sign in with email/password or Google. Guest access is also available.
 2. Start an empty room in centimetres or feet and inches, choose a furnished 1BHK, 2BHK, 3BHK or 4BHK flat, or upload a PNG, JPEG, WebP or PDF floor plan. PDFs use their first page; uploaded plans are scaled tracing references, not automatic wall detection.
 3. Arrange furniture, walls, doors and windows in the 2D editor and inspect the matching 3D scene. Room setup supports international currencies; inspector measurements remain in centimetres.
 4. Apply finishes, record costs and suppliers, and export layout JSON, plan SVG, 3D PNG, furniture CSV or a client presentation for printing to PDF.
-5. Return to the project dashboard to reopen locally saved designs.
+5. Return to the project dashboard to reopen your cloud-saved plans.
 
 ## Flat templates
 
@@ -26,18 +26,13 @@ The collection contains **eight furnished flats**, with two layouts for each BHK
 
 Each flat includes named rooms, shared walls, attached doors with editable swings, exterior windows, fitted kitchen units, bathroom fixtures and measured furniture. Previews and the editor show clear room sizes; overall dimensions and plan area follow wall centre lines. The [template dimensions and conventions](docs/flat-templates.md) explain the collection and its checks.
 
-## Account simulation and Firebase
+## Real accounts and cloud plans
 
-**The default is preview mode. No backend or credentials are required.** Signup and login simulate the account flow; passwords are never checked or stored. An email identifies a local preview profile. Sessions use sessionStorage and projects use localStorage. These profiles are not secure accounts. Designs do not sync across devices, browsers or domains. Export JSON backups before clearing storage or moving domains.
+Firebase Authentication and Cloud Firestore are the default. Sign in with email/password or Google to save and reopen private plans across devices. The editor saves rooms, geometry, furniture, finishes, costs, suppliers, notes and camera position. Tracing images stay in the browser and JSON exports; Firebase Storage is not used, so the integration works with the Spark plan.
 
-Firebase Auth, Firestore and Storage adapters are prepared but disconnected in preview mode. To connect a project later:
+Follow [Firebase and Vercel setup](docs/firebase-setup.md) for the exact environment-variable block, provider/domain configuration, Firestore rules deployment and emulator tests. Real sign-in stays unavailable until configuration is supplied; it never silently falls back to a simulated account.
 
-1. Register a Firebase web app. Add the six public web configuration values listed in `.env.example` to Vercel environment settings.
-2. Enable Email/Password authentication; optionally enable Google sign-in. Add `vela-dgen.vercel.app` and any custom domain to Authentication's authorized domains.
-3. Create Firestore and Storage, then deploy the owner-scoped rules from `firestore.rules` and `storage.rules` using Firebase CLI (`firebase deploy --only firestore:rules,storage --project YOUR_PROJECT_ID`). Review and test rules in the emulator before a public launch.
-4. Set `NEXT_PUBLIC_AUTH_MODE=firebase` and redeploy. Public configuration variables are embedded at build time. Never place service-account credentials or private keys in `NEXT_PUBLIC_` variables.
-
-Live Firebase services have not been configured or integration-tested. Preview projects are not automatically migrated; export/import JSON when switching modes.
+Saves are serialized and debounced, with revision checks for concurrent edits. Unsynced browser drafts can be recovered as separate projects from the dashboard. Guests can still use the local editor. Existing preview projects can be moved using JSON export/import. Explicit `NEXT_PUBLIC_AUTH_MODE=demo` enables the old local simulation for development tests only; passwords in that mode are never verified or saved.
 
 ## Run and deploy
 
@@ -51,7 +46,7 @@ npm run dev
 
 Development uses port 8766. `npm run start` serves the production build on port 8767. In the prepared cloud environment, use `npm ci --cache /workspace/.npm-cache --no-audit --no-fund`.
 
-Vercel should import this repository with its root directory at the repository root. `vercel.json` selects **Next.js**, `npm ci`, `npm run build`, and explicitly sets the output directory to `.next`. This overrides the legacy `docs` project setting. If editing the Vercel dashboard settings, use `.next` or disable the output-directory override; never use `docs` for this Next.js application. No environment variables are required for the simulation. Connected Git deployments can publish subsequent pushes.
+Vercel should import this repository with its root directory at the repository root. `vercel.json` selects **Next.js**, `npm ci`, `npm run build`, and explicitly sets the output directory to `.next`. This overrides the legacy `docs` project setting. If editing the Vercel dashboard settings, use `.next` or disable the output-directory override; never use `docs` for this Next.js application. Set the Firebase environment variables before deploying real accounts. Connected Git deployments can publish subsequent pushes.
 
 The canonical URL and sharing metadata use `https://vela-dgen.vercel.app` in `src/lib/site.js`. Brand assets are generated during preparation. Fonts are self-hosted and licensed under the SIL Open Font License; sources and palette research are in `brand/README.md`. The editorial landing page uses local WebP inspiration images, SVG icons, scroll reveals and gentle parallax with reduced-motion and no-JavaScript fallbacks. Its testimonial cards are explicitly labelled sample quotes; replace them with approved customer feedback before presenting them as real reviews. Image provenance is recorded in the brand guide.
 
@@ -67,7 +62,7 @@ VELA_BASE_URL=http://127.0.0.1:8767 npm test
 
 Browser tests require Python Playwright and Chromium. The cloud environment supplies both. Elsewhere, install Playwright and Chromium, then set `CHROMIUM_PATH` if it differs from `/usr/bin/chromium`.
 
-Tests cover editing, drag/drop, wall attachments, undo/redo, JSON round-trip, 3D, exports, material and cost workflows, React event handling, simulation signup/login, local persistence, measured rooms, image/PDF upload, mobile widths and metadata. Firebase connectivity is intentionally not exercised in simulation mode.
+Tests cover editing, drag/drop, wall attachments, undo/redo, JSON round-trip, 3D, exports, material and cost workflows, React event handling, simulation signup/login, local persistence, measured rooms, image/PDF upload, mobile widths and metadata. Run `npm run test:cloud` and `npm run test:firebase` for cloud-save and Firestore-rule coverage. The historical onboarding smoke test requires explicit demo mode.
 
 ## Standalone edition
 
@@ -77,7 +72,7 @@ Tests cover editing, drag/drop, wall attachments, undo/redo, JSON round-trip, 3D
 
 - `app/`: Next.js pages and global metadata.
 - `src/auth/`, `src/onboarding/`, `src/components/`: account, room setup and React workspace.
-- `src/lib/`: measurements, preview stores, dormant Firebase adapters and plan upload processing.
+- `src/lib/`: measurements, local stores, active Firebase adapters and plan upload processing.
 - `planner/app.js`, `planner/studio.js`: room geometry, Three.js, project tools and exports.
 - `scripts/`: branding, PDF worker preparation and standalone packaging.
 - `tests/`: browser regression and asset/unit checks.

@@ -1,7 +1,8 @@
 'use client';
 const SESSION='vela-preview-session';
 const PROFILES='vela-preview-profiles';
-export const demoMode=process.env.NEXT_PUBLIC_AUTH_MODE!=='firebase';
+// Preview accounts must be explicitly enabled; missing config never creates fake accounts.
+export const demoMode=process.env.NEXT_PUBLIC_AUTH_MODE==='demo';
 export function readDemoSession(){try{return JSON.parse(sessionStorage.getItem(SESSION)||'null');}catch{return null;}}
 export async function signInDemo({email,name}){
  const normalized=String(email).trim().toLowerCase();

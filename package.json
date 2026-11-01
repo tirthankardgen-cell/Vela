@@ -10,11 +10,14 @@
     "build:standalone": "node scripts/standalone.mjs",
     "test:branding": "node --test tests/branding.test.mjs",
     "test:templates": "node --test tests/templates.test.mjs",
-    "start": "next start --hostname 127.0.0.1 --port 8767"
+    "start": "next start --hostname 127.0.0.1 --port 8767",
+    "test:cloud": "node --test tests/cloud-save.test.mjs",
+    "test:firebase": "firebase emulators:exec --only firestore --project demo-vela \"node --test tests/firestore.rules.test.mjs\"",
+    "emulators": "firebase emulators:start --only auth,firestore --project demo-vela"
   },
   "dependencies": {
     "firebase": "13.0.0",
-    "next": "16.4.0",
+    "next": "16.4.3",
     "pdfjs-dist": "6.4.299",
     "react": "19.3.0",
     "react-dom": "19.3.0",
@@ -25,10 +28,12 @@
     "node": "24.x"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
     "@tailwindcss/postcss": "4.3.3",
     "@tailwindcss/vite": "4.3.3",
     "@vitejs/plugin-react": "6.1.2",
     "fflate": "0.8.3",
+    "firebase-tools": "^13.35.1",
     "sharp": "0.35.5",
     "tailwindcss": "4.3.3",
     "vite": "8.3.4",

@@ -16,3 +16,8 @@ public/pdf.worker.min.mjs
 
 .playwright-cli/
 output/playwright/
+
+# Firebase local emulator artifacts
+.firebase/
+*-debug.log
+*-debug.*.log
