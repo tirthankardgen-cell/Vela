@@ -198,11 +198,10 @@ function catalogue(direction=0,restoreGroup){
  const restored=[...$('catalogue').querySelectorAll('[data-group]')].find(n=>n.dataset.group===restoreGroup);
  (restored||(!nested&&!searching?$('catalogue-search'):$('catalogue-title'))).focus({preventScroll:true});}
 }
-function chooseCategory(next){category=next;catalogueTypeFilter='All';cataloguePath=[];$('catalogue-search').value='';document.querySelectorAll('[data-category]').forEach(n=>{const active=n.dataset.category===next;n.classList.toggle('active',active);n.setAttribute('aria-pressed',String(active));});$('build-tab').classList.toggle('active',next==='structure');$('design-tab').classList.toggle('active',next!=='structure');catalogue();$('studio-objects').scrollTop=0;}
+function chooseCategory(next){category=next;catalogueTypeFilter='All';cataloguePath=[];$('catalogue-search').value='';document.querySelectorAll('[data-category]').forEach(n=>{const active=n.dataset.category===next;n.classList.toggle('active',active);n.setAttribute('aria-pressed',String(active));});$('design-tab').classList.toggle('active',next!=='structure');catalogue();$('studio-objects').scrollTop=0;}
 $('catalogue-back').onclick=()=>{if($('catalogue-search').value.trim()){$('catalogue-search').value='';catalogue(-1);}else{const previous=cataloguePath.pop();catalogue(-1,previous);}};
 listen($('catalogue-type-filters'),'click',e=>{const button=e.target.closest('[data-type]');if(!button)return;catalogueTypeFilter=button.dataset.type;catalogue();[...$('catalogue-type-filters').querySelectorAll('[data-type]')].find(b=>b.dataset.type===catalogueTypeFilter)?.focus({preventScroll:true});});
 $('catalogue-room').onchange=()=>{catalogueTypeFilter='All';catalogue();};$('catalogue-clear').onclick=()=>{catalogueTypeFilter='All';$('catalogue-search').value='';$('catalogue-room').value='all';cataloguePath=[];catalogue();};
-$('build-tab').onclick=()=>{chooseCategory('structure');document.dispatchEvent(new Event('vela:library'));};
 listen($('design-tab'),'click',()=>{chooseCategory('furniture');document.dispatchEvent(new Event('vela:library'));});
 listen($('catalogue'),'click',e=>{const group=e.target.closest('[data-group]');if(group){cataloguePath.push(group.dataset.group);catalogue(1);return;}const b=e.target.closest('[data-kind]');if(b)add(b.dataset.kind);});
 listen($('catalogue'),'dragstart',e=>{const b=e.target.closest('[data-kind]');if(b)e.dataTransfer.setData('text/roomnote-kind',b.dataset.kind);});
