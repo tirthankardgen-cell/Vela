@@ -12,13 +12,15 @@ await sharp(mark).png().toFile('public/brand/vela-mark.png');
 const brandData=(await (await import('node:fs/promises')).readFile('src/assets/vela-mark.png')).toString('base64');
 await writeFile('src/assets/brand-data.js',`export const logoDataUrl = 'data:image/png;base64,${brandData}';\n`);
 
-async function icon(size, file, padding=.15) {
+async function icon(size, file, padding=.15, background='#faf9f2') {
  const inner = Math.round(size * (1-padding*2));
  const symbol = await sharp(mark).resize(inner,inner).toBuffer();
- await sharp({create:{width:size,height:size,channels:4,background:'#faf9f2'}})
+ await sharp({create:{width:size,height:size,channels:4,background}})
   .composite([{input:symbol,gravity:'centre'}]).png().toFile(file);
 }
-for (const size of [16,32,48]) await icon(size,`public/favicon-${size}x${size}.png`,.09);
+for (const size of [16,32,48]) await icon(size,`public/favicon-${size}x${size}.png`,.09,'#00000000');
+// Transparent browser icon: preserve the supplied mark, brighten it on dark tabs.
+await writeFile('public/favicon.svg',`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><style>@media (prefers-color-scheme: dark){image{filter:brightness(0) invert(.95)}}</style><image x="2" y="2" width="28" height="28" href="data:image/png;base64,${brandData}"/></svg>\n`);
 await icon(180,'public/apple-touch-icon.png');
 await icon(192,'public/brand/icon-192.png');
 await icon(512,'public/brand/icon-512.png');

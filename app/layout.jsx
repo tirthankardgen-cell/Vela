@@ -16,7 +16,7 @@ export const metadata = {
   verification:process.env.GOOGLE_SITE_VERIFICATION?{google:process.env.GOOGLE_SITE_VERIFICATION}:undefined,
   other:{'google-adsense-account':adsenseClient},
   alternates:{canonical:'/',types:{'application/rss+xml':'/feed.xml'}},
-  icons:{icon:[{url:'/favicon-32x32.png',sizes:'32x32',type:'image/png'},{url:'/favicon-16x16.png',sizes:'16x16',type:'image/png'}],shortcut:'/favicon.ico',apple:[{url:'/apple-touch-icon.png',sizes:'180x180'}]},
+  icons:{icon:[{url:'/favicon-32x32.png?v=2',sizes:'32x32',type:'image/png'},{url:'/favicon-16x16.png?v=2',sizes:'16x16',type:'image/png'},{url:'/favicon.svg?v=2',sizes:'any',type:'image/svg+xml'}],shortcut:'/favicon.ico?v=2',apple:[{url:'/apple-touch-icon.png',sizes:'180x180'}]},
   manifest:'/site.webmanifest',
   openGraph:{type:'website',url:siteUrl,siteName:'Vela',title:'Vela — Thoughtful spaces. Beautifully presented.',description:siteDescription,images:[{url:'/brand/vela-social.png',width:1200,height:630,alt:'Vela — olive and champagne architectural V, with an ivory wordmark.'}]},
   twitter:{card:'summary_large_image',title:siteTitle,description:siteDescription,images:['/brand/vela-social.png']},
