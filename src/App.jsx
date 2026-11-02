@@ -27,8 +27,8 @@ function Studio(props) {
   useLayoutEffect(() => initializePlanner(props), []);
   return (
     <>
-      <Header cloud={Boolean(props.store)} preview={props.store?.isDemo} />
-      <nav className="panel-dock" aria-label="Studio panels"><button aria-controls="studio-objects" aria-expanded={library} onClick={toggleLibrary}><Icon name="library"/>Library</button><button aria-controls="studio-properties" aria-expanded={properties} onClick={toggleProperties}><Icon name="sliders"/>Properties</button><button title="Focus on canvas" onClick={()=>{setLibrary(false);setProperties(false);}}><Icon name="fit"/>Focus</button></nav>
+      <Header cloud={Boolean(props.store)} preview={props.store?.isDemo} libraryOpen={library} onToggleLibrary={toggleLibrary} />
+      <nav className="panel-dock" aria-label="Studio panels"><button aria-controls="studio-properties" aria-expanded={properties} onClick={toggleProperties}><Icon name="sliders"/>Properties</button><button title="Focus on canvas" onClick={()=>{setLibrary(false);setProperties(false);}}><Icon name="fit"/>Focus</button></nav>
       <main className="workspace"><Library guest={!props.store} open={library} onClose={closeLibrary}/><DesignCanvas/><Inspector open={properties} onClose={closeProperties}/></main>
       <DialogHost />
       <section id="presentation" hidden />

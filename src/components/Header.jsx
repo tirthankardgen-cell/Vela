@@ -13,7 +13,7 @@ function subscribe(listener) {
 }
 const getProject = () => window.Vela ? JSON.stringify(window.Vela.getLayout().project) : defaultProject;
 
-export default function Header({cloud=false,preview=false}) {
+export default function Header({cloud=false,preview=false,libraryOpen=false,onToggleLibrary}) {
   const project = JSON.parse(useSyncExternalStore(subscribe, getProject, () => defaultProject));
   return (
     <>
@@ -28,7 +28,7 @@ export default function Header({cloud=false,preview=false}) {
         </div>
       </header>
       <nav className="studio-nav" aria-label="Studio tools">
-        <div><button className="active" id="design-tab"><Icon name="library"/>Furnish</button><button id="materials-button"><Icon name="palette"/>Finishes</button><button id="schedule-button"><Icon name="list"/>Schedule</button></div>
+        <div><button className={libraryOpen?"active":""} aria-controls="studio-objects" aria-expanded={libraryOpen} onClick={onToggleLibrary}><Icon name="library"/>Library</button><button id="materials-button"><Icon name="palette"/>Finishes</button><button id="schedule-button"><Icon name="list"/>Schedule</button></div>
         <span className="local-badge"><i /> {preview?"Preview · local saves":cloud?"Cloud workspace":"Guest · local saves"}</span>
       </nav>
     </>
